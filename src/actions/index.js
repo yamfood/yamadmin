@@ -68,8 +68,8 @@ export const login = (login, password) => async (dispatch) => {
             body: JSON.stringify(data)
         });
         const result = await response.json();
+        localStorage.setItem("token", result.token);
         dispatch(loginSuccess({data: result}));
-        localStorage.setItem('token', result.token)
     } catch (e) {
         console.log(e);
         dispatch(loginFailure());
