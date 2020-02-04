@@ -31,7 +31,7 @@ const Login = (props) => {
     };
 
     const redirect = () => {
-        if (auth.token !== null) {
+        if (auth.status === 'success') {
             return (
                 <Redirect to="/"/>
             )

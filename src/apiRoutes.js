@@ -1,4 +1,4 @@
-const host = 'http://localhost:666/api/admin';
+const host = `${process.env.REACT_APP_API_HOST}/api/admin`;
 
 export default {
     login: () => [host, 'auth/login/'].join('/'),
