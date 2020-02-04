@@ -10,6 +10,8 @@ import {Layout} from 'antd';
 import ProductDetail from "./ProductDetail";
 import OrdersActive from "./OrdersActive";
 import Users from "./Users";
+import Login from "./Login";
+import PrivateRoute from "./PrivateRoute";
 
 
 const App = () => {
@@ -19,21 +21,12 @@ const App = () => {
                 <Navigation/>
 
                 <Switch>
-                    <Route path="/products/:id">
-                        <ProductDetail/>
-                    </Route>
-                    <Route path="/products">
-                        <Products/>
-                    </Route>
-                    <Route path="/users">
-                        <Users/>
-                    </Route>
-                    <Route path="/orders/active">
-                        <OrdersActive/>
-                    </Route>
-                    <Route path="/">
-                        <Home/>
-                    </Route>
+                    <Route path="/login" component={Login}/>
+                    <PrivateRoute path="/products/:id" component={ProductDetail}/>
+                    <PrivateRoute path="/products" component={Products}/>
+                    <PrivateRoute path="/users" component={Users}/>
+                    <PrivateRoute path="/orders/active" component={OrdersActive}/>
+                    <PrivateRoute path="/" component={Home}/>
                 </Switch>
             </BrowserRouter>
         </Layout>

@@ -1,12 +1,26 @@
-import React from "react";
-import {Layout, Table} from 'antd';
+import React, {useEffect} from "react";
+import {Button, Icon, Layout, Table} from 'antd';
 
 import {withRouter} from 'react-router-dom'
-
+import {connect} from "react-redux";
+import * as actions from "../actions";
 
 const {Content} = Layout;
 
-const Products = ({history}) => {
+const actionsCreators = {
+    getProducts: actions.getProducts,
+};
+
+
+const mapStateToProps = (state) => {
+    return {
+        products: state.products
+    }
+};
+
+const Products = (props) => {
+
+    const {history, products, getProducts} = props;
 
     const columns = [
         {
@@ -33,23 +47,13 @@ const Products = ({history}) => {
         },
     ];
 
-    const products = [
-        {id: 1, name: "Куриный суп с лапшой и яйцом", price: 10000, energy: 500},
-        {id: 2, name: "Борщ с рубленой говядиной", price: 10000, energy: 500},
-        {id: 3, name: "Шпинатный крем-суп", price: 10000, energy: 500},
-        {id: 4, name: "Крабовый салат без риса", price: 10000, energy: 500},
-        {id: 5, name: "Помидоры черри и моцарелла", price: 10000, energy: 500},
-        {id: 6, name: "Куриный суп с лапшой и яйцом", price: 10000, energy: 500},
-        {id: 7, name: "Борщ с рубленой говядиной", price: 10000, energy: 500},
-        {id: 8, name: "Шпинатный крем-суп", price: 10000, energy: 500},
-        {id: 3, name: "Шпинатный крем-суп", price: 10000, energy: 500},
-        {id: 4, name: "Крабовый салат без риса", price: 10000, energy: 500},
-        {id: 5, name: "Помидоры черри и моцарелла", price: 10000, energy: 500},
-        {id: 6, name: "Куриный суп с лапшой и яйцом", price: 10000, energy: 500},
-        {id: 7, name: "Борщ с рубленой говядиной", price: 10000, energy: 500},
-        {id: 8, name: "Шпинатный крем-суп", price: 10000, energy: 500},
-    ];
+    useEffect(() => {
+        if (products.status === null) {
+            getProducts();
+        }
+    });
 
+    const loading = products.status === 'request';
 
     return (
         <Layout>
@@ -58,17 +62,20 @@ const Products = ({history}) => {
                     margin: '24px 16px',
                     padding: 24,
                     background: '#fff',
-                    minHeight: 280,
                 }}
             >
                 <h1 style={{fontSize: 30, textAlign: "center"}}>Меню</h1>
+                <Button style={{marginBottom: 20}} onClick={getProducts}><Icon type="reload" /></Button>
                 <Table onRow={(r) => ({
                     onClick: () => history.push(`/products/${r.id}`)
-                })} columns={columns} dataSource={products}/>
+                })} size={"small"} columns={columns} dataSource={products.list} loading={loading}/>
             </Content>
         </Layout>
     )
 };
 
 
-export default withRouter(Products);
+export default connect(
+    mapStateToProps,
+    actionsCreators
+)(withRouter(Products));

@@ -1,11 +1,31 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {Layout, Table} from "antd";
+import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom'
+import * as actions from '../actions'
+import { Button, Icon } from 'antd';
 
 const {Content} = Layout;
 
+const actionsCreators = {
+    getUsers: actions.getUsers,
+};
 
-const Users = ({history}) => {
+
+const mapStateToProps = (state) => {
+    return {
+        users: state.users
+    }
+};
+
+const Users = (props) => {
+    const {users, getUsers} = props;
+
+    useEffect(() => {
+        if (users.status === null) {
+            getUsers();
+        }
+    });
 
     const columns = [
         {
@@ -14,40 +34,28 @@ const Users = ({history}) => {
             key: 'id'
         },
         {
-            title: 'Название',
+            title: 'TID',
+            dataIndex: 'tid',
+            key: 'tid',
+        },
+        {
+            title: 'Имя',
             dataIndex: 'name',
-            key: 'name',
+            key: 'name'
         },
         {
-            title: 'Цена',
-            dataIndex: 'price',
-            key: 'price',
-            render: text => `${text.toLocaleString('ru')} сум`
+            title: 'Номер',
+            dataIndex: 'phone',
+            key: 'phone'
         },
         {
-            title: 'Калорийность',
-            dataIndex: 'energy',
-            key: 'energy',
-            render: text => `${text} кКал`
+            title: 'Комментарий',
+            dataIndex: 'comment',
+            key: 'comment'
         },
     ];
 
-    const products = [
-        {id: 1, name: "Куриный суп с лапшой и яйцом", price: 10000, energy: 500},
-        {id: 2, name: "Борщ с рубленой говядиной", price: 10000, energy: 500},
-        {id: 3, name: "Шпинатный крем-суп", price: 10000, energy: 500},
-        {id: 4, name: "Крабовый салат без риса", price: 10000, energy: 500},
-        {id: 5, name: "Помидоры черри и моцарелла", price: 10000, energy: 500},
-        {id: 6, name: "Куриный суп с лапшой и яйцом", price: 10000, energy: 500},
-        {id: 7, name: "Борщ с рубленой говядиной", price: 10000, energy: 500},
-        {id: 8, name: "Шпинатный крем-суп", price: 10000, energy: 500},
-        {id: 3, name: "Шпинатный крем-суп", price: 10000, energy: 500},
-        {id: 4, name: "Крабовый салат без риса", price: 10000, energy: 500},
-        {id: 5, name: "Помидоры черри и моцарелла", price: 10000, energy: 500},
-        {id: 6, name: "Куриный суп с лапшой и яйцом", price: 10000, energy: 500},
-        {id: 7, name: "Борщ с рубленой говядиной", price: 10000, energy: 500},
-        {id: 8, name: "Шпинатный крем-суп", price: 10000, energy: 500},
-    ];
+    const loading = users.status === 'request';
 
     return (
         <Layout>
@@ -60,13 +68,15 @@ const Users = ({history}) => {
                 }}
             >
                 <h1 style={{fontSize: 30, textAlign: "center"}}>Пользователи</h1>
-                <Table onRow={(r) => ({
-                    onClick: () => history.push(`/products/${r.id}`)
-                })} columns={columns} dataSource={products}/>
+                <Button style={{marginBottom: 20}} onClick={getUsers}><Icon type="reload" /></Button>
+                <Table size={"small"} columns={columns} dataSource={users.list} loading={loading}/>
             </Content>
         </Layout>
     )
 };
 
 
-export default withRouter(Users);
+export default connect(
+    mapStateToProps,
+    actionsCreators
+)(withRouter(Users));
