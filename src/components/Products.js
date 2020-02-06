@@ -65,10 +65,15 @@ const Products = (props) => {
                 }}
             >
                 <h1 style={{fontSize: 30, textAlign: "center"}}>Меню</h1>
-                <Button style={{marginBottom: 20}} onClick={getProducts}><Icon type="reload" /></Button>
-                <Table onRow={(r) => ({
-                    onClick: () => history.push(`/products/${r.id}`)
-                })} size={"small"} columns={columns} dataSource={products.list} loading={loading}/>
+                <Button style={{marginBottom: 20}} onClick={getProducts}><Icon type="reload"/></Button>
+                <Table
+                    size={"small"}
+                    columns={columns}
+                    loading={loading}
+                    dataSource={products.list}
+                    onRow={(r) => ({
+                        onClick: () => history.push(`/products/${r.id}`)
+                    })}/>
             </Content>
         </Layout>
     )

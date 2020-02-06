@@ -4,4 +4,5 @@ export default {
     login: () => [host, 'auth/login/'].join('/'),
     users: () => [host, 'users/'].join('/'),
     products: () => [host, 'products/'].join('/'),
+    orders: () => [host, 'orders/active/'].join('/'),
 };

@@ -5,24 +5,25 @@ const {Meta} = Card;
 const { Countdown } = Statistic;
 
 
-const OrderCard = () => {
-    const deadline = Date.now() + 1000 * 60 * 30; // Moment is also OK
+const OrderCard = ({order}) => {
+
+    const deadline = new Date(order.created_at).getTime() + 1000 * 60 * 60 * 10;
 
     return (
         <Card
-            style={{width: 300, marginBottom: 40}}
+            style={{width: 300, margin: 10}}
             actions={[
                 <Icon type="monitor" />,
                 <Icon type="ellipsis" key="ellipsis"/>,
             ]}
         >
             <Meta
-                title="# 31"
+                title={`# ${order.id}`}
             /><br/>
-            <strong>Рустам</strong> <br/>
-            🥗 1 x Яблочный фреш <br/>
-            🥗 1 x Сырники со сметаной и джемом <br/>
-            💰 24 900 сум (Наличными) <br/><br/>
+            <strong>{order.name}</strong> <br/>
+            +{order.phone} <br/><br/>
+            {order.total_sum.toLocaleString("ru")} сум <br/><br/>
+            {order.comment} <br/><br/>
             <Countdown value={deadline} format="mm:ss"/>
         </Card>
     )

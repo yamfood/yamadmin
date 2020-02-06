@@ -85,9 +85,41 @@ const auth = handleActions({
 });
 
 
+const activeOrders = handleActions({
+    [actions.getActiveOrdersRequest](state) {
+        return {
+            ...state,
+            status: 'request'
+        }
+    },
+    [actions.getActiveOrdersFailure](state) {
+        return {
+            ...state,
+            status: 'failure',
+        }
+    },
+    [actions.getActiveOrdersSuccess](state, {payload: {data}}) {
+        console.log(data);
+        return {
+            ...state,
+            status: 'success',
+            ...data
+        }
+    }
+}, {
+    status: null,
+    new: [],
+    onKitchen: [],
+    ready: [],
+    onWay: [],
+    late: []
+});
+
+
 export default combineReducers({
     users,
     products,
-    auth
+    auth,
+    activeOrders
 })
 
