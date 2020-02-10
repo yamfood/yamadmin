@@ -87,9 +87,16 @@ const auth = handleActions({
 
 const activeOrders = handleActions({
     [actions.getActiveOrdersRequest](state) {
+        let loading = state.loading;
+
+        if (state.status === null) {
+            loading = true;
+        }
+
         return {
             ...state,
-            status: 'request'
+            status: 'request',
+            loading: loading
         }
     },
     [actions.getActiveOrdersFailure](state) {
@@ -99,15 +106,16 @@ const activeOrders = handleActions({
         }
     },
     [actions.getActiveOrdersSuccess](state, {payload: {data}}) {
-        console.log(data);
         return {
             ...state,
+            loading: false,
             status: 'success',
             ...data
         }
     }
 }, {
     status: null,
+    loading: false,
     new: [],
     onKitchen: [],
     ready: [],

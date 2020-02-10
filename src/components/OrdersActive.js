@@ -45,19 +45,19 @@ const OrdersActive = (props) => {
             <h1 style={{fontSize: 30, textAlign: "center"}}>Заказы</h1>
             <Tabs defaultActiveKey="1" size='small'>
                 <TabPane tab={`Новые (${orders.new.length})`} key="1">
-                    <OrdersTable orders={orders.new}/>
+                    <OrdersTable orders={orders.new} loading={orders.loading}/>
                 </TabPane>
                 <TabPane tab={`На кухне (${orders.onKitchen.length})`} key="2">
-                    <OrdersTable orders={orders.onKitchen}/>
+                    <OrdersTable orders={orders.onKitchen} loading={orders.loading}/>
                 </TabPane>
                 <TabPane tab={`Готовы (${orders.ready.length})`} key="4">
-                    <OrdersTable orders={orders.ready}/>
+                    <OrdersTable orders={orders.ready} loading={orders.loading}/>
                 </TabPane>
                 <TabPane tab={`В пути (${orders.onWay.length})`} key="3">
-                    <OrdersTable orders={orders.onWay}/>
+                    <OrdersTable orders={orders.onWay} loading={orders.loading}/>
                 </TabPane>
                 <TabPane tab={`Опаздывают (${orders.late.length})`} key="5">
-                    <OrdersTable orders={orders.late}/>
+                    <OrdersTable orders={orders.late} loading={orders.loading}/>
                 </TabPane>
             </Tabs>
         </Content>

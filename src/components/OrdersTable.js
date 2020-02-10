@@ -1,12 +1,15 @@
 import React from "react";
 import OrderCard from "./OrderCard";
+import OrderCardSkeleton from "./OrderCardSkeleton";
 
 
-const OrdersTable = ({orders}) => {
+const OrdersTable = ({orders, loading = true}) => {
     return (
         <div className="OrdersTable">
-            {orders.map(order =>
-            <OrderCard order={order}/>)}
+            {loading
+                ? [1, 2, 3, 4].map(i => <OrderCardSkeleton/>)
+                : orders.map(order =>
+                    <OrderCard order={order}/>)}
         </div>
     )
 };
