@@ -82,6 +82,31 @@ export const getProducts = () => async (dispatch) => {
 };
 
 
+export const getRidersRequest = createAction('GET_RIDERS_REQUEST');
+export const getRidersFailure = createAction('GET_RIDERS_FAILURE');
+export const getRidersSuccess = createAction('GET_RIDERS_SUCCESS');
+
+export const getRiders = () => async (dispatch) => {
+    dispatch(getRidersRequest());
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(api.riders(), {
+            headers: {
+                token: token
+            }
+        });
+        const result = await response.json();
+        dispatch(getRidersSuccess({data: result}));
+    } catch (e) {
+        console.log(e);
+        if (e.error === 'Auth failed' || e.error === "Auth required") {
+            localStorage.removeItem("token");
+        }
+        dispatch(getRidersFailure());
+    }
+};
+
+
 export const getActiveOrdersRequest = createAction('GET_ACTIVE_ORDERS_REQUEST');
 export const getActiveOrdersFailure = createAction('GET_ACTIVE_ORDERS_FAILURE');
 export const getActiveOrdersSuccess = createAction('GET_ACTIVE_ORDERS_SUCCESS');

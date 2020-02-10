@@ -31,6 +31,33 @@ const users = handleActions({
 });
 
 
+const riders = handleActions({
+    [actions.getRidersRequest](state) {
+        return {
+            ...state,
+            status: 'request'
+        }
+    },
+    [actions.getRidersFailure](state) {
+        return {
+            ...state,
+            status: 'failure',
+        }
+    },
+    [actions.getRidersSuccess](state, {payload: {data}}) {
+        console.log(data);
+        return {
+            ...state,
+            status: 'success',
+            list: data
+        }
+    }
+}, {
+    list: [],
+    status: null
+});
+
+
 const products = handleActions({
     [actions.getProductsRequest](state) {
         return {
@@ -126,6 +153,7 @@ const activeOrders = handleActions({
 
 export default combineReducers({
     users,
+    riders,
     products,
     auth,
     activeOrders

@@ -21,12 +21,17 @@ const Navigation = () => {
                 <Menu.Item key="2">
                     <Icon type="shop"/>
                     <span>Продукты</span>
-                    <Link to="/products"/>
+                    <Link to="/products/"/>
                 </Menu.Item>
                 <Menu.Item key="3">
                     <Icon type="user"/>
                     <span>Пользователи</span>
-                    <Link to="/users"/>
+                    <Link to="/users/"/>
+                </Menu.Item>
+                <Menu.Item key="4">
+                    <Icon type="car"/>
+                    <span>Курьеры</span>
+                    <Link to="/riders/"/>
                 </Menu.Item>
                 <SubMenu key="sub1"
                          title={
@@ -38,21 +43,15 @@ const Navigation = () => {
                 >
                     <Menu.Item key="5">
                         Активные
-                        <Link to="/orders/active"/>
+                        <Link to="/orders/active/"/>
                     </Menu.Item>
                     <Menu.Item key="6">
                         Завершенные
-                        <Link to="/orders/finished"/>
+                        <Link to="/orders/finished/"/>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
         </Sider>
-        // <div className="navigation">
-        //     <Link to="/"><i className='bx bx-home'/> Домой </Link>
-        //     <Link to="/orders"><i className='bx bx-basket'/> Заказы</Link>
-        //     <Link to="/products"><i className='bx bx-food-menu'/> Продукты</Link>
-        // </div>
-
     )
 };
 

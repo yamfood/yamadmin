@@ -12,6 +12,7 @@ import OrdersActive from "./OrdersActive";
 import Users from "./Users";
 import Login from "./Login";
 import PrivateRoute from "./PrivateRoute";
+import RidersList from "./RidersList";
 
 
 const App = () => {
@@ -21,11 +22,12 @@ const App = () => {
                 <Navigation/>
 
                 <Switch>
-                    <Route path="/login" component={Login}/>
-                    <PrivateRoute path="/products/:id" component={ProductDetail}/>
-                    <PrivateRoute path="/products" component={Products}/>
-                    <PrivateRoute path="/users" component={Users}/>
-                    <PrivateRoute path="/orders/active" component={OrdersActive}/>
+                    <Route path="/login/" component={Login}/>
+                    <PrivateRoute path="/products/:id/" component={ProductDetail}/>
+                    <PrivateRoute path="/products/" component={Products}/>
+                    <PrivateRoute path="/users/" component={Users}/>
+                    <PrivateRoute path="/riders/" component={RidersList}/>
+                    <PrivateRoute path="/orders/active/" component={OrdersActive}/>
                     <PrivateRoute path="/" component={Home}/>
                 </Switch>
             </BrowserRouter>
