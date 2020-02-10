@@ -6,4 +6,5 @@ export default {
     products: () => [host, 'products/'].join('/'),
     riders: () => [host, 'riders/'].join('/'),
     orders: () => [host, 'orders/active/'].join('/'),
+    admins: () => [host, 'admins/'].join('/'),
 };

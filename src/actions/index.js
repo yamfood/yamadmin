@@ -107,6 +107,31 @@ export const getRiders = () => async (dispatch) => {
 };
 
 
+export const getAdminsRequest = createAction('GET_ADMINS_REQUEST');
+export const getAdminsFailure = createAction('GET_ADMINS_FAILURE');
+export const getAdminsSuccess = createAction('GET_ADMINS_SUCCESS');
+
+export const getAdmins = () => async (dispatch) => {
+    dispatch(getAdminsRequest());
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(api.admins(), {
+            headers: {
+                token: token
+            }
+        });
+        const result = await response.json();
+        dispatch(getAdminsSuccess({data: result}));
+    } catch (e) {
+        console.log(e);
+        if (e.error === 'Auth failed' || e.error === "Auth required") {
+            localStorage.removeItem("token");
+        }
+        dispatch(getAdminsFailure());
+    }
+};
+
+
 export const getActiveOrdersRequest = createAction('GET_ACTIVE_ORDERS_REQUEST');
 export const getActiveOrdersFailure = createAction('GET_ACTIVE_ORDERS_FAILURE');
 export const getActiveOrdersSuccess = createAction('GET_ACTIVE_ORDERS_SUCCESS');

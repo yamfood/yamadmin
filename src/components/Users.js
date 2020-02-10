@@ -67,7 +67,7 @@ const Users = (props) => {
                     minHeight: 280,
                 }}
             >
-                <h1 style={{fontSize: 30, textAlign: "center"}}>Пользователи</h1>
+                <h1 style={{fontSize: 30, textAlign: "center"}}>Клиенты</h1>
                 <Button style={{marginBottom: 20}} onClick={getUsers}><Icon type="reload" /></Button>
                 <Table size={"small"} columns={columns} dataSource={users.list} loading={loading}/>
             </Content>

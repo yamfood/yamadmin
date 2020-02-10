@@ -13,6 +13,7 @@ import Users from "./Users";
 import Login from "./Login";
 import PrivateRoute from "./PrivateRoute";
 import RidersList from "./RidersList";
+import AdminsList from "./AdminsList";
 
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
                     <PrivateRoute path="/products/:id/" component={ProductDetail}/>
                     <PrivateRoute path="/products/" component={Products}/>
                     <PrivateRoute path="/users/" component={Users}/>
+                    <PrivateRoute path="/admins/" component={AdminsList}/>
                     <PrivateRoute path="/riders/" component={RidersList}/>
                     <PrivateRoute path="/orders/active/" component={OrdersActive}/>
                     <PrivateRoute path="/" component={Home}/>

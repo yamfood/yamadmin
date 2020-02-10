@@ -24,8 +24,8 @@ const Navigation = () => {
                     <Link to="/products/"/>
                 </Menu.Item>
                 <Menu.Item key="3">
-                    <Icon type="user"/>
-                    <span>Пользователи</span>
+                    <Icon type="smile"/>
+                    <span>Клиенты</span>
                     <Link to="/users/"/>
                 </Menu.Item>
                 <Menu.Item key="4">
@@ -50,6 +50,11 @@ const Navigation = () => {
                         <Link to="/orders/finished/"/>
                     </Menu.Item>
                 </SubMenu>
+                <Menu.Item key="7">
+                    <Icon type="user"/>
+                    <span>Администраторы</span>
+                    <Link to="/admins/"/>
+                </Menu.Item>
             </Menu>
         </Sider>
     )
