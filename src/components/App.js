@@ -14,6 +14,7 @@ import Login from "./Login";
 import PrivateRoute from "./PrivateRoute";
 import RidersList from "./RidersList";
 import AdminsList from "./AdminsList";
+import OrderDetails from "./OrderDetails";
 
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
                     <PrivateRoute path="/admins/" component={AdminsList}/>
                     <PrivateRoute path="/riders/" component={RidersList}/>
                     <PrivateRoute path="/orders/active/" component={OrdersActive}/>
+                    <PrivateRoute path="/orders/:id/" component={OrderDetails}/>
                     <PrivateRoute path="/" component={Home}/>
                 </Switch>
             </BrowserRouter>

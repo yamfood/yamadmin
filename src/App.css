@@ -26,3 +26,8 @@ html, body {
     flex-wrap: wrap;
     justify-content: flex-start;
 }
+
+
+.order-detail {
+    display: flex;
+}

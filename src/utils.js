@@ -15,3 +15,6 @@ export default (initialState, window) => {
     }
     return createStore(rootReducer, initialState, middleware);
 };
+
+
+export const mapBoxToken = "pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNmdrMGkxcjExYWMzZW52NDM1Ymhmc3AifQ.QNNipRYHGdZZ59WxtggPdA";

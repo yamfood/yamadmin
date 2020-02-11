@@ -13,7 +13,7 @@ const OrderCard = ({order}) => {
         <Card
             style={{width: 300, margin: 10}}
             actions={[
-                <Icon type="eye"/>,
+                <Icon type="eye" onClick={() => window.open(`/orders/${order.id}/`, "_blank")}/>,
                 <Icon type="ellipsis"/>
             ]}
         >
