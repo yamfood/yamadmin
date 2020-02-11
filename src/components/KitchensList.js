@@ -8,19 +8,19 @@ import * as actions from "../actions";
 const {Content} = Layout;
 
 const actionsCreators = {
-    getProducts: actions.getProducts,
+    getKitchens: actions.getKitchens,
 };
 
 
 const mapStateToProps = (state) => {
     return {
-        products: state.products
+        kitchens: state.kitchens
     }
 };
 
-const Products = (props) => {
+const KitchensList = (props) => {
 
-    const {history, products, getProducts} = props;
+    const {kitchens, getKitchens} = props;
 
     const columns = [
         {
@@ -31,29 +31,17 @@ const Products = (props) => {
         {
             title: 'Название',
             dataIndex: 'name',
-            key: 'name',
-        },
-        {
-            title: 'Цена',
-            dataIndex: 'price',
-            key: 'price',
-            render: text => `${text.toLocaleString('ru')} сум`
-        },
-        {
-            title: 'Калорийность',
-            dataIndex: 'energy',
-            key: 'energy',
-            render: text => `${text} кКал`
+            key: 'name'
         },
     ];
 
     useEffect(() => {
-        if (products.status === null) {
-            getProducts();
+        if (kitchens.status === null) {
+            getKitchens();
         }
     });
 
-    const loading = products.status === 'request';
+    const loading = kitchens.status === 'request';
 
     return (
         <Layout>
@@ -64,16 +52,13 @@ const Products = (props) => {
                     background: '#fff',
                 }}
             >
-                <h1 style={{fontSize: 30, textAlign: "center"}}>Продукты</h1>
-                <Button style={{marginBottom: 20}} onClick={getProducts}><Icon type="reload"/></Button>
+                <h1 style={{fontSize: 30, textAlign: "center"}}>Кухни</h1>
+                <Button style={{marginBottom: 20}} onClick={getKitchens}><Icon type="reload"/></Button>
                 <Table
                     size={"small"}
                     columns={columns}
                     loading={loading}
-                    dataSource={products.list}
-                    onRow={(r) => ({
-                        onClick: () => history.push(`/products/${r.id}`)
-                    })}/>
+                    dataSource={kitchens.list}/>
             </Content>
         </Layout>
     )
@@ -83,4 +68,4 @@ const Products = (props) => {
 export default connect(
     mapStateToProps,
     actionsCreators
-)(withRouter(Products));
+)(withRouter(KitchensList));

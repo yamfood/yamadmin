@@ -15,6 +15,7 @@ import PrivateRoute from "./PrivateRoute";
 import RidersList from "./RidersList";
 import AdminsList from "./AdminsList";
 import OrderDetails from "./OrderDetails";
+import KitchensList from "./KitchensList";
 
 
 const App = () => {
@@ -27,6 +28,7 @@ const App = () => {
                     <Route path="/login/" component={Login}/>
                     <PrivateRoute path="/products/:id/" component={ProductDetail}/>
                     <PrivateRoute path="/products/" component={Products}/>
+                    <PrivateRoute path="/kitchens/" component={KitchensList}/>
                     <PrivateRoute path="/users/" component={Users}/>
                     <PrivateRoute path="/admins/" component={AdminsList}/>
                     <PrivateRoute path="/riders/" component={RidersList}/>

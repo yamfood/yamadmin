@@ -57,6 +57,31 @@ export const getUsers = () => async (dispatch) => {
 };
 
 
+export const getKitchensRequest = createAction('GET_KITCHENS_REQUEST');
+export const getKitchensFailure = createAction('GET_KITCHENS_FAILURE');
+export const getKitchensSuccess = createAction('GET_KITCHENS_SUCCESS');
+
+export const getKitchens = () => async (dispatch) => {
+    dispatch(getKitchensRequest());
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(api.kitchens(), {
+            headers: {
+                token: token
+            }
+        });
+        const result = await response.json();
+        dispatch(getKitchensSuccess({data: result}));
+    } catch (e) {
+        console.log(e);
+        if (e.error === 'Auth failed' || e.error === "Auth required") {
+            localStorage.removeItem("token");
+        }
+        dispatch(getKitchensFailure());
+    }
+};
+
+
 export const getProductsRequest = createAction('GET_PRODUCTS_REQUEST');
 export const getProductsFailure = createAction('GET_PRODUCTS_FAILURE');
 export const getProductsSuccess = createAction('GET_PRODUCTS_SUCCESS');

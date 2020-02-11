@@ -85,7 +85,6 @@ const products = handleActions({
 });
 
 
-
 const admins = handleActions({
     [actions.getAdminsRequest](state) {
         return {
@@ -100,6 +99,33 @@ const admins = handleActions({
         }
     },
     [actions.getAdminsSuccess](state, {payload: {data}}) {
+        console.log(data);
+        return {
+            ...state,
+            status: 'success',
+            list: data
+        }
+    }
+}, {
+    list: [],
+    status: null
+});
+
+
+const kitchens = handleActions({
+    [actions.getKitchensRequest](state) {
+        return {
+            ...state,
+            status: 'request'
+        }
+    },
+    [actions.getKitchensFailure](state) {
+        return {
+            ...state,
+            status: 'failure',
+        }
+    },
+    [actions.getKitchensSuccess](state, {payload: {data}}) {
         console.log(data);
         return {
             ...state,
@@ -182,6 +208,7 @@ const activeOrders = handleActions({
 export default combineReducers({
     users,
     riders,
+    kitchens,
     products,
     auth,
     admins,

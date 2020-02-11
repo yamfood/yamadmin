@@ -20,15 +20,20 @@ const Navigation = () => {
                 </Menu.Item>
                 <Menu.Item key="2">
                     <Icon type="shop"/>
+                    <span>Кухни</span>
+                    <Link to="/kitchens/"/>
+                </Menu.Item>
+                <Menu.Item key="3">
+                    <Icon type="shopping" />
                     <span>Продукты</span>
                     <Link to="/products/"/>
                 </Menu.Item>
-                <Menu.Item key="3">
+                <Menu.Item key="4">
                     <Icon type="smile"/>
                     <span>Клиенты</span>
                     <Link to="/users/"/>
                 </Menu.Item>
-                <Menu.Item key="4">
+                <Menu.Item key="5">
                     <Icon type="car"/>
                     <span>Курьеры</span>
                     <Link to="/riders/"/>
@@ -41,16 +46,16 @@ const Navigation = () => {
                              </span>
                          }
                 >
-                    <Menu.Item key="5">
+                    <Menu.Item key="6">
                         Активные
                         <Link to="/orders/active/"/>
                     </Menu.Item>
-                    <Menu.Item key="6">
+                    <Menu.Item key="7">
                         Завершенные
                         <Link to="/orders/finished/"/>
                     </Menu.Item>
                 </SubMenu>
-                <Menu.Item key="7">
+                <Menu.Item key="8">
                     <Icon type="user"/>
                     <span>Администраторы</span>
                     <Link to="/admins/"/>
