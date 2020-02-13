@@ -157,6 +157,31 @@ export const getAdmins = () => async (dispatch) => {
 };
 
 
+export const getOrderDetailsRequest = createAction('GET_ORDER_DETAILS_REQUEST');
+export const getOrderDetailsFailure = createAction('GET_ORDER_DETAILS_FAILURE');
+export const getOrderDetailsSuccess = createAction('GET_ORDER_DETAILS_SUCCESS');
+
+export const getOrderDetails = (id) => async (dispatch) => {
+    dispatch(getOrderDetailsRequest());
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(api.orderDetails(id), {
+            headers: {
+                token: token
+            }
+        });
+        const result = await response.json();
+        dispatch(getOrderDetailsSuccess({data: result}));
+    } catch (e) {
+        console.log(e);
+        if (e.error === 'Auth failed' || e.error === "Auth required") {
+            localStorage.removeItem("token");
+        }
+        dispatch(getOrderDetailsFailure());
+    }
+};
+
+
 export const getActiveOrdersRequest = createAction('GET_ACTIVE_ORDERS_REQUEST');
 export const getActiveOrdersFailure = createAction('GET_ACTIVE_ORDERS_FAILURE');
 export const getActiveOrdersSuccess = createAction('GET_ACTIVE_ORDERS_SUCCESS');

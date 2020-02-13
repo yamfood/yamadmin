@@ -205,6 +205,31 @@ const activeOrders = handleActions({
 });
 
 
+const orderDetails = handleActions({
+    [actions.getOrderDetailsRequest](state) {
+        return {
+            ...state,
+            status: 'request',
+        }
+    },
+    [actions.getOrderDetailsFailure](state) {
+        return {
+            ...state,
+            status: 'failure',
+        }
+    },
+    [actions.getOrderDetailsSuccess](state, {payload: {data}}) {
+        return {
+            ...state,
+            status: 'success',
+            [data.id]: data
+        }
+    }
+}, {
+    status: null,
+});
+
+
 export default combineReducers({
     users,
     riders,
@@ -212,6 +237,7 @@ export default combineReducers({
     products,
     auth,
     admins,
-    activeOrders
+    activeOrders,
+    orderDetails
 })
 
