@@ -1,4 +1,5 @@
 import api from "../apiRoutes"
+import axios from 'axios';
 import {createAction} from 'redux-actions';
 
 
@@ -36,17 +37,21 @@ export const getUsersRequest = createAction('GET_USERS_REQUEST');
 export const getUsersFailure = createAction('GET_USERS_FAILURE');
 export const getUsersSuccess = createAction('GET_USERS_SUCCESS');
 
-export const getUsers = () => async (dispatch) => {
+export const getUsers = (params) => async (dispatch) => {
     dispatch(getUsersRequest());
     try {
         const token = localStorage.getItem("token");
-        const response = await fetch(api.users(), {
+        const result = await axios.get(api.clients(), {
             headers: {
                 token: token
+            },
+            params: {
+              ...params
             }
         });
-        const result = await response.json();
-        dispatch(getUsersSuccess({data: result}));
+        // const result = await response.json();
+        console.log('this is response: ', result);
+        dispatch(getUsersSuccess({data: result.data}));
     } catch (e) {
         console.log(e);
         if (e.error === 'Auth failed' || e.error === "Auth required") {
@@ -206,3 +211,26 @@ export const getActiveOrders = () => async (dispatch) => {
     }
 };
 
+export const getClientDetailsRequest = createAction('GET_CLIENT_DETAILS_REQUEST');
+export const getClientDetailsFailed = createAction('GET_CLIENT_DETAILS_FAILED');
+export const getClientDetailsSuccess = createAction('GET_CLIENT_DETAILS_SUCCESS');
+
+export const getClientDetails = (id) => async (dispatch) => {
+  dispatch(getClientDetails());
+  try {
+    const token = localStorage.getItem("token");
+    const result = await axios.get(api.clientDetails(id), {
+            headers: {
+                token: token
+            }
+        });
+        console.log('this is result: ', result);
+        dispatch(getClientDetailsSuccess());
+  } catch (e) {
+    console.log(e);
+        if (e.error === 'Auth failed' || e.error === "Auth required") {
+            localStorage.removeItem("token");
+        }
+        dispatch(getClientDetailsFailed());
+  }
+};

@@ -1,29 +1,47 @@
 import React, {useEffect} from "react";
 import {Layout, Table} from "antd";
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom'
-import * as actions from '../actions'
-import { Button, Icon } from 'antd';
+import {withRouter} from 'react-router-dom';
+import * as actions from '../actions';
+import {
+  Button,
+  Icon,
+} from 'antd';
+import ClientForm from './ClientsForm';
 
 const {Content} = Layout;
 
 const actionsCreators = {
     getUsers: actions.getUsers,
+    getClientDetails: actions.getClientDetails,
 };
 
 
 const mapStateToProps = (state) => {
     return {
-        users: state.users
+        users: state.users,
+        page: state.users.page,
+        userList: state.users.list.data.map((user, i) => (
+          {
+            ...user,
+            key: `${i}`,
+            // description: 'hello',
+          }
+        ))
     }
 };
 
 const Users = (props) => {
-    const {users, getUsers} = props;
+    const {
+      users,
+      getUsers,
+      userList,
+      // getClientDetails
+    } = props;
 
     useEffect(() => {
         if (users.status === null) {
-            getUsers();
+            getUsers({page: 1, per_page: 2});
         }
     });
 
@@ -55,6 +73,10 @@ const Users = (props) => {
         },
     ];
 
+    const handlePage = (page) => {
+      getUsers({page, per_page: 2});
+    }
+
     const loading = users.status === 'request';
 
     return (
@@ -69,7 +91,22 @@ const Users = (props) => {
             >
                 <h1 style={{fontSize: 30, textAlign: "center"}}>Клиенты</h1>
                 <Button style={{marginBottom: 20}} onClick={getUsers}><Icon type="reload" /></Button>
-                <Table size={"small"} columns={columns} dataSource={users.list} loading={loading}/>
+                <ClientForm getUsers={getUsers} />
+                <Table
+                  size={"small"}
+                  columns={columns}
+                  dataSource={userList}
+                  loading={loading}
+                  pagination={{
+                    total: users.list.count,
+                    pageSize: 2,
+                    onChange: handlePage,
+                  }}
+                  // expandedRowRender={(record) => {
+                  //   console.log('record id: ', record.id);
+                  //   getClientDetails(record.id);
+                  // }}
+                />
             </Content>
         </Layout>
     )

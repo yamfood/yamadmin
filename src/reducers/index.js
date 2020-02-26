@@ -26,8 +26,11 @@ const users = handleActions({
         }
     }
 }, {
-    list: [],
-    status: null
+    list: {
+      data: []
+    },
+    status: null,
+    page: 1,
 });
 
 
