@@ -18,19 +18,41 @@ const users = handleActions({
         }
     },
     [actions.getUsersSuccess](state, {payload: {data}}) {
-        console.log(data);
+        console.log('this is data: ', data);
         return {
             ...state,
             status: 'success',
-            list: data
+            list: data,
+            page: data.page
         }
-    }
+    },
+    // [actions.getClientDetailsSuccess] (state, { payload }) {
+    //   console.log('this is payload: ', payload);
+    //   return {
+    //     ...state,
+    //     statusForDetails: 'success',
+    //     dataForClientDetails: payload,
+    //   };
+    // },
+    // [actions.getClientDetailsRequest](state) {
+    //   return {
+    //     ...state,
+    //     statusForDetails: 'request',
+    //   };
+    // },
+    // [actions.getClientDetailsFailure](state) {
+    //   return {
+    //     ...state,
+    //     statusForDetails: 'failure',
+    //   };
+    // },
 }, {
     list: {
       data: []
     },
     status: null,
     page: 1,
+    // dataForClientDetails: [],
 });
 
 

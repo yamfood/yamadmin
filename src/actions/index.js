@@ -9,23 +9,14 @@ export const loginSuccess = createAction('LOGIN_SUCCESS');
 
 export const login = (login, password) => async (dispatch) => {
     dispatch(loginRequest());
-
-    const data = {
-        login: login,
-        password: password
-    };
-
     try {
-        const response = await fetch(api.login(), {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+        const result = await axios.post(api.login(), {
+            login,
+            password
         });
-        const result = await response.json();
-        localStorage.setItem("token", result.token);
-        dispatch(loginSuccess({data: result}));
+        console.log('this is response: ', result.data);
+        localStorage.setItem('token', result.data.token);
+        dispatch(loginSuccess({data: result.data}));
     } catch (e) {
         console.log(e);
         dispatch(loginFailure());
@@ -49,15 +40,13 @@ export const getUsers = (params) => async (dispatch) => {
               ...params
             }
         });
-        // const result = await response.json();
-        console.log('this is response: ', result);
+        // console.log('this is response: ', result);
         dispatch(getUsersSuccess({data: result.data}));
-    } catch (e) {
-        console.log(e);
-        if (e.error === 'Auth failed' || e.error === "Auth required") {
-            localStorage.removeItem("token");
+    } catch (error) {
+        console.error(error);
+        if (error.response.status === 403 || error.response.status === 401) {
+          localStorage.removeItem("token");
         }
-        dispatch(getUsersFailure());
     }
 };
 
@@ -211,26 +200,26 @@ export const getActiveOrders = () => async (dispatch) => {
     }
 };
 
-export const getClientDetailsRequest = createAction('GET_CLIENT_DETAILS_REQUEST');
-export const getClientDetailsFailed = createAction('GET_CLIENT_DETAILS_FAILED');
-export const getClientDetailsSuccess = createAction('GET_CLIENT_DETAILS_SUCCESS');
+// export const getClientDetailsRequest = createAction('GET_CLIENT_DETAILS_REQUEST');
+// export const getClientDetailsFailure = createAction('GET_CLIENT_DETAILS_FAILED');
+// export const getClientDetailsSuccess = createAction('GET_CLIENT_DETAILS_SUCCESS');
 
-export const getClientDetails = (id) => async (dispatch) => {
-  dispatch(getClientDetails());
-  try {
-    const token = localStorage.getItem("token");
-    const result = await axios.get(api.clientDetails(id), {
-            headers: {
-                token: token
-            }
-        });
-        console.log('this is result: ', result);
-        dispatch(getClientDetailsSuccess());
-  } catch (e) {
-    console.log(e);
-        if (e.error === 'Auth failed' || e.error === "Auth required") {
-            localStorage.removeItem("token");
-        }
-        dispatch(getClientDetailsFailed());
-  }
-};
+// export const getClientDetails = (id) => async (dispatch) => {
+//   dispatch(getClientDetailsRequest());
+//   try {
+//     const token = localStorage.getItem("token");
+//     const result = await axios.get(api.clientDetails(id), {
+//             headers: {
+//                 token: token
+//             }
+//         });
+//         console.log('action');
+//         dispatch(getClientDetailsSuccess(result.data));
+//   } catch (e) {
+//     console.log(e);
+//         if (e.error === 'Auth failed' || e.error === "Auth required") {
+//             localStorage.removeItem("token");
+//         }
+//         dispatch(getClientDetailsFailure());
+//   }
+// };

@@ -6,7 +6,7 @@ import {
   Input
 } from 'antd';
 
-const UserForm = (props) => {
+const ClientForm = (props) => {
   useEffect(() => {
     props.form.validateFields();
   });
@@ -44,5 +44,5 @@ const UserForm = (props) => {
   );
 }
 
-const WrappedForm = Form.create()(UserForm);
+const WrappedForm = Form.create()(ClientForm);
 export default WrappedForm;

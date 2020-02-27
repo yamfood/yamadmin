@@ -7,13 +7,14 @@ import {
   Button,
   Icon,
 } from 'antd';
-import ClientForm from './ClientsForm';
+import ClientForm from './ClientForm';
+// import TableForDetails from './TableForDetails';
 
 const {Content} = Layout;
 
 const actionsCreators = {
     getUsers: actions.getUsers,
-    getClientDetails: actions.getClientDetails,
+    // getClientDetails: actions.getClientDetails,
 };
 
 
@@ -21,11 +22,10 @@ const mapStateToProps = (state) => {
     return {
         users: state.users,
         page: state.users.page,
-        userList: state.users.list.data.map((user, i) => (
+        userList: state.users.list.data.map((user) => (
           {
             ...user,
-            key: `${i}`,
-            // description: 'hello',
+            key: `${user.id}`,
           }
         ))
     }
@@ -37,11 +37,12 @@ const Users = (props) => {
       getUsers,
       userList,
       // getClientDetails
+      page
     } = props;
 
     useEffect(() => {
         if (users.status === null) {
-            getUsers({page: 1, per_page: 2});
+            getUsers({page, per_page: 2});
         }
     });
 
@@ -79,6 +80,10 @@ const Users = (props) => {
 
     const loading = users.status === 'request';
 
+    // const renderedRow = (user) => {
+    //   return <TableForDetails props={user} getDetails={getClientDetails} />
+    // }
+
     return (
         <Layout>
             <Content
@@ -90,7 +95,7 @@ const Users = (props) => {
                 }}
             >
                 <h1 style={{fontSize: 30, textAlign: "center"}}>Клиенты</h1>
-                <Button style={{marginBottom: 20}} onClick={getUsers}><Icon type="reload" /></Button>
+                <Button style={{marginBottom: 20}} onClick={() => getUsers({page: 1, per_page: 2})}><Icon type="reload" /></Button>
                 <ClientForm getUsers={getUsers} />
                 <Table
                   size={"small"}
@@ -101,11 +106,9 @@ const Users = (props) => {
                     total: users.list.count,
                     pageSize: 2,
                     onChange: handlePage,
+                    current: page
                   }}
-                  // expandedRowRender={(record) => {
-                  //   console.log('record id: ', record.id);
-                  //   getClientDetails(record.id);
-                  // }}
+                  // expandedRowRender={renderedRow}
                 />
             </Content>
         </Layout>
