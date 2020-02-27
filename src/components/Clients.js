@@ -8,41 +8,38 @@ import {
   Icon,
 } from 'antd';
 import ClientForm from './ClientForm';
-// import TableForDetails from './TableForDetails';
 
 const {Content} = Layout;
 
 const actionsCreators = {
-    getUsers: actions.getUsers,
-    // getClientDetails: actions.getClientDetails,
+  getClients: actions.getClients,
 };
 
 
 const mapStateToProps = (state) => {
     return {
-        users: state.users,
-        page: state.users.page,
-        userList: state.users.list.data.map((user) => (
+        clients: state.clients,
+        page: state.clients.page,
+        userList: state.clients.list.data.map((client) => (
           {
-            ...user,
-            key: `${user.id}`,
+            ...client,
+            key: `${client.id}`,
           }
         ))
     }
 };
 
-const Users = (props) => {
+const Clients = (props) => {
     const {
-      users,
-      getUsers,
+      clients,
+      getClients,
       userList,
-      // getClientDetails
       page
     } = props;
 
     useEffect(() => {
-        if (users.status === null) {
-            getUsers({page, per_page: 2});
+        if (clients.status === null) {
+          getClients({page, per_page: 2});
         }
     });
 
@@ -75,15 +72,10 @@ const Users = (props) => {
     ];
 
     const handlePage = (page) => {
-      getUsers({page, per_page: 2});
+      getClients({page, per_page: 2});
     }
 
-    const loading = users.status === 'request';
-
-    // const renderedRow = (user) => {
-    //   return <TableForDetails props={user} getDetails={getClientDetails} />
-    // }
-
+    const loading = clients.status === 'request';
     return (
         <Layout>
             <Content
@@ -95,20 +87,19 @@ const Users = (props) => {
                 }}
             >
                 <h1 style={{fontSize: 30, textAlign: "center"}}>Клиенты</h1>
-                <Button style={{marginBottom: 20}} onClick={() => getUsers({page: 1, per_page: 2})}><Icon type="reload" /></Button>
-                <ClientForm getUsers={getUsers} />
+                <Button style={{marginBottom: 20}} onClick={() => getClients({page: 1, per_page: 2})}><Icon type="reload" /></Button>
+                <ClientForm getClients={getClients} />
                 <Table
                   size={"small"}
                   columns={columns}
                   dataSource={userList}
                   loading={loading}
                   pagination={{
-                    total: users.list.count,
+                    total: clients.list.count,
                     pageSize: 2,
                     onChange: handlePage,
                     current: page
                   }}
-                  // expandedRowRender={renderedRow}
                 />
             </Content>
         </Layout>
@@ -119,4 +110,4 @@ const Users = (props) => {
 export default connect(
     mapStateToProps,
     actionsCreators
-)(withRouter(Users));
+)(withRouter(Clients));

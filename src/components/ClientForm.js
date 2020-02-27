@@ -10,7 +10,7 @@ const ClientForm = (props) => {
   useEffect(() => {
     props.form.validateFields();
   });
-  const { getUsers } = props;
+  const { getClients } = props;
   const { getFieldDecorator } = props.form;
 
   const handleSubmit = (e) => {
@@ -19,8 +19,7 @@ const ClientForm = (props) => {
     props.form.validateFields((err, values) => {
       const { phone } = values;
       if (!err) {
-        console.log('Received values of form: ', values);
-        getUsers({phone, per_page: 2});
+        getClients({phone, per_page: 2});
       }
     });
   };

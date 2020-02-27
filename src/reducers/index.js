@@ -4,21 +4,21 @@ import {combineReducers} from 'redux';
 import * as actions from '../actions';
 
 
-const users = handleActions({
-    [actions.getUsersRequest](state) {
+const clients = handleActions({
+    [actions.getClientsRequest](state) {
         return {
             ...state,
             status: 'request'
         }
     },
-    [actions.getUsersFailure](state) {
+    [actions.getClientsFailure](state) {
         return {
             ...state,
             status: 'failure',
         }
     },
-    [actions.getUsersSuccess](state, {payload: {data}}) {
-        console.log('this is data: ', data);
+    [actions.getClientsSuccess](state, {payload: {data}}) {
+        console.log(data);
         return {
             ...state,
             status: 'success',
@@ -26,33 +26,12 @@ const users = handleActions({
             page: data.page
         }
     },
-    // [actions.getClientDetailsSuccess] (state, { payload }) {
-    //   console.log('this is payload: ', payload);
-    //   return {
-    //     ...state,
-    //     statusForDetails: 'success',
-    //     dataForClientDetails: payload,
-    //   };
-    // },
-    // [actions.getClientDetailsRequest](state) {
-    //   return {
-    //     ...state,
-    //     statusForDetails: 'request',
-    //   };
-    // },
-    // [actions.getClientDetailsFailure](state) {
-    //   return {
-    //     ...state,
-    //     statusForDetails: 'failure',
-    //   };
-    // },
 }, {
     list: {
       data: []
     },
     status: null,
     page: 1,
-    // dataForClientDetails: [],
 });
 
 
@@ -256,7 +235,7 @@ const orderDetails = handleActions({
 
 
 export default combineReducers({
-    users,
+    clients,
     riders,
     kitchens,
     products,

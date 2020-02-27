@@ -9,7 +9,7 @@ import 'antd/dist/antd.css';
 import {Layout} from 'antd';
 import ProductDetail from "./ProductDetail";
 import OrdersActive from "./OrdersActive";
-import Users from "./Users";
+import Clients from "./Clients";
 import Login from "./Login";
 import PrivateRoute from "./PrivateRoute";
 import RidersList from "./RidersList";
@@ -29,7 +29,7 @@ const App = () => {
                     <PrivateRoute path="/products/:id/" component={ProductDetail}/>
                     <PrivateRoute path="/products/" component={Products}/>
                     <PrivateRoute path="/kitchens/" component={KitchensList}/>
-                    <PrivateRoute path="/users/" component={Users}/>
+                    <PrivateRoute path="/clients/" component={Clients}/>
                     <PrivateRoute path="/admins/" component={AdminsList}/>
                     <PrivateRoute path="/riders/" component={RidersList}/>
                     <PrivateRoute path="/orders/active/" component={OrdersActive}/>

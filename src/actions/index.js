@@ -14,7 +14,6 @@ export const login = (login, password) => async (dispatch) => {
             login,
             password
         });
-        console.log('this is response: ', result.data);
         localStorage.setItem('token', result.data.token);
         dispatch(loginSuccess({data: result.data}));
     } catch (e) {
@@ -24,12 +23,12 @@ export const login = (login, password) => async (dispatch) => {
 };
 
 
-export const getUsersRequest = createAction('GET_USERS_REQUEST');
-export const getUsersFailure = createAction('GET_USERS_FAILURE');
-export const getUsersSuccess = createAction('GET_USERS_SUCCESS');
+export const getClientsRequest = createAction('GET_CLIENTS_REQUEST');
+export const getClientsFailure = createAction('GET_CLIENTS_FAILURE');
+export const getClientsSuccess = createAction('GET_CLIENTS_SUCCESS');
 
-export const getUsers = (params) => async (dispatch) => {
-    dispatch(getUsersRequest());
+export const getClients = (params) => async (dispatch) => {
+    dispatch(getClientsRequest());
     try {
         const token = localStorage.getItem("token");
         const result = await axios.get(api.clients(), {
@@ -40,8 +39,7 @@ export const getUsers = (params) => async (dispatch) => {
               ...params
             }
         });
-        // console.log('this is response: ', result);
-        dispatch(getUsersSuccess({data: result.data}));
+        dispatch(getClientsSuccess({data: result.data}));
     } catch (error) {
         console.error(error);
         if (error.response.status === 403 || error.response.status === 401) {
@@ -199,27 +197,3 @@ export const getActiveOrders = () => async (dispatch) => {
         dispatch(getActiveOrdersFailure());
     }
 };
-
-// export const getClientDetailsRequest = createAction('GET_CLIENT_DETAILS_REQUEST');
-// export const getClientDetailsFailure = createAction('GET_CLIENT_DETAILS_FAILED');
-// export const getClientDetailsSuccess = createAction('GET_CLIENT_DETAILS_SUCCESS');
-
-// export const getClientDetails = (id) => async (dispatch) => {
-//   dispatch(getClientDetailsRequest());
-//   try {
-//     const token = localStorage.getItem("token");
-//     const result = await axios.get(api.clientDetails(id), {
-//             headers: {
-//                 token: token
-//             }
-//         });
-//         console.log('action');
-//         dispatch(getClientDetailsSuccess(result.data));
-//   } catch (e) {
-//     console.log(e);
-//         if (e.error === 'Auth failed' || e.error === "Auth required") {
-//             localStorage.removeItem("token");
-//         }
-//         dispatch(getClientDetailsFailure());
-//   }
-// };
