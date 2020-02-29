@@ -220,3 +220,25 @@ export const getClientDetails = (clientId) => async (dispatch) => {
     dispatch(getClientDetailsFailure());
 }
 };
+
+export const setIsBlockedClientRequest = createAction('SET_IS_BLOCKED_CLIENT_REQUEST');
+export const setIsBlockedClientFailure = createAction('SET_IS_BLOCKED_CLIENT_FAILURE');
+export const setIsBlockedClientSuccess = createAction('SET_IS_BLOCKED_CLIENT_SUCCESS');
+
+export const setIsBlockedClient = (clientId, params) => async (dispatch) => {
+  dispatch(setIsBlockedClientRequest());
+  try {
+    const token = localStorage.getItem("token");
+    await axios.patch(api.clientDetails(clientId), params, {
+      headers: {
+        token: token
+    }
+    });
+    dispatch(setIsBlockedClientSuccess());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem("token");
+    }
+  }
+};

@@ -29,25 +29,43 @@ const clients = handleActions({
     [actions.getClientDetailsRequest](state) {
       return {
         ...state,
-        statusForDetails: 'request'
+        detailsStatus: 'request'
       }
     },
     [actions.getClientDetailsFailure](state) {
       return {
         ...state,
-        statusForDetails: 'failure'
+        detailsStatus: 'failure'
       };
     },
     [actions.getClientDetailsSuccess](state, {payload: {data, clientId}}) {
       return {
         ...state,
-        statusForDetails: 'success',
+        detailsStatus: 'success',
         detailsData: {
           ...state.detailsData,
           [clientId]: data,
         },
       };
     },
+    [actions.setIsBlockedClientRequest](state) {
+      return {
+        ...state,
+        blockedStatus: 'request'
+      }
+    },
+    [actions.setIsBlockedClientFailure](state) {
+      return {
+        ...state,
+        blockedStatus: 'failure'
+      };
+    },
+    [actions.setIsBlockedClientSuccess](state){
+      return {
+        ...state,
+        blockedStatus: 'success',
+      }
+    }
 }, {
     list: {
       data: []

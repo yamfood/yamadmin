@@ -17,6 +17,7 @@ const {Content} = Layout;
 const actionsCreators = {
   getClients: actions.getClients,
   getClientDetails: actions.getClientDetails,
+  setIsBlockedClient: actions.setIsBlockedClient,
 };
 
 
@@ -31,7 +32,8 @@ const mapStateToProps = (state) => {
           }
         )),
         clientDetails: state.clients.detailsData,
-        statusForDetails: state.clients.statusForDetails
+        detailsStatus: state.clients.detailsStatus,
+        blockedStatus: state.clients.blockedStatus
     }
 };
 
@@ -43,7 +45,9 @@ const Clients = (props) => {
       page,
       getClientDetails,
       clientDetails,
-      statusForDetails
+      blockedStatus,
+      setIsBlockedClient,
+      detailsStatus
     } = props;
 
     useEffect(() => {
@@ -52,8 +56,8 @@ const Clients = (props) => {
         }
     });
 
-    const handleSwitch = (checked) => {
-      console.log('this is checked: ', checked);
+    const handleIsBlockedSwitch = (checked, id) => {
+      setIsBlockedClient(id, {is_blocked: checked})
     }
 
     const columns = [
@@ -81,8 +85,8 @@ const Clients = (props) => {
           title: 'Блокирован',
           dataIndex: 'is_blocked',
           key: 'is_blocked',
-          render: (blocked) => {
-            return <Switch defaultChecked={blocked === true} onChange={handleSwitch} />
+          render: (blocked, client) => {
+            return <Switch defaultChecked={blocked === true} onChange={(checked) => handleIsBlockedSwitch(checked, client.id)} />
           }
       },
     ];
@@ -96,7 +100,7 @@ const Clients = (props) => {
        }
     };
 
-    const loading = clients.status === 'request';
+    const loading = (clients.status === 'request' || blockedStatus === 'request' || detailsStatus === 'request');
     return (
         <Layout>
             <Content
@@ -117,7 +121,7 @@ const Clients = (props) => {
                   size={"small"}
                   columns={columns}
                   dataSource={clientsList}
-                  loading={loading || statusForDetails === 'request'}
+                  loading={loading}
                   pagination={pagination(
                     clients.list.count,
                     2,
