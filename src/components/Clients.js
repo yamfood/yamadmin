@@ -32,8 +32,8 @@ const mapStateToProps = (state) => {
           }
         )),
         clientDetails: state.clients.detailsData,
-        statusForDetails: state.clients.statusForDetails,
-        statusForIsBlocked: state.clients.statusForIsBlocked
+        detailsStatus: state.clients.detailsStatus,
+        blockedStatus: state.clients.blockedStatus
     }
 };
 
@@ -45,8 +45,9 @@ const Clients = (props) => {
       page,
       getClientDetails,
       clientDetails,
-      statusForIsBlocked,
+      blockedStatus,
       setIsBlockedClient,
+      detailsStatus
     } = props;
 
     useEffect(() => {
@@ -99,11 +100,7 @@ const Clients = (props) => {
        }
     };
 
-    const loading = (
-      clients.status === 'request',
-      statusForIsBlocked === 'request',
-      statusForIsBlocked === 'request'
-    );
+    const loading = (clients.status === 'request' || blockedStatus === 'request' || detailsStatus === 'request');
     return (
         <Layout>
             <Content

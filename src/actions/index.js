@@ -229,15 +229,16 @@ export const setIsBlockedClient = (clientId, params) => async (dispatch) => {
   dispatch(setIsBlockedClientRequest());
   try {
     const token = localStorage.getItem("token");
-    await axios.patch(api.clientDetails(clientId), {
-      ...params
-    }, {
+    await axios.patch(api.clientDetails(clientId), params, {
       headers: {
         token: token
     }
     });
     dispatch(setIsBlockedClientSuccess());
   } catch (error) {
-    console.error('errror: ', error);
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem("token");
+    }
   }
 };

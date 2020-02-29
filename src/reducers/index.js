@@ -29,19 +29,19 @@ const clients = handleActions({
     [actions.getClientDetailsRequest](state) {
       return {
         ...state,
-        statusForDetails: 'request'
+        detailsStatus: 'request'
       }
     },
     [actions.getClientDetailsFailure](state) {
       return {
         ...state,
-        statusForDetails: 'failure'
+        detailsStatus: 'failure'
       };
     },
     [actions.getClientDetailsSuccess](state, {payload: {data, clientId}}) {
       return {
         ...state,
-        statusForDetails: 'success',
+        detailsStatus: 'success',
         detailsData: {
           ...state.detailsData,
           [clientId]: data,
@@ -51,19 +51,19 @@ const clients = handleActions({
     [actions.setIsBlockedClientRequest](state) {
       return {
         ...state,
-        statusForIsBlocked: 'request'
+        blockedStatus: 'request'
       }
     },
     [actions.setIsBlockedClientFailure](state) {
       return {
         ...state,
-        statusForIsBlocked: 'failure'
+        blockedStatus: 'failure'
       };
     },
     [actions.setIsBlockedClientSuccess](state){
       return {
         ...state,
-        statusForIsBlocked: 'success',
+        blockedStatus: 'success',
       }
     }
 }, {
