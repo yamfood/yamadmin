@@ -90,13 +90,6 @@ const Clients = (props) => {
     const displayDetails = (clientId) => {
        if (clientDetails[clientId]) {
         const formattedClientDetails = clientDetails[clientId].map((detail) => {
-          if (detail.label === ':payload') {
-            return (
-              <li key={detail.label}>
-                <b>{detail.label}:</b> {detail.value}
-              </li>
-            );
-          }
             return <li key={detail.label}><b>{detail.label}:</b> {detail.value}</li>
         })
         return formattedClientDetails;
