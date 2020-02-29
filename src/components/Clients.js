@@ -90,17 +90,7 @@ const Clients = (props) => {
     const displayDetails = (clientId) => {
        if (clientDetails[clientId]) {
         const formattedClientDetails = clientDetails[clientId].map((detail) => {
-          if (detail.label === ':is_blocked') {
-            return <li key={detail.label}>:blocked <Switch defaultChecked={detail.value === 'true'} onChange={handleSwitch} /></li>
-          }
-          if (detail.label === ':payload') {
-            return (
-              <li key={detail.label}>
-                {detail.label}: {detail.value}
-              </li>
-            );
-          }
-            return <li key={detail.label}>{detail.label}: {detail.value}</li>
+            return <li key={detail.label}><b>{detail.label}:</b> {detail.value}</li>
         })
         return formattedClientDetails;
        }
@@ -119,7 +109,10 @@ const Clients = (props) => {
             >
                 <h1 style={{fontSize: 30, textAlign: "center"}}>Клиенты</h1>
                 <Button style={{marginBottom: 20}} onClick={() => getClients({page: 1, per_page: 2})}><Icon type="reload" /></Button>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <PhoneSearchForm getByPhone={getClients} />
+              <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}><b>Кол-во:</b> {clients.list.count}</p>
+                </div>
                 <Table
                   size={"small"}
                   columns={columns}
