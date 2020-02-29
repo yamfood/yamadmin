@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
 import {
   Form,
-  Icon,
   Button,
   Input
 } from 'antd';
 
-const ClientForm = (props) => {
+const PhoneSearchForm = (props) => {
   useEffect(() => {
     props.form.validateFields();
   });
-  const { getClients } = props;
+  const { getByPhone } = props;
   const { getFieldDecorator } = props.form;
 
   const handleSubmit = (e) => {
@@ -19,7 +18,7 @@ const ClientForm = (props) => {
     props.form.validateFields((err, values) => {
       const { phone } = values;
       if (!err) {
-        getClients({phone, per_page: 2});
+        getByPhone({phone, per_page: 2});
       }
     });
   };
@@ -29,7 +28,7 @@ const ClientForm = (props) => {
     <Form.Item>
       {getFieldDecorator('phone')(
         <Input
-          prefix={<Icon type="number" style={{ color: 'rgba(0,0,0,.25)' }} />}
+          prefix="+"
           placeholder="Phone"
         />,
       )}
@@ -43,5 +42,5 @@ const ClientForm = (props) => {
   );
 }
 
-const WrappedForm = Form.create()(ClientForm);
+const WrappedForm = Form.create()(PhoneSearchForm);
 export default WrappedForm;

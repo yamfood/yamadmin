@@ -197,3 +197,26 @@ export const getActiveOrders = () => async (dispatch) => {
         dispatch(getActiveOrdersFailure());
     }
 };
+
+export const getClientDetailsRequest = createAction('GET_CLIENTDETAILS_REQUEST');
+export const getClientDetailsFailure = createAction('GET_CLIENTDETAILS_FAILURE');
+export const getClientDetailsSuccess = createAction('GET_CLIENTDETAILS_SUCCESS');
+
+export const getClientDetails = (clientId) => async (dispatch) => {
+  dispatch(getClientDetailsRequest());
+  try {
+    const token = localStorage.getItem("token");
+    const result = await axios.get(api.clientDetails(clientId), {
+        headers: {
+            token: token
+        }
+    });
+    dispatch(getClientDetailsSuccess({data: result.data, clientId}));
+} catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem("token");
+    }
+    dispatch(getClientDetailsFailure());
+}
+};

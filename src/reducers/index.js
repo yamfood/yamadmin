@@ -26,39 +26,61 @@ const clients = handleActions({
             page: data.page
         }
     },
+    [actions.getClientDetailsRequest](state) {
+      return {
+        ...state,
+        statusForDetails: 'request'
+      }
+    },
+    [actions.getClientDetailsFailure](state) {
+      return {
+        ...state,
+        statusForDetails: 'failure'
+      };
+    },
+    [actions.getClientDetailsSuccess](state, {payload: {data, clientId}}) {
+      return {
+        ...state,
+        statusForDetails: 'success',
+        detailsData: {
+          ...state.detailsData,
+          [clientId]: data,
+        },
+      };
+    },
 }, {
     list: {
       data: []
     },
     status: null,
     page: 1,
+    detailsData: {}
 });
 
-
 const riders = handleActions({
-    [actions.getRidersRequest](state) {
-        return {
-            ...state,
-            status: 'request'
-        }
-    },
-    [actions.getRidersFailure](state) {
-        return {
-            ...state,
-            status: 'failure',
-        }
-    },
-    [actions.getRidersSuccess](state, {payload: {data}}) {
-        console.log(data);
-        return {
-            ...state,
-            status: 'success',
-            list: data
-        }
-    }
+  [actions.getRidersRequest](state) {
+      return {
+          ...state,
+          status: 'request'
+      }
+  },
+  [actions.getRidersFailure](state) {
+      return {
+          ...state,
+          status: 'failure',
+      }
+  },
+  [actions.getRidersSuccess](state, {payload: {data}}) {
+      console.log(data);
+      return {
+          ...state,
+          status: 'success',
+          list: data
+      }
+  }
 }, {
-    list: [],
-    status: null
+  list: [],
+  status: null
 });
 
 
@@ -244,4 +266,3 @@ export default combineReducers({
     activeOrders,
     orderDetails
 })
-
