@@ -48,6 +48,24 @@ const clients = handleActions({
         },
       };
     },
+    [actions.setIsBlockedClientRequest](state) {
+      return {
+        ...state,
+        statusForIsBlocked: 'request'
+      }
+    },
+    [actions.setIsBlockedClientFailure](state) {
+      return {
+        ...state,
+        statusForIsBlocked: 'failure'
+      };
+    },
+    [actions.setIsBlockedClientSuccess](state){
+      return {
+        ...state,
+        statusForIsBlocked: 'success',
+      }
+    }
 }, {
     list: {
       data: []
