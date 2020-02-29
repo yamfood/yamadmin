@@ -4,6 +4,7 @@ import {Button, Icon, Layout, Table} from 'antd';
 import {withRouter} from 'react-router-dom'
 import {connect} from "react-redux";
 import * as actions from "../actions";
+import pagination from "./Pagination";
 
 const {Content} = Layout;
 
@@ -14,13 +15,23 @@ const actionsCreators = {
 
 const mapStateToProps = (state) => {
     return {
-        riders: state.riders
+        riders: state.riders,
+        ridersList: state.riders.list.data.map((rider) => ({
+          ...rider,
+          key: `${rider.id}`,
+        })),
+        page: state.riders.page,
     }
 };
 
 const RidersList = (props) => {
 
-    const {riders, getRiders} = props;
+    const {
+      riders,
+      getRiders,
+      ridersList,
+      page,
+    } = props;
 
     const columns = [
         {
@@ -48,7 +59,7 @@ const RidersList = (props) => {
 
     useEffect(() => {
         if (riders.status === null) {
-            getRiders();
+            getRiders({page, per_page: 2});
         }
     });
 
@@ -64,12 +75,19 @@ const RidersList = (props) => {
                 }}
             >
                 <h1 style={{fontSize: 30, textAlign: "center"}}>Курьеры</h1>
-                <Button style={{marginBottom: 20}} onClick={getRiders}><Icon type="reload"/></Button>
+                <Button style={{marginBottom: 20}} onClick={() => getRiders({page, per_page: 2})}><Icon type="reload"/></Button>
                 <Table
                     size={"small"}
                     columns={columns}
                     loading={loading}
-                    dataSource={riders.list}/>
+                    dataSource={ridersList}
+                    pagination={pagination(
+                      riders.list.count,
+                      2,
+                      getRiders,
+                      page
+                    )}
+                    />
             </Content>
         </Layout>
     )

@@ -103,24 +103,24 @@ export const getRidersRequest = createAction('GET_RIDERS_REQUEST');
 export const getRidersFailure = createAction('GET_RIDERS_FAILURE');
 export const getRidersSuccess = createAction('GET_RIDERS_SUCCESS');
 
-export const getRiders = () => async (dispatch) => {
-    dispatch(getRidersRequest());
-    try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(api.riders(), {
-            headers: {
-                token: token
-            }
-        });
-        const result = await response.json();
-        dispatch(getRidersSuccess({data: result}));
-    } catch (e) {
-        console.log(e);
-        if (e.error === 'Auth failed' || e.error === "Auth required") {
-            localStorage.removeItem("token");
-        }
-        dispatch(getRidersFailure());
-    }
+export const getRiders = (params) => async (dispatch) => {
+  dispatch(getRidersRequest());
+  try {
+      const token = localStorage.getItem("token");
+      const result = await axios.get(api.riders(), {
+          headers: {
+              token: token
+          },
+          params,
+      });
+      dispatch(getRidersSuccess({data: result.data}));
+  } catch (error) {
+      console.log(error);
+      if (error.response.status === 403 || error.response.status === 401) {
+        localStorage.removeItem("token");
+      }
+      dispatch(getRidersFailure());
+  }
 };
 
 

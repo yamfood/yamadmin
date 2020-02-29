@@ -93,12 +93,16 @@ const riders = handleActions({
       return {
           ...state,
           status: 'success',
-          list: data
+          list: data,
+          page: data.page,
       }
   }
 }, {
-  list: [],
-  status: null
+  list: {
+    data: []
+  },
+  status: null,
+  page: 1
 });
 
 
