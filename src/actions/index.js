@@ -1,4 +1,5 @@
 import api from "../apiRoutes"
+import axios from 'axios';
 import {createAction} from 'redux-actions';
 
 
@@ -8,23 +9,13 @@ export const loginSuccess = createAction('LOGIN_SUCCESS');
 
 export const login = (login, password) => async (dispatch) => {
     dispatch(loginRequest());
-
-    const data = {
-        login: login,
-        password: password
-    };
-
     try {
-        const response = await fetch(api.login(), {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+        const result = await axios.post(api.login(), {
+            login,
+            password
         });
-        const result = await response.json();
-        localStorage.setItem("token", result.token);
-        dispatch(loginSuccess({data: result}));
+        localStorage.setItem('token', result.data.token);
+        dispatch(loginSuccess({data: result.data}));
     } catch (e) {
         console.log(e);
         dispatch(loginFailure());
@@ -32,27 +23,28 @@ export const login = (login, password) => async (dispatch) => {
 };
 
 
-export const getUsersRequest = createAction('GET_USERS_REQUEST');
-export const getUsersFailure = createAction('GET_USERS_FAILURE');
-export const getUsersSuccess = createAction('GET_USERS_SUCCESS');
+export const getClientsRequest = createAction('GET_CLIENTS_REQUEST');
+export const getClientsFailure = createAction('GET_CLIENTS_FAILURE');
+export const getClientsSuccess = createAction('GET_CLIENTS_SUCCESS');
 
-export const getUsers = () => async (dispatch) => {
-    dispatch(getUsersRequest());
+export const getClients = (params) => async (dispatch) => {
+    dispatch(getClientsRequest());
     try {
         const token = localStorage.getItem("token");
-        const response = await fetch(api.users(), {
+        const result = await axios.get(api.clients(), {
             headers: {
                 token: token
+            },
+            params: {
+              ...params
             }
         });
-        const result = await response.json();
-        dispatch(getUsersSuccess({data: result}));
-    } catch (e) {
-        console.log(e);
-        if (e.error === 'Auth failed' || e.error === "Auth required") {
-            localStorage.removeItem("token");
+        dispatch(getClientsSuccess({data: result.data}));
+    } catch (error) {
+        console.error(error);
+        if (error.response.status === 403 || error.response.status === 401) {
+          localStorage.removeItem("token");
         }
-        dispatch(getUsersFailure());
     }
 };
 
@@ -205,4 +197,3 @@ export const getActiveOrders = () => async (dispatch) => {
         dispatch(getActiveOrdersFailure());
     }
 };
-

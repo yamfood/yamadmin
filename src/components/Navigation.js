@@ -31,7 +31,7 @@ const Navigation = () => {
                 <Menu.Item key="4">
                     <Icon type="smile"/>
                     <span>Клиенты</span>
-                    <Link to="/users/"/>
+                    <Link to="/clients/"/>
                 </Menu.Item>
                 <Menu.Item key="5">
                     <Icon type="car"/>
