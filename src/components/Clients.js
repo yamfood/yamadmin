@@ -65,9 +65,9 @@ const Clients = (props) => {
             key: 'phone'
         },
         {
-            title: 'Комментарий',
-            dataIndex: 'comment',
-            key: 'comment'
+            title: 'Блокирован',
+            dataIndex: 'is_blocked',
+            key: 'is_blocked'
         },
     ];
 
