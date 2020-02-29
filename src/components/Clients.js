@@ -1,18 +1,22 @@
 import React, {useEffect} from "react";
-import {Layout, Table} from "antd";
+import {
+  Layout,
+  Table,
+  Switch,
+  Button,
+  Icon,
+} from "antd";
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import * as actions from '../actions';
-import {
-  Button,
-  Icon,
-} from 'antd';
-import ClientForm from './ClientForm';
+import PhoneSearchForm from './PhoneSearchForm';
+import pagination from './Pagination';
 
 const {Content} = Layout;
 
 const actionsCreators = {
   getClients: actions.getClients,
+  getClientDetails: actions.getClientDetails,
 };
 
 
@@ -20,12 +24,14 @@ const mapStateToProps = (state) => {
     return {
         clients: state.clients,
         page: state.clients.page,
-        userList: state.clients.list.data.map((client) => (
+        clientsList: state.clients.list.data.map((client) => (
           {
             ...client,
             key: `${client.id}`,
           }
-        ))
+        )),
+        clientDetails: state.clients.detailsData,
+        statusForDetails: state.clients.statusForDetails
     }
 };
 
@@ -33,8 +39,11 @@ const Clients = (props) => {
     const {
       clients,
       getClients,
-      userList,
-      page
+      clientsList,
+      page,
+      getClientDetails,
+      clientDetails,
+      statusForDetails
     } = props;
 
     useEffect(() => {
@@ -42,6 +51,10 @@ const Clients = (props) => {
           getClients({page, per_page: 2});
         }
     });
+
+    const handleSwitch = (checked) => {
+      console.log('this is checked: ', checked);
+    }
 
     const columns = [
         {
@@ -65,15 +78,33 @@ const Clients = (props) => {
             key: 'phone'
         },
         {
-            title: 'Блокирован',
-            dataIndex: 'is_blocked',
-            key: 'is_blocked'
-        },
+          title: 'Блокирован',
+          dataIndex: 'is_blocked',
+          key: 'is_blocked',
+          render: (blocked) => {
+            return <Switch defaultChecked={blocked === true} onChange={handleSwitch} />
+          }
+      },
     ];
 
-    const handlePage = (page) => {
-      getClients({page, per_page: 2});
-    }
+    const displayDetails = (clientId) => {
+       if (clientDetails[clientId]) {
+        const formattedClientDetails = clientDetails[clientId].map((detail) => {
+          if (detail.label === ':is_blocked') {
+            return <li key={detail.label}>:blocked <Switch defaultChecked={detail.value === 'true'} onChange={handleSwitch} /></li>
+          }
+          if (detail.label === ':payload') {
+            return (
+              <li key={detail.label}>
+                {detail.label}: {detail.value}
+              </li>
+            );
+          }
+            return <li key={detail.label}>{detail.label}: {detail.value}</li>
+        })
+        return formattedClientDetails;
+       }
+    };
 
     const loading = clients.status === 'request';
     return (
@@ -88,18 +119,29 @@ const Clients = (props) => {
             >
                 <h1 style={{fontSize: 30, textAlign: "center"}}>Клиенты</h1>
                 <Button style={{marginBottom: 20}} onClick={() => getClients({page: 1, per_page: 2})}><Icon type="reload" /></Button>
-                <ClientForm getClients={getClients} />
+                <PhoneSearchForm getByPhone={getClients} />
                 <Table
                   size={"small"}
                   columns={columns}
-                  dataSource={userList}
-                  loading={loading}
-                  pagination={{
-                    total: clients.list.count,
-                    pageSize: 2,
-                    onChange: handlePage,
-                    current: page
-                  }}
+                  dataSource={clientsList}
+                  loading={loading || statusForDetails === 'request'}
+                  pagination={pagination(
+                    clients.list.count,
+                    2,
+                    getClients,
+                    page
+                  )}
+                  expandedRowRender = {(record) => (
+                      <ul>
+                        {displayDetails(record.id)}
+                      </ul>
+                    )}
+                  onExpand={(expanded, record) => {
+                    if (expanded) {
+                      getClientDetails(record.id);
+                      }
+                    }
+                  }
                 />
             </Content>
         </Layout>
