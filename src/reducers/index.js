@@ -98,10 +98,33 @@ const riders = handleActions({
       page: data.page,
     }
   },
+  [actions.getRiderDetailsRequest](state) {
+    return {
+      ...state,
+      riderDetailsStatus: 'request',
+    }
+  },
+  [actions.getRiderDetailsFailure](state) {
+    return {
+      ...state,
+      riderDetailsStatus: 'failure',
+    };
+  },
+  [actions.getRiderDetailsSuccess](state, { payload: { data, riderId } }) {
+    return {
+      ...state,
+      riderDetailsStatus: 'success',
+      riderDetails: {
+        ...state.riderDetails,
+        [riderId]: data,
+      },
+    };
+  },
 }, {
   list: [],
   status: null,
   page: 1,
+  riderDetails: {},
 });
 
 
