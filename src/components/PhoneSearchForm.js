@@ -18,8 +18,9 @@ const PhoneSearchForm = (props) => {
 
     props.form.validateFields((err, values) => {
       const { phone } = values;
+      console.log('values: ', values);
       if (!err) {
-        getByPhone({phone, per_page: 2});
+        getByPhone({ phone });
       }
     });
   };
