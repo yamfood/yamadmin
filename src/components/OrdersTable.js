@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import OrderCard from "./OrderCard";
 import OrderCardSkeleton from "./OrderCardSkeleton";

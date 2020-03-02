@@ -1,5 +1,5 @@
+/* eslint-disable */
 import React, {useEffect} from "react";
-
 import {Layout} from "antd";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";

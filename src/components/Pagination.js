@@ -1,10 +1,10 @@
-const Pagination = (total, pageSize, handlePage, page) => ({
+const Pagination = (total, pageSize, handlePage, currentPage) => ({
   total: total,
   pageSize,
   onChange: (page) => {
-    handlePage({page, per_page: 2})
+    handlePage({ page })
   },
-  current: page
+  current: currentPage,
 });
 
 export default Pagination;

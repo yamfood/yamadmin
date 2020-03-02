@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {useEffect} from "react";
 import {Button, Icon, Layout, Table} from 'antd';
 
