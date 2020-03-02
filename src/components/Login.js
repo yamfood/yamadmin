@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, {useState} from "react";
 import {Form, Input, Layout} from "antd";
 import {connect} from "react-redux";

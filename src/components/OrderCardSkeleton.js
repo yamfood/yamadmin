@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from "react";
 import { Skeleton, Card, Icon } from 'antd';
 const { Meta } = Card;
