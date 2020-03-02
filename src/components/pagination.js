@@ -7,5 +7,5 @@ const pagination = (total, pageSize, handlePage, currentPage) => ({
   },
   current: currentPage,
 });
-console.log('hello ')
+
 export default pagination;
