@@ -77,7 +77,7 @@ const RidersList = (props) => {
             key: `${rider.id}`,
           }))}
           pagination={pagination(
-            riders.list.count,
+            riders.total,
             2,
             getRiders,
             riders.page,

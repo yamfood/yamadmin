@@ -94,6 +94,7 @@ const riders = handleActions({
       ...state,
       status: 'success',
       list: data.data,
+      total: data.count,
       page: data.page,
     }
   },
