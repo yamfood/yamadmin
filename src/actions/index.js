@@ -26,7 +26,7 @@ export const getClientsRequest = createAction('GET_CLIENTS_REQUEST');
 export const getClientsFailure = createAction('GET_CLIENTS_FAILURE');
 export const getClientsSuccess = createAction('GET_CLIENTS_SUCCESS');
 
-export const getClients = ({ page }) => async (dispatch) => {
+export const getClients = (params) => async (dispatch) => {
   dispatch(getClientsRequest());
   try {
     const token = localStorage.getItem('token');
@@ -35,7 +35,7 @@ export const getClients = ({ page }) => async (dispatch) => {
         token,
       },
       params: {
-        page,
+        ...params,
         per_page: 2,
       },
     });
@@ -103,7 +103,7 @@ export const getRidersRequest = createAction('GET_RIDERS_REQUEST');
 export const getRidersFailure = createAction('GET_RIDERS_FAILURE');
 export const getRidersSuccess = createAction('GET_RIDERS_SUCCESS');
 
-export const getRiders = ({ page }) => async (dispatch) => {
+export const getRiders = (params) => async (dispatch) => {
   dispatch(getRidersRequest());
   try {
     const token = localStorage.getItem('token');
@@ -112,7 +112,7 @@ export const getRiders = ({ page }) => async (dispatch) => {
         token,
       },
       params: {
-        page,
+        ...params,
         per_page: 2,
       },
     });

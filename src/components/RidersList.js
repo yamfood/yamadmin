@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import pagination from './pagination';
+import PhoneSearchForm from './PhoneSearchForm';
 
 const { Content } = Layout;
 
@@ -68,6 +69,13 @@ const RidersList = (props) => {
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Курьеры</h1>
         <Button style={{ marginBottom: 20 }} onClick={() => getRiders({ page: 1 })}><Icon type="reload" /></Button>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <PhoneSearchForm getByPhone={getRiders} />
+          <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
+            <b>Кол-во:  </b>
+            {riders.total}
+          </p>
+        </div>
         <Table
           size="small"
           columns={columns}
