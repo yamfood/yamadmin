@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import {
-  Button, Icon, Layout, Table,
+  Button,
+  Icon,
+  Layout,
+  Table,
+  Switch,
 } from 'antd';
 
 import { withRouter } from 'react-router-dom'
@@ -15,6 +19,7 @@ const { Content } = Layout;
 const actionsCreators = {
   getRiders: actions.getRiders,
   getRiderDetails: actions.getRiderDetails,
+  editRider: actions.editRider,
 };
 
 
@@ -27,6 +32,7 @@ const RidersList = (props) => {
     riders,
     getRiders,
     getRiderDetails,
+    editRider,
   } = props;
 
   const handleEdit = (details) => {
@@ -63,6 +69,17 @@ const RidersList = (props) => {
       render: (text) => `+${text}`,
     },
     {
+      title: 'Блокирован',
+      dataIndex: 'is_blocked',
+      key: 'is_blocked',
+      render: (blocked, client) => (
+        <Switch
+          defaultChecked={blocked === true}
+          onChange={(checked) => editRider({ is_blocked: checked }, client.id)}
+        />
+      ),
+    },
+    {
       title: 'Изменить/Удалить',
       dataIndex: 'edit/delete',
       key: 'edit/delete',
@@ -91,7 +108,7 @@ const RidersList = (props) => {
     }
   });
 
-  const loading = riders.status === 'request' || riders.riderDetailsStatus === 'request';
+  const loading = riders.status === 'request' || riders.riderDetailsStatus === 'request' || riders.editRiderStatus === 'request';
 
   return (
     <Layout>
