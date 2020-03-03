@@ -123,6 +123,24 @@ const riders = handleActions({
       },
     };
   },
+  [actions.editRiderRequest](state) {
+    return {
+      ...state,
+      editRiderStatus: 'request',
+    };
+  },
+  [actions.editRiderFailure](state) {
+    return {
+      ...state,
+      editRiderStatus: 'failure',
+    };
+  },
+  [actions.editRiderSuccess](state) {
+    return {
+      ...state,
+      editRiderStatus: 'success',
+    };
+  },
 }, {
   list: [],
   status: null,

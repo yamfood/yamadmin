@@ -29,6 +29,17 @@ const RidersList = (props) => {
     getRiderDetails,
   } = props;
 
+  const handleEdit = (details) => {
+    props.history.push({
+      pathname: '/riders/edit',
+      state: details,
+    });
+  }
+
+  const handleDelete = () => {
+    console.log('Delete');
+  }
+
   const columns = [
     {
       title: 'ID',
@@ -50,6 +61,27 @@ const RidersList = (props) => {
       dataIndex: 'phone',
       key: 'phone',
       render: (text) => `+${text}`,
+    },
+    {
+      title: 'Изменить/Удалить',
+      dataIndex: 'edit/delete',
+      key: 'edit/delete',
+      render: (id, record) => (
+        <span>
+          <Button
+            type="link"
+            onClick={() => handleEdit(record)}
+          >
+              Edit
+          </Button>
+          <Button
+            type="link"
+            onClick={() => handleDelete()}
+          >
+              Delete
+          </Button>
+        </span>
+      ),
     },
   ];
 

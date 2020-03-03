@@ -268,3 +268,26 @@ export const getRiderDetails = (riderId) => async (dispatch) => {
     dispatch(getRiderDetailsFailure());
   }
 };
+
+export const editRiderRequest = createAction('EDIT_RIDER_REQUEST');
+export const editRiderFailure = createAction('EDIT_RIDER_FAILURE');
+export const editRiderSuccess = createAction('EDIT_RIDER_SUCCESS');
+
+export const editRider = (riderDteails, riderid) => async (dispatch) => {
+  dispatch(editRiderRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.patch(api.riderDetails(riderid), riderDteails, {
+      headers: {
+        token,
+      },
+    });
+    dispatch(editRiderSuccess());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(editRiderFailure());
+  }
+};
