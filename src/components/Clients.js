@@ -11,6 +11,7 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
 import PhoneSearchForm from './PhoneSearchForm';
 import pagination from './pagination';
+import ClientDetails from './DisplayDetails';
 
 const { Content } = Layout;
 
@@ -23,34 +24,19 @@ const actionsCreators = {
 
 const mapStateToProps = (state) => ({
   clients: state.clients,
-  page: state.clients.page,
-  clientsList: state.clients.list.data.map((client) => (
-    {
-      ...client,
-      key: `${client.id}`,
-    }
-  )),
-  clientDetails: state.clients.detailsData,
-  detailsStatus: state.clients.detailsStatus,
-  blockedStatus: state.clients.blockedStatus,
 });
 
 const Clients = (props) => {
   const {
     clients,
     getClients,
-    clientsList,
-    page,
     getClientDetails,
-    clientDetails,
-    blockedStatus,
     setIsBlockedClient,
-    detailsStatus,
   } = props;
 
   useEffect(() => {
     if (clients.status === null) {
-      getClients({ page });
+      getClients({ page: clients.page });
     }
   });
 
@@ -92,23 +78,7 @@ const Clients = (props) => {
     },
   ];
 
-  const displayDetails = (clientId) => {
-    if (clientDetails[clientId]) {
-      const formattedClientDetails = clientDetails[clientId].map((detail) => (
-        <li key={detail.label}>
-          <b>
-            {detail.label}
-            :
-          </b>
-          {detail.value}
-        </li>
-      ));
-      return formattedClientDetails;
-    }
-    return null;
-  };
-
-  const loading = (clients.status === 'request' || blockedStatus === 'request' || detailsStatus === 'request');
+  const loading = (clients.status === 'request' || clients.blockedStatus === 'request' || clients.detailsStatus === 'request');
   return (
     <Layout>
       <Content
@@ -125,23 +95,28 @@ const Clients = (props) => {
           <PhoneSearchForm getByPhone={getClients} />
           <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
             <b>Кол-во:</b>
-            {clients.list.count}
+            {clients.total}
           </p>
         </div>
         <Table
           size="small"
           columns={columns}
-          dataSource={clientsList}
+          dataSource={clients.list.map((client) => (
+            {
+              ...client,
+              key: `${client.id}`,
+            }
+          ))}
           loading={loading}
           pagination={pagination(
-            clients.list.count,
+            clients.total,
             2,
             getClients,
-            page,
+            clients.page,
           )}
           expandedRowRender={(record) => (
             <ul>
-              {displayDetails(record.id)}
+              <ClientDetails dataToDisplay={clients.detailsData} id={record.id} />
             </ul>
           )}
           onExpand={(expanded, record) => {

@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import pagination from './pagination';
 import PhoneSearchForm from './PhoneSearchForm';
+import RiderDetails from './DisplayDetails';
 
 const { Content } = Layout;
 
@@ -25,7 +26,6 @@ const RidersList = (props) => {
   const {
     riders,
     getRiders,
-    // riderDetails,
     getRiderDetails,
   } = props;
 
@@ -58,44 +58,6 @@ const RidersList = (props) => {
       getRiders({ page: riders.page });
     }
   });
-
-  const displayDetails = (recordId) => {
-    if (riders.riderDetails[recordId]) {
-      return (
-        <ul>
-          <li key={riders.riderDetails[recordId].id}>
-            <b>id:</b>
-            {riders.riderDetails[recordId].id}
-          </li>
-          <li key={riders.riderDetails[recordId].tid}>
-            <b>tid:</b>
-            {riders.riderDetails[recordId].tid}
-          </li>
-          <li key={riders.riderDetails[recordId].name}>
-            <b>name:</b>
-            {riders.riderDetails[recordId].name}
-          </li>
-          <li key={riders.riderDetails[recordId].phone}>
-            <b>phone:</b>
-            {riders.riderDetails[recordId].phone}
-          </li>
-          <li key={riders.riderDetails[recordId].notes}>
-            <b>notes:</b>
-            {riders.riderDetails[recordId].notes}
-          </li>
-          <li key={riders.riderDetails[recordId].is_blocked}>
-            <b>is_blocked:</b>
-            {riders.riderDetails[recordId].is_blocked}
-          </li>
-          <li key={riders.riderDetails[recordId].deposit}>
-            <b>deposit:</b>
-            {riders.riderDetails[recordId].deposit}
-          </li>
-        </ul>
-      );
-    }
-    return null;
-  };
 
   const loading = riders.status === 'request' || riders.riderDetailsStatus === 'request';
 
@@ -131,7 +93,11 @@ const RidersList = (props) => {
             getRiders,
             riders.page,
           )}
-          expandedRowRender={(record) => displayDetails(record.id)}
+          expandedRowRender={(record) => (
+            <ul>
+              <RiderDetails dataToDisplay={riders.riderDetails} id={record.id} />
+            </ul>
+          )}
           onExpand={(expanded, record) => {
             if (expanded) {
               getRiderDetails(record.id)
