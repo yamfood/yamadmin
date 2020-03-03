@@ -245,3 +245,26 @@ export const setIsBlockedClient = (clientId, params) => async (dispatch) => {
     }
   }
 };
+
+export const getRiderDetailsRequest = createAction('GET_RIDER_DETAILS_REQUEST');
+export const getRiderDetailsFailure = createAction('GET_RIDER_DETAILS_FAILURE');
+export const getRiderDetailsSuccess = createAction('GET_RIDER_DETAILS_SUCCESS');
+
+export const getRiderDetails = (riderId) => async (dispatch) => {
+  dispatch(getRiderDetailsRequest());
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(api.riderDetails(riderId), {
+      headers: {
+        token,
+      },
+    });
+    dispatch(getRiderDetailsSuccess({ data: response.data, riderId }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(getRiderDetailsFailure());
+  }
+};

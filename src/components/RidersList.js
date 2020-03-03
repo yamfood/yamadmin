@@ -8,11 +8,13 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import pagination from './pagination';
 import PhoneSearchForm from './PhoneSearchForm';
+import RiderDetails from './DisplayDetails';
 
 const { Content } = Layout;
 
 const actionsCreators = {
   getRiders: actions.getRiders,
+  getRiderDetails: actions.getRiderDetails,
 };
 
 
@@ -24,6 +26,7 @@ const RidersList = (props) => {
   const {
     riders,
     getRiders,
+    getRiderDetails,
   } = props;
 
   const columns = [
@@ -56,7 +59,7 @@ const RidersList = (props) => {
     }
   });
 
-  const loading = riders.status === 'request';
+  const loading = riders.status === 'request' || riders.riderDetailsStatus === 'request';
 
   return (
     <Layout>
@@ -90,6 +93,16 @@ const RidersList = (props) => {
             getRiders,
             riders.page,
           )}
+          expandedRowRender={(record) => (
+            <ul>
+              <RiderDetails dataToDisplay={riders.riderDetails} id={record.id} />
+            </ul>
+          )}
+          onExpand={(expanded, record) => {
+            if (expanded) {
+              getRiderDetails(record.id)
+            }
+          }}
         />
       </Content>
     </Layout>

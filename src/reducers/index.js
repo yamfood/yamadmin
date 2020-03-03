@@ -22,8 +22,9 @@ const clients = handleActions({
     return {
       ...state,
       status: 'success',
-      list: data,
+      list: data.data,
       page: data.page,
+      total: data.count,
     }
   },
   [actions.getClientDetailsRequest](state) {
@@ -67,9 +68,7 @@ const clients = handleActions({
     }
   },
 }, {
-  list: {
-    data: [],
-  },
+  list: [],
   status: null,
   page: 1,
   detailsData: {},
@@ -98,10 +97,37 @@ const riders = handleActions({
       page: data.page,
     }
   },
+  [actions.getRiderDetailsRequest](state) {
+    return {
+      ...state,
+      riderDetailsStatus: 'request',
+    }
+  },
+  [actions.getRiderDetailsFailure](state) {
+    return {
+      ...state,
+      riderDetailsStatus: 'failure',
+    };
+  },
+  [actions.getRiderDetailsSuccess](state, { payload: { data, riderId } }) {
+    const riderDetail = Object.entries(data).map(((detail) => ({
+      label: detail[0],
+      value: detail[1],
+    })));
+    return {
+      ...state,
+      riderDetailsStatus: 'success',
+      riderDetails: {
+        ...state.riderDetails,
+        [riderId]: riderDetail,
+      },
+    };
+  },
 }, {
   list: [],
   status: null,
   page: 1,
+  riderDetails: {},
 });
 
 
