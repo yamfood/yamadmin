@@ -42,10 +42,6 @@ const RidersList = (props) => {
     });
   }
 
-  const handleDelete = () => {
-    console.log('Delete');
-  }
-
   const columns = [
     {
       title: 'ID',
@@ -80,24 +76,16 @@ const RidersList = (props) => {
       ),
     },
     {
-      title: 'Изменить/Удалить',
-      dataIndex: 'edit/delete',
-      key: 'edit/delete',
+      title: 'Изменить',
+      dataIndex: 'edit',
+      key: 'edit',
       render: (id, record) => (
-        <span>
-          <Button
-            type="link"
-            onClick={() => handleEdit(record)}
-          >
-              Edit
-          </Button>
-          <Button
-            type="link"
-            onClick={() => handleDelete()}
-          >
-              Delete
-          </Button>
-        </span>
+        <Button
+          type="link"
+          onClick={() => handleEdit(record)}
+        >
+          Изменить
+        </Button>
       ),
     },
   ];
@@ -123,6 +111,14 @@ const RidersList = (props) => {
         <Button style={{ marginBottom: 20 }} onClick={() => getRiders({ page: 1 })}><Icon type="reload" /></Button>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <PhoneSearchForm getByPhone={getRiders} />
+          <Button
+            type="primary"
+            onClick={() => {
+              props.history.push('/riders/create/');
+            }}
+          >
+            Создать Курьера
+          </Button>
           <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
             <b>Кол-во:  </b>
             {riders.total}
