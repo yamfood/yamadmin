@@ -259,6 +259,7 @@ export const getRiderDetails = (riderId) => async (dispatch) => {
         token,
       },
     });
+    console.log('response: ', response);
     dispatch(getRiderDetailsSuccess({ data: response.data, riderId }));
   } catch (error) {
     console.error(error);

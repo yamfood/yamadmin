@@ -29,17 +29,6 @@ const RidersList = (props) => {
     getRiderDetails,
   } = props;
 
-  const handleEdit = (details) => {
-    props.history.push({
-      pathname: '/riders/edit',
-      state: details,
-    });
-  }
-
-  const handleDelete = () => {
-    console.log('Delete');
-  }
-
   const columns = [
     {
       title: 'ID',
@@ -63,22 +52,22 @@ const RidersList = (props) => {
       render: (text) => `+${text}`,
     },
     {
-      title: 'Изменить/Удалить',
-      dataIndex: 'edit/delete',
-      key: 'edit/delete',
+      title: 'Изменить',
+      dataIndex: 'edit',
+      key: 'edit',
       render: (id, record) => (
         <span>
           <Button
             type="link"
-            onClick={() => handleEdit(record)}
+            onClick={() => {
+              props.history.push(`/riders/${record.id}/edit`);
+              // props.history.push({
+              //   pathname: '/riders/edit',
+              //   state: riders.riderDetails,
+              // });
+            }}
           >
-              Edit
-          </Button>
-          <Button
-            type="link"
-            onClick={() => handleDelete()}
-          >
-              Delete
+              Изменить
           </Button>
         </span>
       ),
@@ -89,7 +78,7 @@ const RidersList = (props) => {
     if (riders.status === null) {
       getRiders({ page: riders.page });
     }
-  });
+  }, []);
 
   const loading = riders.status === 'request' || riders.riderDetailsStatus === 'request';
 

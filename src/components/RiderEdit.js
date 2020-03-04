@@ -12,29 +12,39 @@ import * as actions from '../actions';
 
 const actionsCreators = {
   editRider: actions.editRider,
+  getRiderDetails: actions.getRiderDetails,
 };
 
 const { Content } = Layout;
 
 const RidersForm = (props) => {
+  const {
+    form,
+    match,
+    editRider,
+    getRiderDetails,
+    riders,
+  } = props;
+
+
   useEffect(() => {
     props.form.validateFields();
-  });
+    const riderID = match.params.id;
+    const { editRiderStatus = null } = riders;
+    if (editRiderStatus === null) {
+      getRiderDetails(riderID);
+    }
+  }, []);
 
-  const { form, location } = props;
   const { getFieldDecorator } = form;
-  const { state } = location;
-  const {
-    editRider,
-    editStatus,
-  } = props;
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    const { editRiderDetails } = riders;
     props.form.validateFields((err, values) => {
       if (!err) {
-        editRider(values, state.id);
+        editRider(values, editRiderDetails.id);
       }
     });
   };
@@ -49,40 +59,42 @@ const RidersForm = (props) => {
         }}
       >
         <h1 style={{ textAlign: 'center', fontSize: 24 }}>Изменение</h1>
-        <Form onSubmit={handleSubmit}>
+        <Form
+          onSubmit={handleSubmit}
+        >
           <Form.Item label="Tid">
             {getFieldDecorator('tid', {
-              initialValue: state.tid,
+              initialValue: riders.editRiderDetails.tid,
             })(
-              <Input type="number" />,
+              <Input type="number" disabled={riders.riderDetailsStatus === 'request'} />,
             )}
           </Form.Item>
           <Form.Item label="Имя">
             {getFieldDecorator('name', {
-              initialValue: state.name,
+              initialValue: riders.editRiderDetails.name,
             })(
-              <Input />,
+              <Input disabled={riders.riderDetailsStatus === 'request'} />,
             )}
           </Form.Item>
           <Form.Item label="Сот.Тел">
             {getFieldDecorator('phone', {
-              initialValue: state.phone,
+              initialValue: riders.editRiderDetails.phone,
             })(
-              <Input type="number" />,
+              <Input disabled={riders.riderDetailsStatus === 'request'} type="number" />,
             )}
           </Form.Item>
-          <Form.Item label="Нотес">
+          <Form.Item label="Заметки">
             {getFieldDecorator('notes', {
-              initialValue: state.notes,
+              initialValue: riders.editRiderDetails.notes,
             })(
-              <Input />,
+              <Input disabled={riders.riderDetailsStatus === 'request'} />,
             )}
           </Form.Item>
           <Form.Item label="Блокирован">
             {getFieldDecorator('is_blocked', {
-              initialValue: state.is_blocked,
+              initialValue: riders.editRiderDetails.is_blocked,
             })(
-              <Switch defaultChecked={state.is_blocked === true} />,
+              <Switch disabled={riders.riderDetailsStatus === 'request'} defaultChecked={riders.editRiderDetails.is_blocked === true} />,
             )}
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -96,7 +108,8 @@ const RidersForm = (props) => {
                 style={{ marginLeft: 10 }}
                 type="primary"
                 htmlType="submit"
-                loading={editStatus === 'request'}
+                loading={riders.editRiderStatus === 'request'}
+                disabled={riders.riderDetailsStatus === 'request'}
               >
                 Сохранить
               </Button>
@@ -109,7 +122,8 @@ const RidersForm = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-  editStatus: state.riders.editRiderStatus,
+  riders: state.riders,
+
 });
 
 const WrappedForm = Form.create()(RidersForm);
