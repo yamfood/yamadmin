@@ -61,10 +61,6 @@ const RidersList = (props) => {
             type="link"
             onClick={() => {
               props.history.push(`/riders/${record.id}/edit`);
-              // props.history.push({
-              //   pathname: '/riders/edit',
-              //   state: riders.riderDetails,
-              // });
             }}
           >
               Изменить
@@ -75,9 +71,7 @@ const RidersList = (props) => {
   ];
 
   useEffect(() => {
-    if (riders.status === null) {
-      getRiders({ page: riders.page });
-    }
+    getRiders({ page: riders.page });
   }, []);
 
   const loading = riders.status === 'request' || riders.riderDetailsStatus === 'request';

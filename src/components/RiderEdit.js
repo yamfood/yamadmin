@@ -28,12 +28,8 @@ const RidersForm = (props) => {
 
 
   useEffect(() => {
-    props.form.validateFields();
     const riderID = match.params.id;
-    const { editRiderStatus = null } = riders;
-    if (editRiderStatus === null) {
-      getRiderDetails(riderID);
-    }
+    getRiderDetails(riderID);
   }, []);
 
   const { getFieldDecorator } = form;
