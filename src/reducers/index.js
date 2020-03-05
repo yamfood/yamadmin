@@ -142,6 +142,24 @@ const riders = handleActions({
       editRiderStatus: 'success',
     };
   },
+  [actions.createRiderRequest](state) {
+    return {
+      ...state,
+      createRiderStatus: 'request',
+    };
+  },
+  [actions.createRiderFailure](state) {
+    return {
+      ...state,
+      createRiderStatus: 'failure',
+    };
+  },
+  [actions.createRiderSuccess](state) {
+    return {
+      ...state,
+      createRiderStatus: 'success',
+    };
+  },
 }, {
   list: [],
   status: null,

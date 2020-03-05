@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { message } from 'antd';
 import { createAction } from 'redux-actions';
 import api from '../apiRoutes';
 
@@ -284,11 +285,39 @@ export const editRider = (riderDteails, riderid) => async (dispatch) => {
       },
     });
     dispatch(editRiderSuccess());
+    message.success('Курьер успешно изменён', 3)
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
     }
     dispatch(editRiderFailure());
+  }
+};
+
+export const createRiderRequest = createAction('CREATE_RIDER_REQUEST');
+export const createRiderFailure = createAction('CREATE_RIDER_FAILURE');
+export const createRiderSuccess = createAction('CREATE_RIDER_SUCCESS');
+
+export const createRider = (params, redirect) => async (dispatch) => {
+  dispatch(createRiderRequest());
+  try {
+    console.log('this is params: ', params);
+    const token = localStorage.getItem('token');
+    await axios.post(api.riders(), params, {
+      headers: {
+        token,
+      },
+    });
+    dispatch(createRiderSuccess());
+    message.success('Курьер успешно создан', 3);
+    redirect('/riders/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(createRiderFailure());
+    message.error('Ошибка при создании курьера', 3);
   }
 };

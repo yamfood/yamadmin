@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import {
-  Button, Icon, Layout, Table,
+  Button,
+  Icon,
+  Layout,
+  Table,
+  Switch,
 } from 'antd';
 
 import { withRouter } from 'react-router-dom'
@@ -15,6 +19,7 @@ const { Content } = Layout;
 const actionsCreators = {
   getRiders: actions.getRiders,
   getRiderDetails: actions.getRiderDetails,
+  editRider: actions.editRider,
 };
 
 
@@ -27,6 +32,7 @@ const RidersList = (props) => {
     riders,
     getRiders,
     getRiderDetails,
+    editRider,
   } = props;
 
   const columns = [
@@ -52,6 +58,17 @@ const RidersList = (props) => {
       render: (text) => `+${text}`,
     },
     {
+      title: 'Блокирован',
+      dataIndex: 'is_blocked',
+      key: 'is_blocked',
+      render: (blocked, client) => (
+        <Switch
+          defaultChecked={blocked === true}
+          onChange={(checked) => editRider({ is_blocked: checked }, client.id)}
+        />
+      ),
+    },
+    {
       title: 'Изменить',
       dataIndex: 'edit',
       key: 'edit',
@@ -74,7 +91,7 @@ const RidersList = (props) => {
     getRiders({ page: riders.page });
   }, []);
 
-  const loading = riders.status === 'request' || riders.riderDetailsStatus === 'request';
+  const loading = riders.status === 'request' || riders.riderDetailsStatus === 'request' || riders.editRiderStatus === 'request';
 
   return (
     <Layout>
@@ -89,6 +106,14 @@ const RidersList = (props) => {
         <Button style={{ marginBottom: 20 }} onClick={() => getRiders({ page: 1 })}><Icon type="reload" /></Button>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <PhoneSearchForm getByPhone={getRiders} />
+          <Button
+            type="primary"
+            onClick={() => {
+              props.history.push('/riders/create/');
+            }}
+          >
+            Создать Курьера
+          </Button>
           <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
             <b>Кол-во:  </b>
             {riders.total}
