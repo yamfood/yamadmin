@@ -40,7 +40,14 @@ const RidersForm = (props) => {
     const { editRiderDetails } = riders;
     props.form.validateFields((err, values) => {
       if (!err) {
-        editRider(values, editRiderDetails.id);
+        // console.log('this is values: ', values);
+        editRider(
+          {
+            params: { ...values, phone: parseInt(values.phone, 10) },
+            id: editRiderDetails.id,
+          },
+          props.history.push,
+        );
       }
     });
   };

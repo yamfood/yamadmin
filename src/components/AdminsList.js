@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect } from "react";
 import { Button, Icon, Layout, Table } from 'antd';
 
@@ -14,7 +15,7 @@ const actionsCreators = {
 
 const mapStateToProps = (state) => {
   return {
-    admins: state.admins
+    admins: state.admins,
   }
 };
 

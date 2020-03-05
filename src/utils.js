@@ -17,4 +17,4 @@ export default (initialState, window) => {
 };
 
 
-export const mapBoxToken = "pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNmdrMGkxcjExYWMzZW52NDM1Ymhmc3AifQ.QNNipRYHGdZZ59WxtggPdA";
+export const mapBoxToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNmdrMGkxcjExYWMzZW52NDM1Ymhmc3AifQ.QNNipRYHGdZZ59WxtggPdA';

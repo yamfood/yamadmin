@@ -64,7 +64,13 @@ const RidersList = (props) => {
       render: (blocked, client) => (
         <Switch
           defaultChecked={blocked === true}
-          onChange={(checked) => editRider({ is_blocked: checked }, client.id)}
+          onChange={(checked) => {
+            // console.log('this is checked: ', checked);
+            editRider(
+              { params: { is_blocked: checked }, id: client.id },
+              props.history.push,
+            )
+          }}
         />
       ),
     },
@@ -123,10 +129,13 @@ const RidersList = (props) => {
           size="small"
           columns={columns}
           loading={loading}
-          dataSource={riders.list.map((rider) => ({
-            ...rider,
-            key: `${rider.id}`,
-          }))}
+          dataSource={riders.list.map((rider) => {
+            // console.log('rider: ', rider);
+            return ({
+              ...rider,
+              key: `${rider.id}`,
+            })
+          })}
           pagination={pagination(
             riders.total,
             2,

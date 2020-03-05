@@ -260,7 +260,6 @@ export const getRiderDetails = (riderId) => async (dispatch) => {
         token,
       },
     });
-    console.log('response: ', response);
     dispatch(getRiderDetailsSuccess({ data: response.data, riderId }));
   } catch (error) {
     console.error(error);
@@ -275,17 +274,18 @@ export const editRiderRequest = createAction('EDIT_RIDER_REQUEST');
 export const editRiderFailure = createAction('EDIT_RIDER_FAILURE');
 export const editRiderSuccess = createAction('EDIT_RIDER_SUCCESS');
 
-export const editRider = (riderDteails, riderid) => async (dispatch) => {
+export const editRider = ({ params, id }, redirect) => async (dispatch) => {
   dispatch(editRiderRequest());
   try {
     const token = localStorage.getItem('token');
-    await axios.patch(api.riderDetails(riderid), riderDteails, {
+    await axios.patch(api.riderDetails(id), params, {
       headers: {
         token,
       },
     });
     dispatch(editRiderSuccess());
-    message.success('Курьер успешно изменён', 3)
+    message.success('Курьер успешно изменён', 3);
+    redirect('/riders/')
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
@@ -302,7 +302,6 @@ export const createRiderSuccess = createAction('CREATE_RIDER_SUCCESS');
 export const createRider = (params, redirect) => async (dispatch) => {
   dispatch(createRiderRequest());
   try {
-    console.log('this is params: ', params);
     const token = localStorage.getItem('token');
     await axios.post(api.riders(), params, {
       headers: {
