@@ -121,12 +121,39 @@ const riders = handleActions({
         ...state.riderDetails,
         [riderId]: riderDetail,
       },
+      editRiderDetails: data,
+    };
+  },
+  [actions.editRiderRequest](state) {
+    return {
+      ...state,
+      editRiderStatus: 'request',
+    };
+  },
+  [actions.editRiderFailure](state) {
+    return {
+      ...state,
+      editRiderStatus: 'failure',
+    };
+  },
+  [actions.editRiderSuccess](state) {
+    return {
+      ...state,
+      editRiderStatus: 'success',
     };
   },
 }, {
   list: [],
   status: null,
   page: 1,
+  editRiderDetails: {
+    tid: null,
+    name: null,
+    phone: null,
+    notes: null,
+    is_blocked: null,
+  },
+  riderDetailsStatus: null,
   riderDetails: {},
 });
 

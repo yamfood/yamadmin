@@ -51,13 +51,28 @@ const RidersList = (props) => {
       key: 'phone',
       render: (text) => `+${text}`,
     },
+    {
+      title: 'Изменить',
+      dataIndex: 'edit',
+      key: 'edit',
+      render: (id, record) => (
+        <span>
+          <Button
+            type="link"
+            onClick={() => {
+              props.history.push(`/riders/${record.id}/edit`);
+            }}
+          >
+              Изменить
+          </Button>
+        </span>
+      ),
+    },
   ];
 
   useEffect(() => {
-    if (riders.status === null) {
-      getRiders({ page: riders.page });
-    }
-  });
+    getRiders({ page: riders.page });
+  }, []);
 
   const loading = riders.status === 'request' || riders.riderDetailsStatus === 'request';
 

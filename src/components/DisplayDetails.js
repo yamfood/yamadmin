@@ -9,7 +9,7 @@ const DisplayDetails = (props) => {
           {detail.label}
           :
         </b>
-        {detail.value}
+        {detail.value ? detail.value.toString() : null}
       </li>
     ));
     return formattedData;
