@@ -1,10 +1,14 @@
-/* eslint-disable */
-import React, { useEffect } from "react";
-import { Button, Icon, Layout, Table } from 'antd';
+import React, { useEffect } from 'react';
+import {
+  Button,
+  Icon,
+  Layout,
+  Table,
+} from 'antd';
 
 import { withRouter } from 'react-router-dom'
-import { connect } from "react-redux";
-import * as actions from "../actions";
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 
 const { Content } = Layout;
 
@@ -13,39 +17,34 @@ const actionsCreators = {
 };
 
 
-const mapStateToProps = (state) => {
-  return {
-    admins: state.admins,
-  }
-};
+const mapStateToProps = (state) => ({
+  admins: state.admins,
+});
 
 const AdminsList = (props) => {
-
   const { admins, getAdmins } = props;
 
   const columns = [
     {
       title: 'ID',
       dataIndex: 'id',
-      key: 'id'
+      key: 'id',
     },
     {
       title: 'Логин',
       dataIndex: 'login',
-      key: 'login'
+      key: 'login',
     },
     {
       title: 'Токент',
       dataIndex: 'token',
-      key: 'token'
+      key: 'token',
     },
   ];
 
   useEffect(() => {
-    if (admins.status === null) {
-      getAdmins();
-    }
-  });
+    getAdmins();
+  }, []);
 
   const loading = admins.status === 'request';
 
@@ -58,13 +57,14 @@ const AdminsList = (props) => {
           background: '#fff',
         }}
       >
-        <h1 style={{ fontSize: 30, textAlign: "center" }}>Администраторы</h1>
+        <h1 style={{ fontSize: 30, textAlign: 'center' }}>Администраторы</h1>
         <Button style={{ marginBottom: 20 }} onClick={getAdmins}><Icon type="reload" /></Button>
         <Table
-          size={"small"}
+          size="small"
           columns={columns}
           loading={loading}
-          dataSource={admins.list} />
+          dataSource={admins.list}
+        />
       </Content>
     </Layout>
   )
@@ -73,5 +73,5 @@ const AdminsList = (props) => {
 
 export default connect(
   mapStateToProps,
-  actionsCreators
+  actionsCreators,
 )(withRouter(AdminsList));

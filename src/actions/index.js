@@ -2,6 +2,7 @@ import axios from 'axios';
 import { message } from 'antd';
 import { createAction } from 'redux-actions';
 import api from '../apiRoutes';
+import history from '../history';
 
 export const loginRequest = createAction('LOGIN_REQUEST');
 export const loginFailure = createAction('LOGIN_FAILURE');
@@ -238,7 +239,8 @@ export const setIsBlockedClient = (clientId, params) => async (dispatch) => {
         token,
       },
     });
-    dispatch(setIsBlockedClientSuccess());
+    await dispatch(setIsBlockedClientSuccess());
+    dispatch(getClientDetails(clientId));
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
@@ -274,7 +276,7 @@ export const editRiderRequest = createAction('EDIT_RIDER_REQUEST');
 export const editRiderFailure = createAction('EDIT_RIDER_FAILURE');
 export const editRiderSuccess = createAction('EDIT_RIDER_SUCCESS');
 
-export const editRider = ({ params, id }, redirect) => async (dispatch) => {
+export const editRider = ({ params, id }) => async (dispatch) => {
   dispatch(editRiderRequest());
   try {
     const token = localStorage.getItem('token');
@@ -284,8 +286,9 @@ export const editRider = ({ params, id }, redirect) => async (dispatch) => {
       },
     });
     dispatch(editRiderSuccess());
+    history.push('/riders/');
+    dispatch(getRiderDetails(id));
     message.success('Курьер успешно изменён', 3);
-    redirect('/riders/')
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
@@ -299,7 +302,7 @@ export const createRiderRequest = createAction('CREATE_RIDER_REQUEST');
 export const createRiderFailure = createAction('CREATE_RIDER_FAILURE');
 export const createRiderSuccess = createAction('CREATE_RIDER_SUCCESS');
 
-export const createRider = (params, redirect) => async (dispatch) => {
+export const createRider = (params) => async (dispatch) => {
   dispatch(createRiderRequest());
   try {
     const token = localStorage.getItem('token');
@@ -308,9 +311,9 @@ export const createRider = (params, redirect) => async (dispatch) => {
         token,
       },
     });
-    dispatch(createRiderSuccess());
+    await dispatch(createRiderSuccess());
     message.success('Курьер успешно создан', 3);
-    redirect('/riders/');
+    history.push('/riders/')
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {

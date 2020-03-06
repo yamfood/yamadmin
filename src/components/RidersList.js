@@ -65,11 +65,7 @@ const RidersList = (props) => {
         <Switch
           defaultChecked={blocked === true}
           onChange={(checked) => {
-            // console.log('this is checked: ', checked);
-            editRider(
-              { params: { is_blocked: checked }, id: client.id },
-              props.history.push,
-            )
+            editRider({ params: { is_blocked: checked }, id: client.id })
           }}
         />
       ),
@@ -86,7 +82,7 @@ const RidersList = (props) => {
               props.history.push(`/riders/${record.id}/edit`);
             }}
           >
-              Изменить
+            Изменить
           </Button>
         </span>
       ),
@@ -97,7 +93,7 @@ const RidersList = (props) => {
     getRiders({ page: riders.page });
   }, []);
 
-  const loading = riders.status === 'request' || riders.riderDetailsStatus === 'request' || riders.editRiderStatus === 'request';
+  const loading = [riders.status, riders.riderDetailsStatus, riders.editRiderStatus].includes('request');
 
   return (
     <Layout>
@@ -129,13 +125,10 @@ const RidersList = (props) => {
           size="small"
           columns={columns}
           loading={loading}
-          dataSource={riders.list.map((rider) => {
-            // console.log('rider: ', rider);
-            return ({
-              ...rider,
-              key: `${rider.id}`,
-            })
-          })}
+          dataSource={riders.list.map((rider) => ({
+            ...rider,
+            key: `${rider.id}`,
+          }))}
           pagination={pagination(
             riders.total,
             2,

@@ -28,7 +28,7 @@ const CreateRider = (props) => {
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        createRider({ ...values, phone: parseInt(values.phone, 10) }, props.history.push);
+        createRider({ ...values, phone: parseInt(values.phone, 10) });
       }
     });
   };
