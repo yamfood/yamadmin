@@ -160,6 +160,24 @@ const riders = handleActions({
       createRiderStatus: 'success',
     };
   },
+  [actions.editDepositRequest](state) {
+    return {
+      ...state,
+      depositStatus: 'request',
+    };
+  },
+  [actions.editDepositFailure](state) {
+    return {
+      ...state,
+      depositStatus: 'failure',
+    };
+  },
+  [actions.editDepositSuccess](state) {
+    return {
+      ...state,
+      depositStatus: 'success',
+    };
+  },
 }, {
   list: [],
   status: null,

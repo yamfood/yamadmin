@@ -13,6 +13,7 @@ import * as actions from '../actions';
 import pagination from './pagination';
 import PhoneSearchForm from './PhoneSearchForm';
 import RiderDetails from './DisplayDetails';
+import DepositForm from './RiderDeposit';
 
 const { Content } = Layout;
 
@@ -20,6 +21,7 @@ const actionsCreators = {
   getRiders: actions.getRiders,
   getRiderDetails: actions.getRiderDetails,
   editRider: actions.editRider,
+  editDeposit: actions.editDeposit,
 };
 
 
@@ -33,6 +35,7 @@ const RidersList = (props) => {
     getRiders,
     getRiderDetails,
     editRider,
+    editDeposit,
   } = props;
 
   const columns = [
@@ -93,7 +96,12 @@ const RidersList = (props) => {
     getRiders({ page: riders.page });
   }, []);
 
-  const loading = [riders.status, riders.riderDetailsStatus, riders.editRiderStatus].includes('request');
+  const loading = [
+    riders.status,
+    riders.riderDetailsStatus,
+    riders.editRiderStatus,
+    riders.depositStatus,
+  ].includes('request');
 
   return (
     <Layout>
@@ -136,9 +144,15 @@ const RidersList = (props) => {
             riders.page,
           )}
           expandedRowRender={(record) => (
-            <ul>
-              <RiderDetails dataToDisplay={riders.riderDetails} id={record.id} />
-            </ul>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <ul>
+                <RiderDetails dataToDisplay={riders.riderDetails} id={record.id} />
+              </ul>
+              <DepositForm
+                id={record.id}
+                editDeposit={editDeposit}
+              />
+            </div>
           )}
           onExpand={(expanded, record) => {
             if (expanded) {

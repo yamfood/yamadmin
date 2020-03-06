@@ -323,3 +323,29 @@ export const createRider = (params) => async (dispatch) => {
     message.error('Ошибка при создании курьера', 3);
   }
 };
+
+export const editDepositRequest = createAction('EDIT_DEPOSIT_REQUEST');
+export const editDepositFailure = createAction('EDIT_DEPOSIT_FAILURE');
+export const editDepositSuccess = createAction('EDIT_DEPOSIT_SUCCESS');
+
+export const editDeposit = (deposit, id) => async (dispatch) => {
+  dispatch(editDepositRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(api.riderDeposit(id), deposit, {
+      headers: {
+        token,
+      },
+    });
+    await dispatch(editDepositSuccess());
+    message.success('Депозит успешно изменен', 3);
+    dispatch(getRiderDetails(id));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(editDepositFailure());
+    message.error('Ошибка при изменение депозита', 3);
+  }
+};
