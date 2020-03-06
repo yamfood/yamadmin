@@ -1,6 +1,6 @@
 import '../App.css';
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Router, Switch, Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import Navigation from './Navigation';
 import Products from './Products';
@@ -16,11 +16,12 @@ import AdminsList from './AdminsList';
 import OrderDetails from './OrderDetails';
 import KitchensList from './KitchensList';
 import RiderEdit from './RiderEdit';
-
+import RiderCreate from './RiderCreate';
+import history from '../history';
 
 const App = () => (
   <Layout className="App">
-    <BrowserRouter>
+    <Router history={history}>
       <Navigation />
 
       <Switch>
@@ -33,10 +34,11 @@ const App = () => (
         <PrivateRoute exact path="/riders" component={RidersList} />
         <PrivateRoute exact path="/riders/:id/edit/" component={RiderEdit} />
         <PrivateRoute path="/orders/active/" component={OrdersActive} />
+        <PrivateRoute exact path="/riders/create/" component={RiderCreate} />
         <PrivateRoute path="/orders/:id/" component={OrderDetails} />
         <PrivateRoute path="/" component={Home} />
       </Switch>
-    </BrowserRouter>
+    </Router>
   </Layout>
 );
 

@@ -40,10 +40,6 @@ const Clients = (props) => {
     }
   });
 
-  const handleIsBlockedSwitch = (checked, id) => {
-    setIsBlockedClient(id, { is_blocked: checked })
-  }
-
   const columns = [
     {
       title: 'ID',
@@ -72,7 +68,7 @@ const Clients = (props) => {
       render: (blocked, client) => (
         <Switch
           defaultChecked={blocked === true}
-          onChange={(checked) => handleIsBlockedSwitch(checked, client.id)}
+          onChange={(checked) => setIsBlockedClient(client.id, { is_blocked: checked })}
         />
       ),
     },

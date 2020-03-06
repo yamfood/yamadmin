@@ -11,4 +11,5 @@ export default {
   orders: () => [host, 'orders/active/'].join('/'),
   admins: () => [host, 'admins/'].join('/'),
   riderDetails: (id) => [host, `riders/${id}/`].join('/'),
+  riderDeposit: (id) => [host, `riders/${id}/deposit/`].join('/'),
 };

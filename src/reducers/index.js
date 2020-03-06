@@ -142,6 +142,42 @@ const riders = handleActions({
       editRiderStatus: 'success',
     };
   },
+  [actions.createRiderRequest](state) {
+    return {
+      ...state,
+      createRiderStatus: 'request',
+    };
+  },
+  [actions.createRiderFailure](state) {
+    return {
+      ...state,
+      createRiderStatus: 'failure',
+    };
+  },
+  [actions.createRiderSuccess](state) {
+    return {
+      ...state,
+      createRiderStatus: 'success',
+    };
+  },
+  [actions.editDepositRequest](state) {
+    return {
+      ...state,
+      depositStatus: 'request',
+    };
+  },
+  [actions.editDepositFailure](state) {
+    return {
+      ...state,
+      depositStatus: 'failure',
+    };
+  },
+  [actions.editDepositSuccess](state) {
+    return {
+      ...state,
+      depositStatus: 'success',
+    };
+  },
 }, {
   list: [],
   status: null,

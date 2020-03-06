@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 import {
-  Button, Icon, Layout, Table,
+  Button,
+  Icon,
+  Layout,
+  Table,
+  Switch,
 } from 'antd';
 
 import { withRouter } from 'react-router-dom'
@@ -9,12 +13,15 @@ import * as actions from '../actions';
 import pagination from './pagination';
 import PhoneSearchForm from './PhoneSearchForm';
 import RiderDetails from './DisplayDetails';
+import DepositForm from './RiderDeposit';
 
 const { Content } = Layout;
 
 const actionsCreators = {
   getRiders: actions.getRiders,
   getRiderDetails: actions.getRiderDetails,
+  editRider: actions.editRider,
+  editDeposit: actions.editDeposit,
 };
 
 
@@ -27,6 +34,8 @@ const RidersList = (props) => {
     riders,
     getRiders,
     getRiderDetails,
+    editRider,
+    editDeposit,
   } = props;
 
   const columns = [
@@ -52,6 +61,19 @@ const RidersList = (props) => {
       render: (text) => `+${text}`,
     },
     {
+      title: 'Блокирован',
+      dataIndex: 'is_blocked',
+      key: 'is_blocked',
+      render: (blocked, client) => (
+        <Switch
+          defaultChecked={blocked === true}
+          onChange={(checked) => {
+            editRider({ params: { is_blocked: checked }, id: client.id })
+          }}
+        />
+      ),
+    },
+    {
       title: 'Изменить',
       dataIndex: 'edit',
       key: 'edit',
@@ -63,7 +85,7 @@ const RidersList = (props) => {
               props.history.push(`/riders/${record.id}/edit`);
             }}
           >
-              Изменить
+            Изменить
           </Button>
         </span>
       ),
@@ -74,7 +96,12 @@ const RidersList = (props) => {
     getRiders({ page: riders.page });
   }, []);
 
-  const loading = riders.status === 'request' || riders.riderDetailsStatus === 'request';
+  const loading = [
+    riders.status,
+    riders.riderDetailsStatus,
+    riders.editRiderStatus,
+    riders.depositStatus,
+  ].includes('request');
 
   return (
     <Layout>
@@ -89,6 +116,14 @@ const RidersList = (props) => {
         <Button style={{ marginBottom: 20 }} onClick={() => getRiders({ page: 1 })}><Icon type="reload" /></Button>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <PhoneSearchForm getByPhone={getRiders} />
+          <Button
+            type="primary"
+            onClick={() => {
+              props.history.push('/riders/create/');
+            }}
+          >
+            Создать Курьера
+          </Button>
           <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
             <b>Кол-во:  </b>
             {riders.total}
@@ -109,9 +144,15 @@ const RidersList = (props) => {
             riders.page,
           )}
           expandedRowRender={(record) => (
-            <ul>
-              <RiderDetails dataToDisplay={riders.riderDetails} id={record.id} />
-            </ul>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <ul>
+                <RiderDetails dataToDisplay={riders.riderDetails} id={record.id} />
+              </ul>
+              <DepositForm
+                id={record.id}
+                editDeposit={editDeposit}
+              />
+            </div>
           )}
           onExpand={(expanded, record) => {
             if (expanded) {

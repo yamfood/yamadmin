@@ -1,6 +1,8 @@
 import axios from 'axios';
+import { message } from 'antd';
 import { createAction } from 'redux-actions';
 import api from '../apiRoutes';
+import history from '../history';
 
 export const loginRequest = createAction('LOGIN_REQUEST');
 export const loginFailure = createAction('LOGIN_FAILURE');
@@ -237,7 +239,8 @@ export const setIsBlockedClient = (clientId, params) => async (dispatch) => {
         token,
       },
     });
-    dispatch(setIsBlockedClientSuccess());
+    await dispatch(setIsBlockedClientSuccess());
+    dispatch(getClientDetails(clientId));
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
@@ -259,7 +262,6 @@ export const getRiderDetails = (riderId) => async (dispatch) => {
         token,
       },
     });
-    console.log('response: ', response);
     dispatch(getRiderDetailsSuccess({ data: response.data, riderId }));
   } catch (error) {
     console.error(error);
@@ -274,21 +276,76 @@ export const editRiderRequest = createAction('EDIT_RIDER_REQUEST');
 export const editRiderFailure = createAction('EDIT_RIDER_FAILURE');
 export const editRiderSuccess = createAction('EDIT_RIDER_SUCCESS');
 
-export const editRider = (riderDteails, riderid) => async (dispatch) => {
+export const editRider = ({ params, id }) => async (dispatch) => {
   dispatch(editRiderRequest());
   try {
     const token = localStorage.getItem('token');
-    await axios.patch(api.riderDetails(riderid), riderDteails, {
+    await axios.patch(api.riderDetails(id), params, {
       headers: {
         token,
       },
     });
     dispatch(editRiderSuccess());
+    history.push('/riders/');
+    dispatch(getRiderDetails(id));
+    message.success('Курьер успешно изменён', 3);
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
     }
     dispatch(editRiderFailure());
+  }
+};
+
+export const createRiderRequest = createAction('CREATE_RIDER_REQUEST');
+export const createRiderFailure = createAction('CREATE_RIDER_FAILURE');
+export const createRiderSuccess = createAction('CREATE_RIDER_SUCCESS');
+
+export const createRider = (params) => async (dispatch) => {
+  dispatch(createRiderRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(api.riders(), params, {
+      headers: {
+        token,
+      },
+    });
+    await dispatch(createRiderSuccess());
+    message.success('Курьер успешно создан', 3);
+    history.push('/riders/')
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(createRiderFailure());
+    message.error('Ошибка при создании курьера', 3);
+  }
+};
+
+export const editDepositRequest = createAction('EDIT_DEPOSIT_REQUEST');
+export const editDepositFailure = createAction('EDIT_DEPOSIT_FAILURE');
+export const editDepositSuccess = createAction('EDIT_DEPOSIT_SUCCESS');
+
+export const editDeposit = (deposit, id) => async (dispatch) => {
+  dispatch(editDepositRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(api.riderDeposit(id), deposit, {
+      headers: {
+        token,
+      },
+    });
+    await dispatch(editDepositSuccess());
+    message.success('Депозит успешно изменен', 3);
+    dispatch(getRiderDetails(id));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(editDepositFailure());
+    message.error('Ошибка при изменение депозита', 3);
   }
 };
