@@ -349,3 +349,29 @@ export const editDeposit = (deposit, id) => async (dispatch) => {
     message.error('Ошибка при изменение депозита', 3);
   }
 };
+
+export const deleteAdminRequest = createAction('DELETE_ADMIN_REQUEST');
+export const deleteAdminFailure = createAction('DELETE_ADMIN_FAILURE');
+export const deleteAdminSuccess = createAction('DELETE_ADMIN_SUCCESS');
+
+export const deleteAdmin = (id) => async (dispatch) => {
+  dispatch(deleteAdminRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.delete(api.deleteAdmin(id), {
+      headers: {
+        token,
+      },
+    });
+    await dispatch(deleteAdminSuccess());
+    message.success('Админ успешно удален', 3);
+    dispatch(getAdmins());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(deleteAdminFailure());
+    message.error('Ошибка при удалении админа', 3);
+  }
+};

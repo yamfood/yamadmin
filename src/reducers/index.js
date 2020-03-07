@@ -242,6 +242,24 @@ const admins = handleActions({
       list: data,
     }
   },
+  [actions.deleteAdminRequest](state) {
+    return {
+      ...state,
+      deleteAdminStatus: 'request',
+    };
+  },
+  [actions.deleteAdminFailure](state) {
+    return {
+      ...state,
+      deleteAdminStatus: 'failure',
+    };
+  },
+  [actions.deleteAdminSuccess](state) {
+    return {
+      ...state,
+      deleteAdminStatus: 'success',
+    };
+  },
 }, {
   list: [],
   status: null,
