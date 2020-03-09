@@ -81,12 +81,42 @@ const AdminsList = (props) => {
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Администраторы</h1>
-        <Button style={{ marginBottom: 20 }} onClick={getAdmins}><Icon type="reload" /></Button>
+        <Button
+          style={{ marginBottom: 20 }}
+          onClick={getAdmins}
+        >
+          <Icon type="reload" />
+        </Button>
+        <Button
+          type="primary"
+          onClick={() => {
+            props.history.push('/admins/create/');
+          }}
+          style={{ marginLeft: 10 }}
+        >
+          Создать Админа
+        </Button>
         <Table
           size="small"
           columns={columns}
           loading={loading}
-          dataSource={admins.list}
+          dataSource={admins.list.map((user) => ({
+            ...user,
+            key: `${user.id}`,
+          }))}
+          pagination={false}
+          expandedRowRender={(admin) => {
+            const { payload } = admin;
+            const { permissions } = payload;
+            return (
+              <div style={{ display: 'flex' }}>
+                <p><b>Роли:</b></p>
+                <ul>
+                  {permissions ? permissions.map((permission) => <li>{permission}</li>) : null}
+                </ul>
+              </div>
+            );
+          }}
         />
       </Content>
     </Layout>

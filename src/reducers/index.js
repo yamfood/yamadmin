@@ -283,6 +283,22 @@ const admins = handleActions({
     return {
       ...state,
       editAdminStatus: 'success',
+  [actions.createAdminRequest](state) {
+    return {
+      ...state,
+      createAdminStatus: 'request',
+    };
+  },
+  [actions.createAdminFailure](state) {
+    return {
+      ...state,
+      createAdminStatus: 'failure',
+    };
+  },
+  [actions.createAdminSuccess](state) {
+    return {
+      ...state,
+      createAdminStatus: 'success',
     };
   },
 }, {

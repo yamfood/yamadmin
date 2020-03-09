@@ -17,9 +17,10 @@ const DepositForm = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    props.form.validateFields((err, values) => {
+    form.validateFields(async (err, values) => {
       if (!err) {
-        editDeposit({ amount: parseInt(values.amount, 10) }, id);
+        await editDeposit({ amount: parseInt(values.amount, 10) }, id);
+        form.resetFields();
       }
     });
   };
@@ -41,7 +42,7 @@ const DepositForm = (props) => {
           htmlType="submit"
           disabled={status === 'request'}
         >
-          Изменить
+          Пополнить
         </Button>
       </Form.Item>
     </Form>
