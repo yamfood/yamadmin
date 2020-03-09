@@ -258,11 +258,73 @@ const admins = handleActions({
     return {
       ...state,
       deleteAdminStatus: 'success',
+    }
+  },
+  [actions.getAdminPermissionsRequest](state) {
+    return {
+      ...state,
+      permissionStatus: 'request',
+    };
+  },
+  [actions.getAdminPermissionsFailure](state) {
+    return {
+      ...state,
+      permissionStatus: 'failure',
+    };
+  },
+  [actions.getAdminPermissionsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      permissionStatus: 'success',
+      permissions: data,
+    };
+  },
+  [actions.getAdminEditDetails](state, { payload }) {
+    return {
+      ...state,
+      editingAdminDetails: payload,
+    };
+  },
+  [actions.editAdminRequest](state) {
+    return {
+      ...state,
+      editAdminStatus: 'request',
+    }
+  },
+  [actions.editAdminFailure](state) {
+    return {
+      ...state,
+      editAdminStatus: 'failure',
+    }
+  },
+  [actions.editAdminSuccess](state) {
+    return {
+      ...state,
+      editAdminStatus: 'success',
+    }
+  },
+  [actions.createAdminRequest](state) {
+    return {
+      ...state,
+      createAdminStatus: 'request',
+    };
+  },
+  [actions.createAdminFailure](state) {
+    return {
+      ...state,
+      createAdminStatus: 'failure',
+    };
+  },
+  [actions.createAdminSuccess](state) {
+    return {
+      ...state,
+      createAdminStatus: 'success',
     };
   },
 }, {
   list: [],
   status: null,
+  permissions: [],
 });
 
 
