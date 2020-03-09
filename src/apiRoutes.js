@@ -11,6 +11,9 @@ export default {
   orders: () => [host, 'orders/active/'].join('/'),
   cancelOrder: (id) => [host, `orders/${id}/cancel/`].join('/'),
   admins: () => [host, 'admins/'].join('/'),
+  deleteAdmin: (id) => [host, `admins/${id}/`].join('/'),
+  editAdmin: (id) => [host, `admins/${id}/`].join('/'),
+  adminPermissions: () => [host, 'admins/permissions/'].join('/'),
   riderDetails: (id) => [host, `riders/${id}/`].join('/'),
   riderDeposit: (id) => [host, `riders/${id}/deposit/`].join('/'),
 };
