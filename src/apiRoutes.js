@@ -10,6 +10,7 @@ export default {
   clientDetails: (id) => [host, `clients/${id}/`].join('/'),
   orders: () => [host, 'orders/active/'].join('/'),
   admins: () => [host, 'admins/'].join('/'),
+  deleteAdmin: (id) => [host, `admins/${id}/`].join('/'),
   editAdmin: (id) => [host, `admins/${id}/`].join('/'),
   adminPermissions: () => [host, 'admins/permissions/'].join('/'),
   riderDetails: (id) => [host, `riders/${id}/`].join('/'),

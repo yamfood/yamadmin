@@ -4,6 +4,7 @@ import {
   Icon,
   Layout,
   Table,
+  Popconfirm,
 } from 'antd';
 
 import { withRouter } from 'react-router-dom'
@@ -14,6 +15,7 @@ const { Content } = Layout;
 
 const actionsCreators = {
   getAdmins: actions.getAdmins,
+  deleteAdmin: actions.deleteAdmin,
   getAdminEditDetails: actions.getAdminEditDetails,
 };
 
@@ -26,8 +28,13 @@ const AdminsList = (props) => {
   const {
     admins,
     getAdmins,
+    deleteAdmin,
     getAdminEditDetails,
   } = props;
+
+  const confirm = (id) => {
+    deleteAdmin(id);
+  }
 
   const columns = [
     {
@@ -44,6 +51,20 @@ const AdminsList = (props) => {
       title: 'Токен',
       dataIndex: 'token',
       key: 'token',
+    },
+    {
+      title: 'Удалить',
+      dataIndex: 'delete',
+      key: 'delete',
+      render: (arg, record) => (
+        <Popconfirm
+          title="Вы уверены в удалении?"
+          onConfirm={() => confirm(record.id)}
+          okText="Да"
+          cancelText="Нет"
+        >
+          <Button type="link">Удалить</Button>
+        </Popconfirm>
     },
     {
       title: 'Изменить',
@@ -69,7 +90,7 @@ const AdminsList = (props) => {
     getAdmins();
   }, []);
 
-  const loading = admins.status === 'request';
+  const loading = admins.status === 'request' || admins.deleteAdminStatus === 'request';
 
   return (
     <Layout>
