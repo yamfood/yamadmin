@@ -301,35 +301,46 @@ const auth = handleActions({
   status: null,
 });
 
-/* eslint-disable */
 const activeOrders = handleActions({
   [actions.getActiveOrdersRequest](state) {
-    let loading = state.loading;
-
-    if (state.status === null) {
-      loading = true;
-    }
-
     return {
       ...state,
       status: 'request',
-      loading: loading,
-    }
+      loading: state.loading === null ? true : state.loading,
+    };
   },
   [actions.getActiveOrdersFailure](state) {
     return {
       ...state,
       status: 'failure',
-    }
+    };
   },
   [actions.getActiveOrdersSuccess](state, { payload: { data } }) {
     return {
       ...state,
       loading: false,
       status: 'success',
-      ...data
-    }
-  }
+      ...data,
+    };
+  },
+  [actions.cancelOrderRequest](state) {
+    return {
+      ...state,
+      cancelStatus: 'request',
+    };
+  },
+  [actions.cancelOrderFailure](state) {
+    return {
+      ...state,
+      cancelStatus: 'failure',
+    };
+  },
+  [actions.cancelOrderSuccess](state) {
+    return {
+      ...state,
+      cancelStatus: 'success',
+    };
+  },
 }, {
   status: null,
   loading: false,
@@ -337,11 +348,8 @@ const activeOrders = handleActions({
   onKitchen: [],
   ready: [],
   onWay: [],
-  late: []
+  late: [],
 });
-
-/* eslint-enable */
-
 
 const orderDetails = handleActions({
   [actions.getOrderDetailsRequest](state) {

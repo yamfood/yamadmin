@@ -349,3 +349,29 @@ export const editDeposit = (deposit, id) => async (dispatch) => {
     message.error('Ошибка при изменение депозита', 3);
   }
 };
+
+export const cancelOrderRequest = createAction('CANCEL_ORDER_REQUEST');
+export const cancelOrderFailure = createAction('CANCEL_ORDER_FAILURE');
+export const cancelOrderSuccess = createAction('CANCEL_ORDER_SUCCESS');
+
+export const cancelOrder = (orderId) => async (dispatch) => {
+  dispatch(cancelOrderRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(api.cancelOrder(orderId), {}, {
+      headers: {
+        token,
+      },
+    });
+    await dispatch(cancelOrderSuccess());
+    message.success('Заказ успешно отменен', 3);
+    dispatch(getActiveOrders());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(cancelOrderFailure());
+    message.error('Ошибка при отменении заказа', 3);
+  }
+};

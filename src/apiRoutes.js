@@ -9,6 +9,7 @@ export default {
   orderDetails: (id) => [host, `orders/${id}/`].join('/'),
   clientDetails: (id) => [host, `clients/${id}/`].join('/'),
   orders: () => [host, 'orders/active/'].join('/'),
+  cancelOrder: (id) => [host, `orders/${id}/cancel/`].join('/'),
   admins: () => [host, 'admins/'].join('/'),
   riderDetails: (id) => [host, `riders/${id}/`].join('/'),
   riderDeposit: (id) => [host, `riders/${id}/deposit/`].join('/'),
