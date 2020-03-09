@@ -18,6 +18,7 @@ import KitchensList from './KitchensList';
 import RiderEdit from './RiderEdit';
 import RiderCreate from './RiderCreate';
 import history from '../history';
+import AdminEdit from './AdminEdit';
 import AdminCreate from './AdminCreate';
 
 const App = () => (
@@ -32,6 +33,7 @@ const App = () => (
         <PrivateRoute path="/kitchens/" component={KitchensList} />
         <PrivateRoute path="/clients/" component={Clients} />
         <PrivateRoute exact path="/admins/" component={AdminsList} />
+        <PrivateRoute exact path="/admins/:id/edit/" component={AdminEdit} />
         <PrivateRoute exact path="/admins/create/" component={AdminCreate} />
         <PrivateRoute exact path="/riders" component={RidersList} />
         <PrivateRoute exact path="/riders/:id/edit/" component={RiderEdit} />

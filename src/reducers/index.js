@@ -261,6 +261,28 @@ const admins = handleActions({
       permissions: data,
     };
   },
+  [actions.getAdminEditDetails](state, { payload }) {
+    return {
+      ...state,
+      editingAdminDetails: payload,
+    };
+  },
+  [actions.editAdminRequest](state) {
+    return {
+      ...state,
+      editAdminStatus: 'request',
+    }
+  },
+  [actions.editAdminFailure](state) {
+    return {
+      ...state,
+      editAdminStatus: 'failure',
+    }
+  },
+  [actions.editAdminSuccess](state) {
+    return {
+      ...state,
+      editAdminStatus: 'success',
   [actions.createAdminRequest](state) {
     return {
       ...state,

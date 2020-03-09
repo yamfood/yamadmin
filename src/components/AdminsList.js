@@ -14,6 +14,7 @@ const { Content } = Layout;
 
 const actionsCreators = {
   getAdmins: actions.getAdmins,
+  getAdminEditDetails: actions.getAdminEditDetails,
 };
 
 
@@ -25,6 +26,7 @@ const AdminsList = (props) => {
   const {
     admins,
     getAdmins,
+    getAdminEditDetails,
   } = props;
 
   const columns = [
@@ -42,6 +44,24 @@ const AdminsList = (props) => {
       title: 'Токен',
       dataIndex: 'token',
       key: 'token',
+    },
+    {
+      title: 'Изменить',
+      dataIndex: 'edit',
+      key: 'edit',
+      render: (id, record) => (
+        <span>
+          <Button
+            type="link"
+            onClick={() => {
+              getAdminEditDetails(record);
+              props.history.push(`/admins/${record.id}/edit/`);
+            }}
+          >
+            Изменить
+          </Button>
+        </span>
+      ),
     },
   ];
 

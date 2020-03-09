@@ -47,6 +47,7 @@ export const getClients = (params) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
   }
 };
@@ -71,6 +72,7 @@ export const getKitchens = () => async (dispatch) => {
     console.log(e);
     if (e.error === 'Auth failed' || e.error === 'Auth required') {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
     dispatch(getKitchensFailure());
   }
@@ -96,6 +98,7 @@ export const getProducts = () => async (dispatch) => {
     console.log(e);
     if (e.error === 'Auth failed' || e.error === 'Auth required') {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
     dispatch(getProductsFailure());
   }
@@ -124,6 +127,7 @@ export const getRiders = (params) => async (dispatch) => {
     console.log(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
     dispatch(getRidersFailure());
   }
@@ -199,6 +203,7 @@ export const getActiveOrders = () => async (dispatch) => {
     console.log(e);
     if (e.error === 'Auth failed' || e.error === 'Auth required') {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
     dispatch(getActiveOrdersFailure());
   }
@@ -222,6 +227,7 @@ export const getClientDetails = (clientId) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
     dispatch(getClientDetailsFailure());
   }
@@ -246,6 +252,7 @@ export const setIsBlockedClient = (clientId, params) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
   }
 };
@@ -268,6 +275,7 @@ export const getRiderDetails = (riderId) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
     dispatch(getRiderDetailsFailure());
   }
@@ -294,6 +302,7 @@ export const editRider = ({ params, id }) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
     dispatch(editRiderFailure());
   }
@@ -319,6 +328,7 @@ export const createRider = (params) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
     dispatch(createRiderFailure());
     message.error('Ошибка при создании курьера', 3);
@@ -345,11 +355,14 @@ export const editDeposit = (deposit, id) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
     dispatch(editDepositFailure());
     message.error('Ошибка при изменение депозита', 3);
   }
 };
+
+export const getAdminEditDetails = createAction('GET_ADMIN_EDIT_DETAILS');
 
 export const getAdminPermissionsRequest = createAction('GET_ADMIN_PERMISSIONS_REQUEST');
 export const getAdminPermissionsFailure = createAction('GET_ADMIN_PERMISSIONS_FAILURE');
@@ -369,8 +382,37 @@ export const getAdminPermissions = () => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
     dispatch(getAdminPermissionsFailure());
+  }
+};
+
+
+export const editAdminRequest = createAction('EDIT_ADMIN_REQUEST');
+export const editAdminFailure = createAction('EDIT_ADMIN_FAILURE');
+export const editAdminSuccess = createAction('EDIT_ADMIN_SUCCESS');
+
+export const editAdmin = (params, id) => async (dispatch) => {
+  dispatch(editAdminRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.patch(api.editAdmin(id), params, {
+      headers: {
+        token,
+      },
+    });
+    await dispatch(editAdminSuccess());
+    message.success('Админ успешно изменен', 3);
+    history.push('/admins/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      history.push('/login/');
+    }
+    dispatch(editAdminFailure());
+    message.error('Ошибка при изменении админа', 3);
   }
 };
 
@@ -394,8 +436,9 @@ export const createAdmin = (params) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      history.push('/login/');
     }
-    dispatch(getAdminPermissionsFailure());
+    dispatch(createAdminFailure());
     message.error('Ошибка при создании админа', 3);
   }
 };
