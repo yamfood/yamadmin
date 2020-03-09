@@ -58,7 +58,7 @@ const CreateRider = (props) => {
               <Input type="number" />,
             )}
           </Form.Item>
-          <Form.Item label="Нотес">
+          <Form.Item label="Заметки">
             {getFieldDecorator('notes')(
               <Input />,
             )}
