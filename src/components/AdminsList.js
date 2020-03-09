@@ -80,7 +80,10 @@ const AdminsList = (props) => {
           size="small"
           columns={columns}
           loading={loading}
-          dataSource={admins.list}
+          dataSource={admins.list.map((user) => ({
+            ...user,
+            key: `${user.id}`,
+          }))}
           pagination={false}
           expandedRowRender={(admin) => {
             const { payload } = admin;
