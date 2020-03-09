@@ -242,9 +242,47 @@ const admins = handleActions({
       list: data,
     }
   },
+  [actions.getAdminPermissionsRequest](state) {
+    return {
+      ...state,
+      permissionStatus: 'request',
+    };
+  },
+  [actions.getAdminPermissionsFailure](state) {
+    return {
+      ...state,
+      permissionStatus: 'failure',
+    };
+  },
+  [actions.getAdminPermissionsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      permissionStatus: 'success',
+      permissions: data,
+    };
+  },
+  [actions.createAdminRequest](state) {
+    return {
+      ...state,
+      createAdminStatus: 'request',
+    };
+  },
+  [actions.createAdminFailure](state) {
+    return {
+      ...state,
+      createAdminStatus: 'failure',
+    };
+  },
+  [actions.createAdminSuccess](state) {
+    return {
+      ...state,
+      createAdminStatus: 'success',
+    };
+  },
 }, {
   list: [],
   status: null,
+  permissions: [],
 });
 
 

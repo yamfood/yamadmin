@@ -20,6 +20,7 @@ export const login = (username, password) => async (dispatch) => {
   } catch (e) {
     console.log(e);
     dispatch(loginFailure());
+    message.error('Логин/Пароль введен неправильно');
   }
 };
 
@@ -347,5 +348,54 @@ export const editDeposit = (deposit, id) => async (dispatch) => {
     }
     dispatch(editDepositFailure());
     message.error('Ошибка при изменение депозита', 3);
+  }
+};
+
+export const getAdminPermissionsRequest = createAction('GET_ADMIN_PERMISSIONS_REQUEST');
+export const getAdminPermissionsFailure = createAction('GET_ADMIN_PERMISSIONS_FAILURE');
+export const getAdminPermissionsSuccess = createAction('GET_ADMIN_PERMISSIONS_SUCCESS');
+
+export const getAdminPermissions = () => async (dispatch) => {
+  dispatch(getAdminPermissionsRequest());
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(api.adminPermissions(), {
+      headers: {
+        token,
+      },
+    });
+    dispatch(getAdminPermissionsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(getAdminPermissionsFailure());
+  }
+};
+
+export const createAdminRequest = createAction('CREATE_ADMIN_REQUEST');
+export const createAdminFailure = createAction('CREATE_ADMIN_FAILURE');
+export const createAdminSuccess = createAction('CREATE_ADMIN_SUCCESS');
+
+export const createAdmin = (params) => async (dispatch) => {
+  dispatch(createAdminRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(api.admins(), params, {
+      headers: {
+        token,
+      },
+    });
+    await dispatch(createAdminSuccess());
+    message.success('Админ успешно создан', 3);
+    history.push('/admins/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(getAdminPermissionsFailure());
+    message.error('Ошибка при создании админа', 3);
   }
 };
