@@ -65,6 +65,7 @@ const AdminsList = (props) => {
         >
           <Button type="link">Удалить</Button>
         </Popconfirm>
+      ),
     },
     {
       title: 'Изменить',
