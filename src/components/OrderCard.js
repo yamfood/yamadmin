@@ -43,7 +43,7 @@ const OrderCard = ({
 
 
   const content = (
-    <div>
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Button
         type="primary"
         onClick={handleAccept}
@@ -53,7 +53,7 @@ const OrderCard = ({
           Принять
       </Button>
       <Button
-        type="primary"
+        type="danger"
         onClick={handleСancel}
         loading={activeOrders.cancelStatus === 'request'}
       >
@@ -68,11 +68,15 @@ const OrderCard = ({
       actions={[
         <Icon type="eye" onClick={() => window.open(`/orders/${order.id}/`, '_blank')} />,
         <Popover
-          title="Принять или удалить заказ?"
+          title="Действия"
           trigger="click"
           visible={visible}
           onVisibleChange={(visibility) => setVisible(visibility)}
           content={content}
+          overlayStyle={{
+            textAlign: 'center',
+            width: 220,
+          }}
         >
           <Icon type="ellipsis" />
         </Popover>,
