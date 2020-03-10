@@ -362,6 +362,32 @@ export const editDeposit = (deposit, id) => async (dispatch) => {
   }
 };
 
+export const cancelOrderRequest = createAction('CANCEL_ORDER_REQUEST');
+export const cancelOrderFailure = createAction('CANCEL_ORDER_FAILURE');
+export const cancelOrderSuccess = createAction('CANCEL_ORDER_SUCCESS');
+
+export const cancelOrder = (orderId) => async (dispatch) => {
+  dispatch(cancelOrderRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(api.cancelOrder(orderId), {}, {
+      headers: {
+        token,
+      },
+    });
+    await dispatch(cancelOrderSuccess());
+    message.success('Заказ успешно отменен', 3);
+    dispatch(getActiveOrders());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      history.push('/login/');
+    }
+    dispatch(cancelOrderFailure());
+    message.error('Ошибка при отменении заказа', 3);
+  }
+};
 
 export const deleteAdminRequest = createAction('DELETE_ADMIN_REQUEST');
 export const deleteAdminFailure = createAction('DELETE_ADMIN_FAILURE');
@@ -373,8 +399,8 @@ export const deleteAdmin = (id) => async (dispatch) => {
     const token = localStorage.getItem('token');
     await axios.delete(api.deleteAdmin(id), {
       headers: {
-         token,
-       },
+        token,
+      },
     });
     await dispatch(deleteAdminSuccess());
     message.success('Админ успешно удален', 3);
@@ -385,10 +411,10 @@ export const deleteAdmin = (id) => async (dispatch) => {
       localStorage.removeItem('token');
     }
     dispatch(deleteAdminFailure());
-    message.error('Ошибка при удалении админа', 3);  
+    message.error('Ошибка при удалении админа', 3);
   }
 };
-      
+
 export const getAdminEditDetails = createAction('GET_ADMIN_EDIT_DETAILS');
 
 export const getAdminPermissionsRequest = createAction('GET_ADMIN_PERMISSIONS_REQUEST');
