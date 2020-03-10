@@ -403,6 +403,24 @@ const activeOrders = handleActions({
       ...data,
     };
   },
+  [actions.acceptOrderRequest](state) {
+    return {
+      ...state,
+      acceptStatus: 'request',
+    };
+  },
+  [actions.acceptOrderFailure](state) {
+    return {
+      ...state,
+      acceptStatus: 'failure',
+    };
+  },
+  [actions.acceptOrderSuccess](state) {
+    return {
+      ...state,
+      acceptStatus: 'success',
+    };
+  },
   [actions.cancelOrderRequest](state) {
     return {
       ...state,

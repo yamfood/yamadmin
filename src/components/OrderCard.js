@@ -11,6 +11,7 @@ import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
 
 const actionCreators = {
+  acceptOrder: actions.acceptOrder,
   cancelOrder: actions.cancelOrder,
 }
 
@@ -24,12 +25,17 @@ const { Countdown } = Statistic;
 
 const OrderCard = ({
   order,
+  acceptOrder,
   cancelOrder,
   activeOrders,
 }) => {
   const [visible, setVisible] = useState(false);
   const deadline = new Date(order.created_at).getTime() + 1000 * 60 * 60 * 10;
 
+  const handleAccept = async () => {
+    await acceptOrder(order.id);
+    setVisible(false);
+  }
   const handleСancel = async () => {
     await cancelOrder(order.id);
     setVisible(false);
@@ -37,14 +43,17 @@ const OrderCard = ({
 
 
   const content = (
-    <div>
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
       <Button
         type="primary"
+        onClick={handleAccept}
+        loading={activeOrders.acceptStatus === 'request'}
+
       >
           Принять
       </Button>
       <Button
-        type="primary"
+        type="danger"
         onClick={handleСancel}
         loading={activeOrders.cancelStatus === 'request'}
       >
@@ -59,11 +68,15 @@ const OrderCard = ({
       actions={[
         <Icon type="eye" onClick={() => window.open(`/orders/${order.id}/`, '_blank')} />,
         <Popover
-          title="Принять или удалить заказ?"
+          title="Действия"
           trigger="click"
           visible={visible}
           onVisibleChange={(visibility) => setVisible(visibility)}
           content={content}
+          overlayStyle={{
+            textAlign: 'center',
+            width: 220,
+          }}
         >
           <Icon type="ellipsis" />
         </Popover>,
@@ -80,8 +93,6 @@ const OrderCard = ({
       {order.phone}
       <br />
       <br />
-
-
       💰
       {order.total_sum.toLocaleString('ru')}
       сум

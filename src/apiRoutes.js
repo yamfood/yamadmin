@@ -13,6 +13,7 @@ export default {
   admins: () => [host, 'admins/'].join('/'),
   deleteAdmin: (id) => [host, `admins/${id}/`].join('/'),
   editAdmin: (id) => [host, `admins/${id}/`].join('/'),
+  acceptOrder: (id) => [host, `orders/${id}/accept/`].join('/'),
   adminPermissions: () => [host, 'admins/permissions/'].join('/'),
   riderDetails: (id) => [host, `riders/${id}/`].join('/'),
   riderDeposit: (id) => [host, `riders/${id}/deposit/`].join('/'),

@@ -495,3 +495,29 @@ export const createAdmin = (params) => async (dispatch) => {
     message.error('Ошибка при создании админа', 3);
   }
 };
+
+export const acceptOrderRequest = createAction('ACCEPT_ORDER_REQUEST');
+export const acceptOrderFailure = createAction('ACCEPT_ORDER_FAILURE');
+export const acceptOrderSuccess = createAction('ACCEPT_ORDER_SUCCESS');
+
+export const acceptOrder = (orderId) => async (dispatch) => {
+  dispatch(acceptOrderRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(api.acceptOrder(orderId), {}, {
+      headers: {
+        token,
+      },
+    });
+    await dispatch(acceptOrderSuccess());
+    message.success('Заказ успешно принят', 3);
+    dispatch(getActiveOrders());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(acceptOrderFailure());
+    message.error('Ошибка при принятии заказа', 3);
+  }
+};
