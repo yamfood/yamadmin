@@ -373,8 +373,8 @@ export const deleteAdmin = (id) => async (dispatch) => {
     const token = localStorage.getItem('token');
     await axios.delete(api.deleteAdmin(id), {
       headers: {
-         token,
-       },
+        token,
+      },
     });
     await dispatch(deleteAdminSuccess());
     message.success('Админ успешно удален', 3);
@@ -385,10 +385,10 @@ export const deleteAdmin = (id) => async (dispatch) => {
       localStorage.removeItem('token');
     }
     dispatch(deleteAdminFailure());
-    message.error('Ошибка при удалении админа', 3);  
+    message.error('Ошибка при удалении админа', 3);
   }
 };
-      
+
 export const getAdminEditDetails = createAction('GET_ADMIN_EDIT_DETAILS');
 
 export const getAdminPermissionsRequest = createAction('GET_ADMIN_PERMISSIONS_REQUEST');
@@ -467,5 +467,31 @@ export const createAdmin = (params) => async (dispatch) => {
     }
     dispatch(createAdminFailure());
     message.error('Ошибка при создании админа', 3);
+  }
+};
+
+export const acceptOrderRequest = createAction('ACCEPT_ORDER_REQUEST');
+export const acceptOrderFailure = createAction('ACCEPT_ORDER_FAILURE');
+export const acceptOrderSuccess = createAction('ACCEPT_ORDER_SUCCESS');
+
+export const acceptOrder = (orderId) => async (dispatch) => {
+  dispatch(acceptOrderRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(api.acceptOrder(orderId), {}, {
+      headers: {
+        token,
+      },
+    });
+    await dispatch(acceptOrderSuccess());
+    message.success('Заказ успешно принят', 3);
+    dispatch(getActiveOrders());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(acceptOrderFailure());
+    message.error('Ошибка при принятии заказа', 3);
   }
 };

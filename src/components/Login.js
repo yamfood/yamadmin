@@ -32,7 +32,7 @@ const Login = (props) => {
     };
 
     const redirect = () => {
-        if (auth.status === 'success') {
+        if (auth.status === 'success' && localStorage.getItem('token')) {
             return (
                 <Redirect to="/"/>
             )

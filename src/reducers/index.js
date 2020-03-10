@@ -381,19 +381,13 @@ const auth = handleActions({
   status: null,
 });
 
-/* eslint-disable */
+
 const activeOrders = handleActions({
   [actions.getActiveOrdersRequest](state) {
-    let loading = state.loading;
-
-    if (state.status === null) {
-      loading = true;
-    }
-
     return {
       ...state,
       status: 'request',
-      loading: loading,
+      loading: state.loading === null ? true : state.loading,
     }
   },
   [actions.getActiveOrdersFailure](state) {
@@ -407,9 +401,28 @@ const activeOrders = handleActions({
       ...state,
       loading: false,
       status: 'success',
-      ...data
-    }
-  }
+      ...data,
+    };
+  },
+  [actions.acceptOrderRequest](state) {
+    return {
+      ...state,
+      acceptStatus: 'request',
+    };
+  },
+  [actions.acceptOrderFailure](state) {
+    return {
+      ...state,
+      acceptStatus: 'failure',
+    };
+  },
+  [actions.acceptOrderSuccess](state) {
+    return {
+      ...state,
+      acceptStatus: 'success',
+    };
+  },
+
 }, {
   status: null,
   loading: false,
@@ -417,10 +430,9 @@ const activeOrders = handleActions({
   onKitchen: [],
   ready: [],
   onWay: [],
-  late: []
+  late: [],
 });
 
-/* eslint-enable */
 
 
 const orderDetails = handleActions({
