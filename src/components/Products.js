@@ -50,10 +50,8 @@ const Products = (props) => {
   ];
 
   useEffect(() => {
-    if (products.status === null) {
-      getProducts();
-    }
-  });
+    getProducts();
+  }, []);
 
   const loading = products.status === 'request';
 
@@ -72,7 +70,7 @@ const Products = (props) => {
           size="small"
           columns={columns}
           loading={loading}
-          dataSource={products.list}
+          dataSource={products.list.map((product) => ({ ...product, key: `${product.id}` }))}
           onRow={(r) => ({
             onClick: () => history.push(`/products/${r.id}`),
           })}
