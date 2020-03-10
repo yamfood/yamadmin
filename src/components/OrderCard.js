@@ -12,6 +12,7 @@ import * as actions from '../actions';
 
 const actionCreators = {
   acceptOrder: actions.acceptOrder,
+  cancelOrder: actions.cancelOrder,
 }
 
 const mapStateToProps = (state) => ({
@@ -25,6 +26,7 @@ const { Countdown } = Statistic;
 const OrderCard = ({
   order,
   acceptOrder,
+  cancelOrder,
   activeOrders,
 }) => {
   const [visible, setVisible] = useState(false);
@@ -32,6 +34,10 @@ const OrderCard = ({
 
   const handleAccept = async () => {
     await acceptOrder(order.id);
+    setVisible(false);
+  }
+  const handleСancel = async () => {
+    await cancelOrder(order.id);
     setVisible(false);
   };
 
@@ -48,6 +54,8 @@ const OrderCard = ({
       </Button>
       <Button
         type="primary"
+        onClick={handleСancel}
+        loading={activeOrders.cancelStatus === 'request'}
       >
           Отменить
       </Button>
@@ -81,8 +89,6 @@ const OrderCard = ({
       {order.phone}
       <br />
       <br />
-
-
       💰
       {order.total_sum.toLocaleString('ru')}
       сум

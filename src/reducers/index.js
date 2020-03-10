@@ -381,20 +381,19 @@ const auth = handleActions({
   status: null,
 });
 
-
 const activeOrders = handleActions({
   [actions.getActiveOrdersRequest](state) {
     return {
       ...state,
       status: 'request',
       loading: state.loading === null ? true : state.loading,
-    }
+    };
   },
   [actions.getActiveOrdersFailure](state) {
     return {
       ...state,
       status: 'failure',
-    }
+    };
   },
   [actions.getActiveOrdersSuccess](state, { payload: { data } }) {
     return {
@@ -422,7 +421,24 @@ const activeOrders = handleActions({
       acceptStatus: 'success',
     };
   },
-
+  [actions.cancelOrderRequest](state) {
+    return {
+      ...state,
+      cancelStatus: 'request',
+    };
+  },
+  [actions.cancelOrderFailure](state) {
+    return {
+      ...state,
+      cancelStatus: 'failure',
+    };
+  },
+  [actions.cancelOrderSuccess](state) {
+    return {
+      ...state,
+      cancelStatus: 'success',
+    };
+  },
 }, {
   status: null,
   loading: false,
@@ -432,8 +448,6 @@ const activeOrders = handleActions({
   onWay: [],
   late: [],
 });
-
-
 
 const orderDetails = handleActions({
   [actions.getOrderDetailsRequest](state) {
