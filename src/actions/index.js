@@ -521,3 +521,53 @@ export const acceptOrder = (orderId) => async (dispatch) => {
     message.error('Ошибка при принятии заказа', 3);
   }
 };
+
+export const getCategoryRequest = createAction('GET_CATEGORY_REQUEST');
+export const getCategoryFailure = createAction('GET_CATEGORY_FAILURE');
+export const getCategorySuccess = createAction('GET_CATEGORY_SUCCESS');
+
+export const getCategory = () => async (dispatch) => {
+  dispatch(getCategoryRequest());
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(api.productsCategory(), {
+      headers: {
+        token,
+      },
+    });
+    dispatch(getCategorySuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+    }
+    dispatch(getCategoryFailure());
+  }
+};
+
+export const createProductRequest = createAction('CREATE_PRODUCT_REQUEST');
+export const createProductFailure = createAction('CREATE_PRODUCT_FAILURE');
+export const createProductSuccess = createAction('CREATE_PRODUCT_SUCCESS');
+
+export const createProduct = (params) => async (dispatch) => {
+  dispatch(createProductRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(api.products(), params, {
+      headers: {
+        token,
+      },
+    });
+    await dispatch(createProductSuccess());
+    message.success('Продукт успешно создан', 3);
+    history.push('/products/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      history.push('/login/');
+    }
+    dispatch(createProductFailure());
+    message.error('Ошибка при создании продукта', 3);
+  }
+};

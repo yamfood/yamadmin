@@ -22,7 +22,11 @@ const mapStateToProps = (state) => ({
 });
 
 const Products = (props) => {
-  const { history, products, getProducts } = props;
+  const {
+    history,
+    products,
+    getProducts,
+  } = props;
 
   const columns = [
     {
@@ -65,7 +69,24 @@ const Products = (props) => {
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Продукты</h1>
-        <Button style={{ marginBottom: 20 }} onClick={getProducts}><Icon type="reload" /></Button>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div>
+            <Button style={{ marginBottom: 20 }} onClick={getProducts}><Icon type="reload" /></Button>
+            <Button
+              type="primary"
+              style={{ marginLeft: 10 }}
+              onClick={() => {
+                history.push('/products/create/');
+              }}
+            >
+              Создать продукт
+            </Button>
+          </div>
+          <p style={{ marginTop: 3 }}>
+            <b>Кол-во: </b>
+            {products.list.length}
+          </p>
+        </div>
         <Table
           size="small"
           columns={columns}
