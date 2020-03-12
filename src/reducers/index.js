@@ -208,16 +208,109 @@ const products = handleActions({
     }
   },
   [actions.getProductsSuccess](state, { payload: { data } }) {
-    console.log(data);
     return {
       ...state,
       status: 'success',
       list: data,
     }
   },
+  [actions.getCategoryRequest](state) {
+    return {
+      ...state,
+      categoryStatus: 'request',
+    };
+  },
+  [actions.getCategoryFailure](state) {
+    return {
+      ...state,
+      categoryStatus: 'failure',
+    };
+  },
+  [actions.getCategorySuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      categoryStatus: 'success',
+      categories: data,
+    };
+  },
+  [actions.getProductDetailsRequest](state) {
+    return {
+      ...state,
+      productDetailsStatus: 'request',
+    };
+  },
+  [actions.getProductDetailsFailure](state) {
+    return {
+      ...state,
+      productDetailsStatus: 'failure',
+    };
+  },
+  [actions.getProductDetailsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      productDetailsStatus: 'success',
+      productDetails: data,
+    };
+  },
+  [actions.editProductRequest](state) {
+    return {
+      ...state,
+      editProductStatus: 'request',
+    };
+  },
+  [actions.editProductFailure](state) {
+    return {
+      ...state,
+      editProductStatus: 'failure',
+    };
+  },
+  [actions.editProductSuccess](state) {
+    return {
+      ...state,
+      editProductStatus: 'success',
+    }
+  },
+  [actions.createProductRequest](state) {
+    return {
+      ...state,
+      productCreateStatus: 'request',
+    };
+  },
+  [actions.createProductFailure](state) {
+    return {
+      ...state,
+      productCreateStatus: 'failure',
+    };
+  },
+  [actions.createProductSuccess](state) {
+    return {
+      ...state,
+      productCreateStatus: 'success',
+    };
+  },
+  [actions.deleteProductRequest](state) {
+    return {
+      ...state,
+      deleteStatus: 'request',
+    };
+  },
+  [actions.deleteProductFailure](state) {
+    return {
+      ...state,
+      deleteStatus: 'failure',
+    };
+  },
+  [actions.deleteProductSuccess](state) {
+    return {
+      ...state,
+      deleteStatus: 'success',
+    };
+  },
 }, {
   list: [],
   status: null,
+  categories: [],
+  productDetails: [],
 });
 
 
@@ -366,6 +459,7 @@ const auth = handleActions({
     return {
       ...state,
       status: 'failure',
+      token: null,
     }
   },
   [actions.loginSuccess](state, { payload: { data } }) {
@@ -381,35 +475,64 @@ const auth = handleActions({
   status: null,
 });
 
-/* eslint-disable */
 const activeOrders = handleActions({
   [actions.getActiveOrdersRequest](state) {
-    let loading = state.loading;
-
-    if (state.status === null) {
-      loading = true;
-    }
-
     return {
       ...state,
       status: 'request',
-      loading: loading,
-    }
+      loading: state.loading === null ? true : state.loading,
+    };
   },
   [actions.getActiveOrdersFailure](state) {
     return {
       ...state,
       status: 'failure',
-    }
+    };
   },
   [actions.getActiveOrdersSuccess](state, { payload: { data } }) {
     return {
       ...state,
       loading: false,
       status: 'success',
-      ...data
-    }
-  }
+      ...data,
+    };
+  },
+  [actions.acceptOrderRequest](state) {
+    return {
+      ...state,
+      acceptStatus: 'request',
+    };
+  },
+  [actions.acceptOrderFailure](state) {
+    return {
+      ...state,
+      acceptStatus: 'failure',
+    };
+  },
+  [actions.acceptOrderSuccess](state) {
+    return {
+      ...state,
+      acceptStatus: 'success',
+    };
+  },
+  [actions.cancelOrderRequest](state) {
+    return {
+      ...state,
+      cancelStatus: 'request',
+    };
+  },
+  [actions.cancelOrderFailure](state) {
+    return {
+      ...state,
+      cancelStatus: 'failure',
+    };
+  },
+  [actions.cancelOrderSuccess](state) {
+    return {
+      ...state,
+      cancelStatus: 'success',
+    };
+  },
 }, {
   status: null,
   loading: false,
@@ -417,11 +540,8 @@ const activeOrders = handleActions({
   onKitchen: [],
   ready: [],
   onWay: [],
-  late: []
+  late: [],
 });
-
-/* eslint-enable */
-
 
 const orderDetails = handleActions({
   [actions.getOrderDetailsRequest](state) {

@@ -6,6 +6,9 @@ import {
   Table,
   Switch,
 } from 'antd';
+import {
+  EditOutlined,
+} from '@ant-design/icons';
 
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
@@ -85,7 +88,7 @@ const RidersList = (props) => {
               props.history.push(`/riders/${record.id}/edit`);
             }}
           >
-            Изменить
+            <EditOutlined />
           </Button>
         </span>
       ),

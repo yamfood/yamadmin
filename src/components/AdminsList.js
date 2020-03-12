@@ -6,6 +6,10 @@ import {
   Table,
   Popconfirm,
 } from 'antd';
+import {
+  DeleteOutlined,
+  EditOutlined,
+} from '@ant-design/icons';
 
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
@@ -32,10 +36,6 @@ const AdminsList = (props) => {
     getAdminEditDetails,
   } = props;
 
-  const confirm = (id) => {
-    deleteAdmin(id);
-  }
-
   const columns = [
     {
       title: 'ID',
@@ -53,21 +53,6 @@ const AdminsList = (props) => {
       key: 'token',
     },
     {
-      title: 'Удалить',
-      dataIndex: 'delete',
-      key: 'delete',
-      render: (arg, record) => (
-        <Popconfirm
-          title="Вы уверены в удалении?"
-          onConfirm={() => confirm(record.id)}
-          okText="Да"
-          cancelText="Нет"
-        >
-          <Button type="link">Удалить</Button>
-        </Popconfirm>
-      ),
-    },
-    {
       title: 'Изменить',
       dataIndex: 'edit',
       key: 'edit',
@@ -80,9 +65,24 @@ const AdminsList = (props) => {
               props.history.push(`/admins/${record.id}/edit/`);
             }}
           >
-            Изменить
+            <EditOutlined />
           </Button>
         </span>
+      ),
+    },
+    {
+      title: 'Удалить',
+      dataIndex: 'delete',
+      key: 'delete',
+      render: (arg, record) => (
+        <Popconfirm
+          title="Вы уверены в удалении?"
+          onConfirm={() => deleteAdmin(record.id)}
+          okText="Да"
+          cancelText="Нет"
+        >
+          <Button type="link"><DeleteOutlined /></Button>
+        </Popconfirm>
       ),
     },
   ];
