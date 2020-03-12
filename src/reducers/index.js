@@ -208,16 +208,53 @@ const products = handleActions({
     }
   },
   [actions.getProductsSuccess](state, { payload: { data } }) {
-    console.log(data);
     return {
       ...state,
       status: 'success',
       list: data,
     }
   },
+  [actions.getCategoryRequest](state) {
+    return {
+      ...state,
+      categoryStatus: 'request',
+    };
+  },
+  [actions.getCategoryFailure](state) {
+    return {
+      ...state,
+      categoryStatus: 'failure',
+    };
+  },
+  [actions.getCategorySuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      categoryStatus: 'success',
+      categories: data,
+    };
+  },
+  [actions.createProductRequest](state) {
+    return {
+      ...state,
+      productCreateStatus: 'request',
+    };
+  },
+  [actions.createProductFailure](state) {
+    return {
+      ...state,
+      productCreateStatus: 'failure',
+    };
+  },
+  [actions.createProductSuccess](state) {
+    return {
+      ...state,
+      productCreateStatus: 'success',
+    };
+  },
 }, {
   list: [],
   status: null,
+  categories: [],
 });
 
 
@@ -366,6 +403,7 @@ const auth = handleActions({
     return {
       ...state,
       status: 'failure',
+      token: null,
     }
   },
   [actions.loginSuccess](state, { payload: { data } }) {
