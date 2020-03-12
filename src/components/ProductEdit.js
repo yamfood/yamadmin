@@ -36,7 +36,6 @@ const ProductCreate = (props) => {
 
   useEffect(() => {
     const productId = match.params.id;
-    console.log(productId);
     getProductDetails(productId);
     getCategory();
   }, [])
@@ -47,12 +46,10 @@ const ProductCreate = (props) => {
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
-        console.log('Values: ', values);
         editProduct({
           ...values,
           price: parseInt(values.price, 10),
           energy: values.energy ? parseInt(values.energy, 10) : undefined,
-          category_id: values.category_id ? parseInt(values.category_id, 10) : undefined,
         }, productDetails.id);
       }
     });
@@ -111,11 +108,12 @@ const ProductCreate = (props) => {
           </Form.Item>
           <Form.Item label="Категория: ">
             {getFieldDecorator('category_id', {
-              initialValue: productDetails.id
-                ? productDetails.id : null,
+              initialValue: productDetails.category_id
+                ? productDetails.category_id : null,
             })(
               <Select
                 disabled={products.productDetailsStatus === 'request'}
+                allowClear
               >
                 {products.categories.map((category) => (
                   <Select.Option
