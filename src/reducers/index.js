@@ -442,6 +442,24 @@ const kitchens = handleActions({
       list: data,
     }
   },
+  [actions.createKitchenRequest](state) {
+    return {
+      ...state,
+      createStatus: 'request',
+    };
+  },
+  [actions.createKitchenFailure](state) {
+    return {
+      ...state,
+      createStatus: 'failure',
+    };
+  },
+  [actions.createKitchenSuccess](state) {
+    return {
+      ...state,
+      createStatus: 'success',
+    };
+  },
 }, {
   list: [],
   status: null,

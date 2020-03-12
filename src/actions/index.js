@@ -655,3 +655,30 @@ export const editProduct = (params, productId) => async (dispatch) => {
     message.error('Ошибка при изменении продукта', 3);
   }
 };
+
+export const createKitchenRequest = createAction('CREATE_KITCHEN_REQUEST');
+export const createKitchenFailure = createAction('CREATE_KITCHEN_FAILURE');
+export const createKitchenSuccess = createAction('CREATE_KITCHEN_SUCCESS');
+
+export const createKitchen = (params) => async (dispatch) => {
+  dispatch(createKitchenRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(api.kitchens(), params, {
+      headers: {
+        token,
+      },
+    });
+    dispatch(createKitchenSuccess());
+    message.success('Кухня успешно создана', 3);
+    history.push('/kitchens/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(createKitchenFailure());
+    message.error('Ошибка при создании кухни', 3);
+  }
+};

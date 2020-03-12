@@ -10,25 +10,32 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 const actionsCreators = {
-  createRider: actions.createRider,
+  createKitchen: actions.createKitchen,
 };
 
 const { Content } = Layout;
 
-const CreateRider = (props) => {
+const KitchenCreate = (props) => {
   const { form } = props;
   const { getFieldDecorator } = form;
   const {
-    createRider,
-    createStatus,
+    createKitchen,
+    kitchens,
   } = props;
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        createRider({ ...values, phone: parseInt(values.phone, 10) });
+        createKitchen({
+          name: values.name,
+          location: {
+            longitude: parseFloat(values.longitude),
+            latitude: parseFloat(values.latitude),
+          },
+        })
       }
     });
   };
@@ -42,31 +49,33 @@ const CreateRider = (props) => {
           background: '#fff',
         }}
       >
-        <h1 style={{ textAlign: 'center', fontSize: 30 }}>Создания Курьера</h1>
+        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Создания Курьера</h1>
         <Form onSubmit={handleSubmit}>
-          <Form.Item label="Имя">
+          <Form.Item label="Название">
             {getFieldDecorator('name', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Input />,
             )}
           </Form.Item>
-          <Form.Item label="Сот.Тел">
-            {getFieldDecorator('phone', {
+          <Form.Item label="Долгота (longitude)">
+            {getFieldDecorator('longitude', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
-              <Input type="number" />,
+              <Input />,
             )}
           </Form.Item>
-          <Form.Item label="Заметки">
-            {getFieldDecorator('notes')(
+          <Form.Item label="Широта (latitude)">
+            {getFieldDecorator('latitude', {
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+            })(
               <Input />,
             )}
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
-              <Button onClick={() => props.history.push('/riders/')}>
-                  Назад
+              <Button onClick={() => props.history.push('/kitchens/')}>
+                Назад
               </Button>
             </Form.Item>
             <Form.Item>
@@ -74,7 +83,7 @@ const CreateRider = (props) => {
                 style={{ marginLeft: 10 }}
                 type="primary"
                 htmlType="submit"
-                loading={createStatus === 'request'}
+                loading={kitchens.createStatus === 'request'}
               >
                 Сохранить
               </Button>
@@ -87,10 +96,10 @@ const CreateRider = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-  createStatus: state.riders.createRiderStatus,
+  kitchens: state.kitchens,
 });
 
-const WrappedForm = Form.create()(CreateRider);
+const WrappedForm = Form.create()(KitchenCreate);
 export default connect(
   mapStateToProps,
   actionsCreators,
