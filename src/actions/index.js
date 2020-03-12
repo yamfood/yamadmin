@@ -47,7 +47,7 @@ export const getClients = (params) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
   }
 };
@@ -72,7 +72,7 @@ export const getKitchens = () => async (dispatch) => {
     console.log(e);
     if (e.error === 'Auth failed' || e.error === 'Auth required') {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
     dispatch(getKitchensFailure());
   }
@@ -98,7 +98,6 @@ export const getProducts = () => async (dispatch) => {
     console.log(e);
     if (e.error === 'Auth failed' || e.error === 'Auth required') {
       localStorage.removeItem('token');
-      history.push('/login/');
     }
     dispatch(getProductsFailure());
   }
@@ -127,7 +126,6 @@ export const getRiders = (params) => async (dispatch) => {
     console.log(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
     }
     dispatch(getRidersFailure());
   }
@@ -203,7 +201,6 @@ export const getActiveOrders = () => async (dispatch) => {
     console.log(e);
     if (e.error === 'Auth failed' || e.error === 'Auth required') {
       localStorage.removeItem('token');
-      history.push('/login/');
     }
     dispatch(getActiveOrdersFailure());
   }
@@ -227,7 +224,6 @@ export const getClientDetails = (clientId) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
     }
     dispatch(getClientDetailsFailure());
   }
@@ -246,14 +242,15 @@ export const setIsBlockedClient = (clientId, params) => async (dispatch) => {
         token,
       },
     });
-    await dispatch(setIsBlockedClientSuccess());
+    dispatch(setIsBlockedClientSuccess());
     dispatch(getClientDetails(clientId));
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
+    dispatch(setIsBlockedClientFailure());
   }
 };
 
@@ -275,7 +272,7 @@ export const getRiderDetails = (riderId) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
     dispatch(getRiderDetailsFailure());
   }
@@ -302,7 +299,7 @@ export const editRider = ({ params, id }) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
     dispatch(editRiderFailure());
   }
@@ -321,14 +318,14 @@ export const createRider = (params) => async (dispatch) => {
         token,
       },
     });
-    await dispatch(createRiderSuccess());
+    dispatch(createRiderSuccess());
     message.success('Курьер успешно создан', 3);
     history.push('/riders/')
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
     dispatch(createRiderFailure());
     message.error('Ошибка при создании курьера', 3);
@@ -348,14 +345,14 @@ export const editDeposit = (deposit, id) => async (dispatch) => {
         token,
       },
     });
-    await dispatch(editDepositSuccess());
+    dispatch(editDepositSuccess());
     message.success('Депозит успешно изменен', 3);
     dispatch(getRiderDetails(id));
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
     dispatch(editDepositFailure());
     message.error('Ошибка при изменение депозита', 3);
@@ -375,14 +372,14 @@ export const cancelOrder = (orderId) => async (dispatch) => {
         token,
       },
     });
-    await dispatch(cancelOrderSuccess());
+    dispatch(cancelOrderSuccess());
     message.success('Заказ успешно отменен', 3);
     dispatch(getActiveOrders());
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
     dispatch(cancelOrderFailure());
     message.error('Ошибка при отменении заказа', 3);
@@ -409,6 +406,7 @@ export const deleteAdmin = (id) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      dispatch(loginFailure());
     }
     dispatch(deleteAdminFailure());
     message.error('Ошибка при удалении админа', 3);
@@ -435,7 +433,7 @@ export const getAdminPermissions = () => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
     dispatch(getAdminPermissionsFailure());
   }
@@ -455,14 +453,14 @@ export const editAdmin = (params, id) => async (dispatch) => {
         token,
       },
     });
-    await dispatch(editAdminSuccess());
+    dispatch(editAdminSuccess());
     message.success('Админ успешно изменен', 3);
     history.push('/admins/');
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
     dispatch(editAdminFailure());
     message.error('Ошибка при изменении админа', 3);
@@ -482,14 +480,14 @@ export const createAdmin = (params) => async (dispatch) => {
         token,
       },
     });
-    await dispatch(createAdminSuccess());
+    dispatch(createAdminSuccess());
     message.success('Админ успешно создан', 3);
     history.push('/admins/');
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
     dispatch(createAdminFailure());
     message.error('Ошибка при создании админа', 3);
@@ -509,13 +507,14 @@ export const acceptOrder = (orderId) => async (dispatch) => {
         token,
       },
     });
-    await dispatch(acceptOrderSuccess());
+    dispatch(acceptOrderSuccess());
     message.success('Заказ успешно принят', 3);
     dispatch(getActiveOrders());
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      dispatch(loginFailure());
     }
     dispatch(acceptOrderFailure());
     message.error('Ошибка при принятии заказа', 3);
@@ -540,6 +539,7 @@ export const getCategory = () => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      dispatch(loginFailure());
     }
     dispatch(getCategoryFailure());
   }
@@ -558,14 +558,14 @@ export const createProduct = (params) => async (dispatch) => {
         token,
       },
     });
-    await dispatch(createProductSuccess());
+    dispatch(createProductSuccess());
     message.success('Продукт успешно создан', 3);
     history.push('/products/');
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
-      history.push('/login/');
+      dispatch(loginFailure());
     }
     dispatch(createProductFailure());
     message.error('Ошибка при создании продукта', 3);

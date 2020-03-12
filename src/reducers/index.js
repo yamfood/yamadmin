@@ -403,6 +403,7 @@ const auth = handleActions({
     return {
       ...state,
       status: 'failure',
+      token: null,
     }
   },
   [actions.loginSuccess](state, { payload: { data } }) {
