@@ -98,6 +98,7 @@ export const getProducts = () => async (dispatch) => {
     console.log(e);
     if (e.error === 'Auth failed' || e.error === 'Auth required') {
       localStorage.removeItem('token');
+      dispatch(loginFailure());
     }
     dispatch(getProductsFailure());
   }
@@ -126,6 +127,7 @@ export const getRiders = (params) => async (dispatch) => {
     console.log(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      dispatch(loginFailure());
     }
     dispatch(getRidersFailure());
   }
@@ -151,6 +153,7 @@ export const getAdmins = () => async (dispatch) => {
     console.log(e);
     if (e.error === 'Auth failed' || e.error === 'Auth required') {
       localStorage.removeItem('token');
+      dispatch(loginFailure());
     }
     dispatch(getAdminsFailure());
   }
@@ -176,6 +179,7 @@ export const getOrderDetails = (id) => async (dispatch) => {
     console.log(e);
     if (e.error === 'Auth failed' || e.error === 'Auth required') {
       localStorage.removeItem('token');
+      dispatch(loginFailure());
     }
     dispatch(getOrderDetailsFailure());
   }
@@ -201,6 +205,7 @@ export const getActiveOrders = () => async (dispatch) => {
     console.log(e);
     if (e.error === 'Auth failed' || e.error === 'Auth required') {
       localStorage.removeItem('token');
+      dispatch(loginFailure());
     }
     dispatch(getActiveOrdersFailure());
   }
@@ -224,6 +229,7 @@ export const getClientDetails = (clientId) => async (dispatch) => {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
+      dispatch(loginFailure());
     }
     dispatch(getClientDetailsFailure());
   }
