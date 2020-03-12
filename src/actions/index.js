@@ -61,13 +61,12 @@ export const getKitchens = () => async (dispatch) => {
   dispatch(getKitchensRequest());
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(api.kitchens(), {
+    const response = await axios.get(api.kitchens(), {
       headers: {
         token,
       },
     });
-    const result = await response.json();
-    dispatch(getKitchensSuccess({ data: result }));
+    dispatch(getKitchensSuccess({ data: response.data }));
   } catch (e) {
     console.log(e);
     if (e.error === 'Auth failed' || e.error === 'Auth required') {

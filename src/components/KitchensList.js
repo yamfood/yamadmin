@@ -59,7 +59,7 @@ const KitchensList = (props) => {
                     size={"small"}
                     columns={columns}
                     loading={loading}
-                    dataSource={kitchens.list}/>
+                    dataSource={kitchens.list.map((kitchen) => ({ ...kitchen, key: kitchen.id }))}/>
             </Content>
         </Layout>
     )
