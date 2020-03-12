@@ -5,6 +5,8 @@ export default {
   clients: () => [host, 'clients/'].join('/'),
   kitchens: () => [host, 'kitchens/'].join('/'),
   products: () => [host, 'products/'].join('/'),
+  product: (id) => [host, `products/${id}/`].join('/'),
+  productsCategory: () => [host, 'products/categories/'].join('/'),
   riders: () => [host, 'riders/'].join('/'),
   orderDetails: (id) => [host, `orders/${id}/`].join('/'),
   clientDetails: (id) => [host, `clients/${id}/`].join('/'),

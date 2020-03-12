@@ -215,9 +215,67 @@ const products = handleActions({
       list: data,
     }
   },
+  [actions.getCategoryRequest](state) {
+    return {
+      ...state,
+      categoryStatus: 'request',
+    };
+  },
+  [actions.getCategoryFailure](state) {
+    return {
+      ...state,
+      categoryStatus: 'failure',
+    };
+  },
+  [actions.getCategorySuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      categoryStatus: 'success',
+      categories: data,
+    };
+  },
+  [actions.getProductDetailsRequest](state) {
+    return {
+      ...state,
+      productDetailsStatus: 'request',
+    };
+  },
+  [actions.getProductDetailsFailure](state) {
+    return {
+      ...state,
+      productDetailsStatus: 'failure',
+    };
+  },
+  [actions.getProductDetailsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      productDetailsStatus: 'success',
+      productDetails: data,
+    };
+  },
+  [actions.editProductRequest](state) {
+    return {
+      ...state,
+      editProductStatus: 'request',
+    };
+  },
+  [actions.editProductFailure](state) {
+    return {
+      ...state,
+      editProductStatus: 'failure',
+    };
+  },
+  [actions.editProductSuccess](state) {
+    return {
+      ...state,
+      editProductStatus: 'success',
+    };
+  },
 }, {
   list: [],
   status: null,
+  categories: [],
+  productDetails: [],
 });
 
 

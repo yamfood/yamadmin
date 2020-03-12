@@ -20,6 +20,8 @@ import RiderCreate from './RiderCreate';
 import history from '../history';
 import AdminEdit from './AdminEdit';
 import AdminCreate from './AdminCreate';
+import ProductEdit from './ProductEdit';
+
 
 const App = () => (
   <Layout className="App">
@@ -28,8 +30,9 @@ const App = () => (
 
       <Switch>
         <Route path="/login/" component={Login} />
-        <PrivateRoute path="/products/:id/" component={ProductDetail} />
-        <PrivateRoute path="/products/" component={Products} />
+        <PrivateRoute exact path="/products/:id/" component={ProductDetail} />
+        <PrivateRoute exact path="/products" component={Products} />
+        <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
         <PrivateRoute path="/kitchens/" component={KitchensList} />
         <PrivateRoute path="/clients/" component={Clients} />
         <PrivateRoute exact path="/admins/" component={AdminsList} />
