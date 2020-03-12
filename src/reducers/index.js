@@ -233,6 +233,41 @@ const products = handleActions({
       categories: data,
     };
   },
+  [actions.getProductDetailsRequest](state) {
+    return {
+      ...state,
+      productDetailsStatus: 'request',
+    };
+  },
+  [actions.getProductDetailsFailure](state) {
+    return {
+      ...state,
+      productDetailsStatus: 'failure',
+    };
+  },
+  [actions.getProductDetailsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      productDetailsStatus: 'success',
+      productDetails: data,
+    };
+  },
+  [actions.editProductRequest](state) {
+    return {
+      ...state,
+      editProductStatus: 'request',
+    };
+  },
+  [actions.editProductFailure](state) {
+    return {
+      ...state,
+      editProductStatus: 'failure',
+    };
+  },
+  [actions.editProductSuccess](state) {
+    return {
+      ...state,
+      editProductStatus: 'success',
   [actions.createProductRequest](state) {
     return {
       ...state,
@@ -255,6 +290,7 @@ const products = handleActions({
   list: [],
   status: null,
   categories: [],
+  productDetails: [],
 });
 
 

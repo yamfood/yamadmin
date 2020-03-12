@@ -551,6 +551,30 @@ export const getCategory = () => async (dispatch) => {
   }
 };
 
+export const getProductDetailsRequest = createAction('GET_PRODUCT_DETAILS_REQUEST');
+export const getProductDetailsFailure = createAction('GET_PRODUCT_DETAILS_FAILURE');
+export const getProductDetailsSuccess = createAction('GET_PRODUCT_DETAILS_SUCCESS');
+
+export const getProductDetails = (productId) => async (dispatch) => {
+  dispatch(getProductDetailsRequest());
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(api.product(productId), {
+       headers: {
+        token,
+      },
+    });
+    dispatch(getProductDetailsSuccess({ data: response.data }));
+    } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getProductDetailsFailure());
+  }
+};
+
 export const createProductRequest = createAction('CREATE_PRODUCT_REQUEST');
 export const createProductFailure = createAction('CREATE_PRODUCT_FAILURE');
 export const createProductSuccess = createAction('CREATE_PRODUCT_SUCCESS');
@@ -575,5 +599,32 @@ export const createProduct = (params) => async (dispatch) => {
     }
     dispatch(createProductFailure());
     message.error('Ошибка при создании продукта', 3);
+  }
+};
+
+export const editProductRequest = createAction('EDIT_PRODUCT_REQUEST');
+export const editProductFailure = createAction('EDIT_PRODUCT_FAILURE');
+export const editProductSuccess = createAction('EDIT_PRODUCT_SUCCESS');
+
+export const editProduct = (params, productId) => async (dispatch) => {
+  dispatch(editProductRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.patch(api.product(productId), params, {
+      headers: {
+        token,
+      },
+    });
+    dispatch(editProductSuccess());
+    message.success('Продукт успешно изменен', 3);
+    history.push('/products');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(editProductFailure());
+    message.error('Ошибка при изменении продукта', 3);
   }
 };

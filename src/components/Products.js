@@ -5,6 +5,9 @@ import {
   Layout,
   Table,
 } from 'antd';
+import {
+  EditOutlined,
+} from '@ant-design/icons';
 
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
@@ -50,6 +53,24 @@ const Products = (props) => {
       dataIndex: 'energy',
       key: 'energy',
       render: (text) => `${text} кКал`,
+    },
+    {
+      title: 'Изменить',
+      dataIndex: 'edit',
+      key: 'edit',
+      render: (id, record) => (
+        <span>
+          <Button
+            type="link"
+            onClick={(e) => {
+              e.stopPropagation();
+              props.history.push(`/products/${record.id}/edit`);
+            }}
+          >
+            <EditOutlined />
+          </Button>
+        </span>
+      ),
     },
   ];
 
