@@ -208,7 +208,6 @@ const products = handleActions({
     }
   },
   [actions.getProductsSuccess](state, { payload: { data } }) {
-    console.log(data);
     return {
       ...state,
       status: 'success',
@@ -269,6 +268,22 @@ const products = handleActions({
     return {
       ...state,
       editProductStatus: 'success',
+  [actions.createProductRequest](state) {
+    return {
+      ...state,
+      productCreateStatus: 'request',
+    };
+  },
+  [actions.createProductFailure](state) {
+    return {
+      ...state,
+      productCreateStatus: 'failure',
+    };
+  },
+  [actions.createProductSuccess](state) {
+    return {
+      ...state,
+      productCreateStatus: 'success',
     };
   },
 }, {
@@ -424,6 +439,7 @@ const auth = handleActions({
     return {
       ...state,
       status: 'failure',
+      token: null,
     }
   },
   [actions.loginSuccess](state, { payload: { data } }) {

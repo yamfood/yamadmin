@@ -126,7 +126,6 @@ const Clients = (props) => {
   )
 };
 
-
 export default connect(
   mapStateToProps,
   actionsCreators,
