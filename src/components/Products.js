@@ -8,6 +8,7 @@ import {
 } from 'antd';
 import {
   DeleteOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 
 import { withRouter } from 'react-router-dom'
@@ -58,6 +59,24 @@ const Products = (props) => {
       render: (text) => `${text} кКал`,
     },
     {
+      title: 'Изменить',
+      dataIndex: 'edit',
+      key: 'edit',
+      render: (id, record) => (
+        <span>
+          <Button
+            type="link"
+            onClick={(e) => {
+              e.stopPropagation();
+              props.history.push(`/products/${record.id}/edit`);
+            }}
+          >
+            <EditOutlined />
+          </Button>
+        </span>
+      ),
+    },
+    {
       title: 'Удалить',
       dataIndex: 'delete',
       key: 'delete',
@@ -67,6 +86,9 @@ const Products = (props) => {
           onConfirm={(e) => {
             e.stopPropagation();
             deleteProduct(record.id)
+          }}
+          onCancel={(e) => {
+            e.stopPropagation();
           }}
           okText="Да"
           cancelText="Нет"

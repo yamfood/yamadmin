@@ -20,6 +20,7 @@ import RiderCreate from './RiderCreate';
 import history from '../history';
 import AdminEdit from './AdminEdit';
 import AdminCreate from './AdminCreate';
+import ProductEdit from './ProductEdit';
 import ProductCreate from './ProductCreate';
 
 const App = () => (
@@ -29,6 +30,7 @@ const App = () => (
 
       <Switch>
         <Route path="/login/" component={Login} />
+        <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
         <PrivateRoute exact path="/products" component={Products} />
         <PrivateRoute exact path="/products/create/" component={ProductCreate} />
         <PrivateRoute exact path="/products/:id/" component={ProductDetail} />
