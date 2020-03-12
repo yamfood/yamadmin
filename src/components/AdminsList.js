@@ -36,10 +36,6 @@ const AdminsList = (props) => {
     getAdminEditDetails,
   } = props;
 
-  const confirm = (id) => {
-    deleteAdmin(id);
-  }
-
   const columns = [
     {
       title: 'ID',
@@ -81,7 +77,7 @@ const AdminsList = (props) => {
       render: (arg, record) => (
         <Popconfirm
           title="Вы уверены в удалении?"
-          onConfirm={() => confirm(record.id)}
+          onConfirm={() => deleteAdmin(record.id)}
           okText="Да"
           cancelText="Нет"
         >

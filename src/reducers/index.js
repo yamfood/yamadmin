@@ -268,6 +268,8 @@ const products = handleActions({
     return {
       ...state,
       editProductStatus: 'success',
+    }
+  },
   [actions.createProductRequest](state) {
     return {
       ...state,
@@ -284,6 +286,24 @@ const products = handleActions({
     return {
       ...state,
       productCreateStatus: 'success',
+    };
+  },
+  [actions.deleteProductRequest](state) {
+    return {
+      ...state,
+      deleteStatus: 'request',
+    };
+  },
+  [actions.deleteProductFailure](state) {
+    return {
+      ...state,
+      deleteStatus: 'failure',
+    };
+  },
+  [actions.deleteProductSuccess](state) {
+    return {
+      ...state,
+      deleteStatus: 'success',
     };
   },
 }, {
