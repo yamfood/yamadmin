@@ -268,6 +268,8 @@ const products = handleActions({
     return {
       ...state,
       editProductStatus: 'success',
+    };
+  },
   [actions.createProductRequest](state) {
     return {
       ...state,
