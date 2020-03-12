@@ -22,7 +22,6 @@ import AdminEdit from './AdminEdit';
 import AdminCreate from './AdminCreate';
 import ProductEdit from './ProductEdit';
 import ProductCreate from './ProductCreate';
-import KitchenCreate from './KitchenCreate';
 
 const App = () => (
   <Layout className="App">
@@ -31,12 +30,13 @@ const App = () => (
 
       <Switch>
         <Route path="/login/" component={Login} />
+        <PrivateRoute exact path="/products/:id/" component={ProductDetail} />
+        <PrivateRoute exact path="/products" component={Products} />
         <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
         <PrivateRoute exact path="/products" component={Products} />
         <PrivateRoute exact path="/products/create/" component={ProductCreate} />
         <PrivateRoute exact path="/products/:id/" component={ProductDetail} />
-        <PrivateRoute exact path="/kitchens" component={KitchensList} />
-        <PrivateRoute exact path="/kitchens/create/" component={KitchenCreate} />
+        <PrivateRoute path="/kitchens/" component={KitchensList} />
         <PrivateRoute path="/clients/" component={Clients} />
         <PrivateRoute exact path="/admins/" component={AdminsList} />
         <PrivateRoute exact path="/admins/:id/edit/" component={AdminEdit} />
