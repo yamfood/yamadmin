@@ -4,7 +4,11 @@ import {
   Icon,
   Layout,
   Table,
+  Popconfirm,
 } from 'antd';
+import {
+  DeleteOutlined,
+} from '@ant-design/icons';
 
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
@@ -14,6 +18,7 @@ const { Content } = Layout;
 
 const actionsCreators = {
   getProducts: actions.getProducts,
+  deleteProduct: actions.deleteProduct,
 };
 
 
@@ -26,6 +31,7 @@ const Products = (props) => {
     history,
     products,
     getProducts,
+    deleteProduct,
   } = props;
 
   const columns = [
@@ -50,6 +56,31 @@ const Products = (props) => {
       dataIndex: 'energy',
       key: 'energy',
       render: (text) => `${text} кКал`,
+    },
+    {
+      title: 'Удалить',
+      dataIndex: 'delete',
+      key: 'delete',
+      render: (arg, record) => (
+        <Popconfirm
+          title="Вы уверены в удалении?"
+          onConfirm={(e) => {
+            e.stopPropagation();
+            deleteProduct(record.id)
+          }}
+          okText="Да"
+          cancelText="Нет"
+        >
+          <Button
+            type="link"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <DeleteOutlined />
+          </Button>
+        </Popconfirm>
+      ),
     },
   ];
 

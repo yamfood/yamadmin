@@ -577,3 +577,30 @@ export const createProduct = (params) => async (dispatch) => {
     message.error('Ошибка при создании продукта', 3);
   }
 };
+
+export const deleteProductRequest = createAction('DELETE_PRODUCT_REQUEST');
+export const deleteProductFailure = createAction('DELETE_PRODUCT_FAILURE');
+export const deleteProductSuccess = createAction('DELETE_PRODUCT_SUCCESS');
+
+export const deleteProduct = (id) => async (dispatch) => {
+  dispatch(deleteProductRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.delete(api.product(id), {
+      headers: {
+        token,
+      },
+    });
+    dispatch(deleteProductSuccess());
+    message.success('Продукт успешно удален', 3);
+    dispatch(getProducts());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(deleteProductFailure());
+    message.error('Ошибка при удалении продукта', 3);
+  }
+};
