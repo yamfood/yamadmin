@@ -25,10 +25,8 @@ const ProductDetail = (props) => {
   const { product = {}, products, getProducts } = props;
 
   useEffect(() => {
-    if (products.status === null) {
       getProducts();
-    }
-  });
+  }, []);
 
   const loading = products.status === 'request' || products.list === [];
 

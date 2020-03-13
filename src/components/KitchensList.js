@@ -20,7 +20,6 @@ const mapStateToProps = (state) => {
 };
 
 const KitchensList = (props) => {
-
     const {kitchens, getKitchens} = props;
 
     const columns = [
@@ -59,7 +58,13 @@ const KitchensList = (props) => {
                     size={"small"}
                     columns={columns}
                     loading={loading}
-                    dataSource={kitchens.list.map((kitchen) => ({ ...kitchen, key: kitchen.id }))}/>
+                    dataSource={kitchens.list.map((kitchen) => ({ ...kitchen, key: kitchen.id }))}
+                    onRow= {(record) => ({
+                      onClick: () => {
+                        props.history.push(`${record.id}/details/`);
+                      }
+                    })}
+                />
             </Content>
         </Layout>
     )

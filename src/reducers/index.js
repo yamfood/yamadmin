@@ -442,6 +442,25 @@ const kitchens = handleActions({
       list: data,
     }
   },
+  [actions.getKitchenDetailsRequest](state) {
+    return {
+      ...state,
+      detailStatus: 'request',
+    };
+  },
+  [actions.getKitchenDetailsFailure](state) {
+    return {
+      ...state,
+      detailStatus: 'failure',
+    };
+  },
+  [actions.getKitchenDetailsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      detailStatus: 'success',
+      details: data,
+    };
+  },
 }, {
   list: [],
   status: null,
