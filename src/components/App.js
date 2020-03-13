@@ -30,6 +30,8 @@ const App = () => (
 
       <Switch>
         <Route path="/login/" component={Login} />
+        <PrivateRoute exact path="/products/:id/" component={ProductDetail} />
+        <PrivateRoute exact path="/products" component={Products} />
         <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
         <PrivateRoute exact path="/products" component={Products} />
         <PrivateRoute exact path="/products/create/" component={ProductCreate} />

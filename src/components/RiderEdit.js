@@ -60,7 +60,7 @@ const RidersForm = (props) => {
           background: '#fff',
         }}
       >
-        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Изменение</h1>
+        <h1 style={{ textAlign: 'center', fontSize: 30 }}>Изменение</h1>
         <Form
           onSubmit={handleSubmit}
         >

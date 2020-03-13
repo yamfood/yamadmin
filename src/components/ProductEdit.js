@@ -64,7 +64,7 @@ const ProductCreate = (props) => {
           background: '#fff',
         }}
       >
-        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Изменение продукта</h1>
+        <h1 style={{ textAlign: 'center', fontSize: 30 }}>Изменение продукта</h1>
         <Form onSubmit={handleSubmit}>
           <Form.Item label="URL Фото">
             {getFieldDecorator('photo', {
