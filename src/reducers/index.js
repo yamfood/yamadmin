@@ -268,7 +268,7 @@ const products = handleActions({
     return {
       ...state,
       editProductStatus: 'success',
-    }
+    };
   },
   [actions.createProductRequest](state) {
     return {
@@ -459,6 +459,24 @@ const kitchens = handleActions({
       ...state,
       detailStatus: 'success',
       details: data,
+    };
+  },
+  [actions.createKitchenRequest](state) {
+    return {
+      ...state,
+      createStatus: 'request',
+    };
+  },
+  [actions.createKitchenFailure](state) {
+    return {
+      ...state,
+      createStatus: 'failure',
+    };
+  },
+  [actions.createKitchenSuccess](state) {
+    return {
+      ...state,
+      createStatus: 'success',
     };
   },
 }, {
