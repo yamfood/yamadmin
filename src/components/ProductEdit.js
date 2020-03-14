@@ -50,6 +50,7 @@ const ProductCreate = (props) => {
           ...values,
           price: parseInt(values.price, 10),
           energy: values.energy ? parseInt(values.energy, 10) : undefined,
+          category_id: values.category_id === undefined ? null : values.category_id,
         }, productDetails.id);
       }
     });
@@ -62,6 +63,7 @@ const ProductCreate = (props) => {
           margin: '24px 16px',
           padding: 24,
           background: '#fff',
+          minHeight: 'auto',
         }}
       >
         <h1 style={{ textAlign: 'center', fontSize: 30 }}>Изменение продукта</h1>
@@ -74,6 +76,10 @@ const ProductCreate = (props) => {
               <Input disabled={products.productDetailsStatus === 'request'} />,
             )}
           </Form.Item>
+          <Form.Item>
+            <img alt={productDetails.name} style={{ width: 100 }} src={productDetails.photo} />
+          </Form.Item>
+          <hr />
           <Form.Item label="Уменьшенное изображение">
             {getFieldDecorator('thumbnail', {
               initialValue: productDetails.thumbnail
@@ -83,6 +89,14 @@ const ProductCreate = (props) => {
               <Input disabled={products.productDetailsStatus === 'request'} />,
             )}
           </Form.Item>
+          <Form.Item>
+            <img
+              alt={productDetails.thumbnail}
+              style={{ width: 100 }}
+              src={productDetails.thumbnail}
+            />
+          </Form.Item>
+          <hr />
           <Form.Item label="Название">
             {getFieldDecorator('name', {
               initialValue: productDetails.name ? productDetails.name : null,
@@ -130,7 +144,7 @@ const ProductCreate = (props) => {
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
               <Button onClick={() => props.history.push('/products')}>
-                  Назад
+                Назад
               </Button>
             </Form.Item>
             <Form.Item>

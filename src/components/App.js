@@ -6,7 +6,6 @@ import Navigation from './Navigation';
 import Products from './Products';
 import Home from './Home';
 import 'antd/dist/antd.css';
-import ProductDetail from './ProductDetail';
 import OrdersActive from './OrdersActive';
 import Clients from './Clients';
 import Login from './Login';
@@ -33,12 +32,10 @@ const App = () => (
 
       <Switch>
         <Route path="/login/" component={Login} />
-        <PrivateRoute exact path="/products/:id/" component={ProductDetail} />
+        <PrivateRoute exact path="/products/create/" component={ProductCreate} />
         <PrivateRoute exact path="/products" component={Products} />
         <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
-        <PrivateRoute exact path="/products" component={Products} />
-        <PrivateRoute exact path="/products/create/" component={ProductCreate} />
-        <PrivateRoute exact path="/products/:id/" component={ProductDetail} />
+        {/* <PrivateRoute exact path="/products/:id/" component={ProductDetail} /> */}
         <PrivateRoute exact path="/kitchens/create/" component={KitchenCreate} />
         <PrivateRoute exact path="/kitchens" component={KitchensList} />
         <PrivateRoute exact path="/kitchens/:id/details/" component={KitchenDetails} />

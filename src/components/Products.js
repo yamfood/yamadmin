@@ -37,6 +37,12 @@ const Products = (props) => {
 
   const columns = [
     {
+      title: 'Фото',
+      dataIndex: 'thumbnail',
+      key: 'thumbnail',
+      render: (thumbnail) => <img alt={thumbnail} style={{ width: 100 }} src={thumbnail} />,
+    },
+    {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
@@ -119,6 +125,7 @@ const Products = (props) => {
           margin: '24px 16px',
           padding: 24,
           background: '#fff',
+          minHeight: 'auto',
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Продукты</h1>
@@ -128,9 +135,7 @@ const Products = (props) => {
             <Button
               type="primary"
               style={{ marginLeft: 10 }}
-              onClick={() => {
-                history.push('/products/create/');
-              }}
+              onClick={() => history.push('/products/create/')}
             >
               Создать продукт
             </Button>
@@ -145,9 +150,6 @@ const Products = (props) => {
           columns={columns}
           loading={loading}
           dataSource={products.list.map((product) => ({ ...product, key: `${product.id}` }))}
-          onRow={(r) => ({
-            onClick: () => history.push(`/products/${r.id}`),
-          })}
         />
       </Content>
     </Layout>

@@ -75,7 +75,7 @@ const OrderCard = ({
           content={content}
           overlayStyle={{
             textAlign: 'center',
-            width: 220,
+            width: 250,
           }}
         >
           <Icon type="ellipsis" />
