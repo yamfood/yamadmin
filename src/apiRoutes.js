@@ -4,6 +4,7 @@ export default {
   login: () => [host, 'auth/login/'].join('/'),
   clients: () => [host, 'clients/'].join('/'),
   kitchens: () => [host, 'kitchens/'].join('/'),
+  kitchenDetails: (id) => [host, `kitchens/${id}/`].join('/'),
   products: () => [host, 'products/'].join('/'),
   product: (id) => [host, `products/${id}/`].join('/'),
   productsCategory: () => [host, 'products/categories/'].join('/'),

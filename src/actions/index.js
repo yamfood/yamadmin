@@ -652,6 +652,31 @@ export const editProduct = (params, productId) => async (dispatch) => {
   }
 };
 
+
+export const getKitchenDetailsRequest = createAction('GET_KITCHEN_DETAILS_REQUEST');
+export const getKitchenDetailsFailure = createAction('GET_KITCHEN_DETAILS_FAILURE');
+export const getKitchenDetailsSuccess = createAction('GET_KITCHEN_DETAILS_SUCCESS');
+
+export const getKitchenDetails = (kitchenId) => async (dispatch) => {
+  dispatch(getKitchenDetailsRequest());
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(api.kitchenDetails(kitchenId), {
+      headers: {
+        token,
+      },
+    });
+    dispatch(getKitchenDetailsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getKitchenDetailsFailure());
+  }
+};
+
 export const createKitchenRequest = createAction('CREATE_KITCHEN_REQUEST');
 export const createKitchenFailure = createAction('CREATE_KITCHEN_FAILURE');
 export const createKitchenSuccess = createAction('CREATE_KITCHEN_SUCCESS');

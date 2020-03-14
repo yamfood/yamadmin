@@ -68,6 +68,11 @@ const KitchensList = (props) => {
           columns={columns}
           loading={loading}
           dataSource={kitchens.list.map((kitchen) => ({ ...kitchen, key: kitchen.id }))}
+          onRow={(record) => ({
+            onClick: () => {
+              props.history.push(`${record.id}/details/`);
+            },
+          })}
         />
       </Content>
     </Layout>
