@@ -1,0 +1,11 @@
+{
+  "name": "YamFoodAdmin Template",
+  "description": "Food delivery service admin",
+  "repository": "https://github.com/yamfood/yamadmin",
+  "keywords": [],
+  "env": {
+    "REACT_APP_API_HOST": {
+      "description": "Host to API"
+    }
+  }
+}
