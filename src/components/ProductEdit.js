@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
   Form,
@@ -12,32 +12,18 @@ import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const mapStateToProps = (state) => ({
-  products: state.products,
-});
-
-const actionCreators = {
-  getCategory: actions.getCategory,
-  getProductDetails: actions.getProductDetails,
-  editProduct: actions.editProduct,
-};
-
 const ProductCreate = (props) => {
-  const {
-    form,
-    getCategory,
-    products,
-    match,
-    getProductDetails,
-    editProduct,
-  } = props;
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products);
+
+  const { form, match } = props;
 
   const { productDetails } = products;
 
   useEffect(() => {
     const productId = match.params.id;
-    getProductDetails(productId);
-    getCategory();
+    dispatch(actions.getProductDetails(productId));
+    dispatch(actions.getCategory());
   }, [])
 
   const { getFieldDecorator } = form;
@@ -46,12 +32,12 @@ const ProductCreate = (props) => {
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
-        editProduct({
+        dispatch(actions.editProduct({
           ...values,
           price: parseInt(values.price, 10),
           energy: values.energy ? parseInt(values.energy, 10) : undefined,
           category_id: values.category_id === undefined ? null : values.category_id,
-        }, productDetails.id);
+        }, productDetails.id));
       }
     });
   };
@@ -166,7 +152,4 @@ const ProductCreate = (props) => {
 
 const WrappedProductCreate = Form.create()(ProductCreate);
 
-export default connect(
-  mapStateToProps,
-  actionCreators,
-)(withRouter(WrappedProductCreate));
+export default withRouter(WrappedProductCreate);

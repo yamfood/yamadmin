@@ -244,9 +244,11 @@ export const setIsBlockedClient = (clientId, params) => async (dispatch) => {
       },
     });
     dispatch(setIsBlockedClientSuccess());
+    message.success('Клиент успешно блокирован', 3);
     dispatch(getClientDetails(clientId));
   } catch (error) {
     console.error(error);
+    message.error('Ошибка при блокировании клиента', 3);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
       dispatch(loginFailure());

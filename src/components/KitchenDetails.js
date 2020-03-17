@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Layout,
   Descriptions,
@@ -9,25 +9,17 @@ import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const mapStateToProps = (state) => ({
-  kitchen: state.kitchens,
-});
-
-const actionCreators = {
-  getKitchenDetails: actions.getKitchenDetails,
-}
-
 const KitchenDetail = (props) => {
-  const {
-    kitchen,
-    getKitchenDetails,
-    match,
-  } = props;
+  const dispatch = useDispatch();
+  const kitchen = useSelector((state) => state.kitchens);
+  const { match } = props;
   const { details } = kitchen;
+
   useEffect(() => {
     const kitchenId = match.params.id;
-    getKitchenDetails(kitchenId);
+    dispatch(actions.getKitchenDetails(kitchenId));
   }, []);
+
   return (
     <Layout>
       <Content
@@ -48,7 +40,4 @@ const KitchenDetail = (props) => {
   );
 };
 
-export default connect(
-  mapStateToProps,
-  actionCreators,
-)(withRouter(KitchenDetail));
+export default withRouter(KitchenDetail);

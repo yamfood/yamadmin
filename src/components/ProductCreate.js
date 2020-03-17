@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import {
   Form,
@@ -12,25 +12,14 @@ import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const mapStateToProps = (state) => ({
-  products: state.products,
-});
-
-const actionCreators = {
-  getCategory: actions.getCategory,
-  createProduct: actions.createProduct,
-};
-
 const ProductCreate = (props) => {
-  const {
-    form,
-    getCategory,
-    products,
-    createProduct,
-  } = props;
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products);
+
+  const { form } = props;
 
   useEffect(() => {
-    getCategory();
+    dispatch(actions.getCategory());
   }, [])
 
   const { getFieldDecorator } = form;
@@ -39,12 +28,12 @@ const ProductCreate = (props) => {
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
-        createProduct({
+        dispatch(actions.createProduct({
           ...values,
           price: parseInt(values.price, 10),
           energy: values.energy ? parseInt(values.energy, 10) : undefined,
           category_id: values.category_id ? parseInt(values.category_id, 10) : undefined,
-        });
+        }));
       }
     });
   };
@@ -134,7 +123,4 @@ const ProductCreate = (props) => {
 
 const WrappedProductCreate = Form.create()(ProductCreate);
 
-export default connect(
-  mapStateToProps,
-  actionCreators,
-)(withRouter(WrappedProductCreate));
+export default withRouter(WrappedProductCreate);

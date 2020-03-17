@@ -12,27 +12,30 @@ import {
 } from '@ant-design/icons';
 
 import { withRouter } from 'react-router-dom'
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const actionsCreators = {
-  getProducts: actions.getProducts,
-  deleteProduct: actions.deleteProduct,
-};
+// const actionsCreators = {
+//   getProducts: actions.getProducts,
+//   deleteProduct: actions.deleteProduct,
+// };
 
 
-const mapStateToProps = (state) => ({
-  products: state.products,
-});
+// const mapStateToProps = (state) => ({
+//   products: state.products,
+// });
 
 const Products = (props) => {
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products);
+
   const {
     history,
-    products,
-    getProducts,
-    deleteProduct,
+    // products,
+    // getProducts,
+    // deleteProduct,
   } = props;
 
   const columns = [
@@ -89,31 +92,20 @@ const Products = (props) => {
       render: (arg, record) => (
         <Popconfirm
           title="Вы уверены в удалении?"
-          onConfirm={(e) => {
-            e.stopPropagation();
-            deleteProduct(record.id)
-          }}
-          onCancel={(e) => {
-            e.stopPropagation();
+          onConfirm={() => {
+            dispatch(actions.deleteProduct(record.id))
           }}
           okText="Да"
           cancelText="Нет"
         >
-          <Button
-            type="link"
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-          >
-            <DeleteOutlined />
-          </Button>
+          <DeleteOutlined style={{ color: '#1890ff' }} />
         </Popconfirm>
       ),
     },
   ];
 
   useEffect(() => {
-    getProducts();
+    dispatch(actions.getProducts());
   }, []);
 
   const loading = products.status === 'request';
@@ -131,7 +123,7 @@ const Products = (props) => {
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Продукты</h1>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div>
-            <Button style={{ marginBottom: 20 }} onClick={getProducts}><Icon type="reload" /></Button>
+            <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getProducts())}><Icon type="reload" /></Button>
             <Button
               type="primary"
               style={{ marginLeft: 10 }}
@@ -157,7 +149,4 @@ const Products = (props) => {
 };
 
 
-export default connect(
-  mapStateToProps,
-  actionsCreators,
-)(withRouter(Products));
+export default withRouter(Products);

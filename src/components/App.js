@@ -35,7 +35,6 @@ const App = () => (
         <PrivateRoute exact path="/products/create/" component={ProductCreate} />
         <PrivateRoute exact path="/products" component={Products} />
         <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
-        {/* <PrivateRoute exact path="/products/:id/" component={ProductDetail} /> */}
         <PrivateRoute exact path="/kitchens/create/" component={KitchenCreate} />
         <PrivateRoute exact path="/kitchens" component={KitchensList} />
         <PrivateRoute exact path="/kitchens/:id/details/" component={KitchenDetails} />

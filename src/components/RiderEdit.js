@@ -7,29 +7,23 @@ import {
   Layout,
 } from 'antd';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
-
-const actionsCreators = {
-  editRider: actions.editRider,
-  getRiderDetails: actions.getRiderDetails,
-};
 
 const { Content } = Layout;
 
 const RidersForm = (props) => {
+  const dispatch = useDispatch();
+  const riders = useSelector((state) => state.riders);
   const {
     form,
     match,
-    editRider,
-    getRiderDetails,
-    riders,
   } = props;
 
 
   useEffect(() => {
     const riderID = match.params.id;
-    getRiderDetails(riderID);
+    dispatch(actions.getRiderDetails(riderID));
   }, []);
 
   const { getFieldDecorator } = form;
@@ -40,13 +34,12 @@ const RidersForm = (props) => {
     const { editRiderDetails } = riders;
     props.form.validateFields((err, values) => {
       if (!err) {
-        editRider(
+        dispatch(actions.editRider(
           {
             params: { ...values, phone: parseInt(values.phone, 10) },
             id: editRiderDetails.id,
           },
-          props.history.push,
-        );
+        ));
       }
     });
   };
@@ -123,13 +116,5 @@ const RidersForm = (props) => {
   );
 }
 
-const mapStateToProps = (state) => ({
-  riders: state.riders,
-
-});
-
 const WrappedForm = Form.create()(RidersForm);
-export default connect(
-  mapStateToProps,
-  actionsCreators,
-)(withRouter(WrappedForm));
+export default withRouter(WrappedForm);
