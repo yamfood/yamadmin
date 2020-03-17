@@ -39,7 +39,7 @@ export const getClients = (params) => async (dispatch) => {
       },
       params: {
         ...params,
-        per_page: 2,
+        per_page: 15,
       },
     });
     dispatch(getClientsSuccess({ data: response.data }));
@@ -117,7 +117,7 @@ export const getRiders = (params) => async (dispatch) => {
       },
       params: {
         ...params,
-        per_page: 2,
+        per_page: 15,
       },
     });
     dispatch(getRidersSuccess({ data: response.data }));
