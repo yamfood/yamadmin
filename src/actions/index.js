@@ -61,16 +61,15 @@ export const getKitchens = () => async (dispatch) => {
   dispatch(getKitchensRequest());
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(api.kitchens(), {
+    const response = await axios.get(api.kitchens(), {
       headers: {
         token,
       },
     });
-    const result = await response.json();
-    dispatch(getKitchensSuccess({ data: result }));
-  } catch (e) {
-    console.log(e);
-    if (e.error === 'Auth failed' || e.error === 'Auth required') {
+    dispatch(getKitchensSuccess({ data: response.data }));
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
       dispatch(loginFailure());
     }
@@ -87,16 +86,15 @@ export const getProducts = () => async (dispatch) => {
   dispatch(getProductsRequest());
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(api.products(), {
+    const response = await axios.get(api.products(), {
       headers: {
         token,
       },
     });
-    const result = await response.json();
-    dispatch(getProductsSuccess({ data: result }));
-  } catch (e) {
-    console.log(e);
-    if (e.error === 'Auth failed' || e.error === 'Auth required') {
+    dispatch(getProductsSuccess({ data: response.data }));
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
       dispatch(loginFailure());
     }
@@ -142,16 +140,15 @@ export const getAdmins = () => async (dispatch) => {
   dispatch(getAdminsRequest());
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(api.admins(), {
+    const response = await axios.get(api.admins(), {
       headers: {
         token,
       },
     });
-    const result = await response.json();
-    dispatch(getAdminsSuccess({ data: result }));
-  } catch (e) {
-    console.log(e);
-    if (e.error === 'Auth failed' || e.error === 'Auth required') {
+    dispatch(getAdminsSuccess({ data: response.data }));
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
       dispatch(loginFailure());
     }
@@ -168,16 +165,15 @@ export const getOrderDetails = (id) => async (dispatch) => {
   dispatch(getOrderDetailsRequest());
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(api.orderDetails(id), {
+    const response = await axios.get(api.orderDetails(id), {
       headers: {
         token,
       },
     });
-    const result = await response.json();
-    dispatch(getOrderDetailsSuccess({ data: result }));
-  } catch (e) {
-    console.log(e);
-    if (e.error === 'Auth failed' || e.error === 'Auth required') {
+    dispatch(getOrderDetailsSuccess({ data: response.data }));
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
       dispatch(loginFailure());
     }
@@ -194,16 +190,15 @@ export const getActiveOrders = () => async (dispatch) => {
   dispatch(getActiveOrdersRequest());
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch(api.orders(), {
+    const response = await axios.get(api.orders(), {
       headers: {
         token,
       },
     });
-    const result = await response.json();
-    dispatch(getActiveOrdersSuccess({ data: result }));
-  } catch (e) {
-    console.log(e);
-    if (e.error === 'Auth failed' || e.error === 'Auth required') {
+    dispatch(getActiveOrdersSuccess({ data: response.data }));
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
       dispatch(loginFailure());
     }
@@ -654,5 +649,57 @@ export const editProduct = (params, productId) => async (dispatch) => {
     }
     dispatch(editProductFailure());
     message.error('Ошибка при изменении продукта', 3);
+  }
+};
+
+
+export const getKitchenDetailsRequest = createAction('GET_KITCHEN_DETAILS_REQUEST');
+export const getKitchenDetailsFailure = createAction('GET_KITCHEN_DETAILS_FAILURE');
+export const getKitchenDetailsSuccess = createAction('GET_KITCHEN_DETAILS_SUCCESS');
+
+export const getKitchenDetails = (kitchenId) => async (dispatch) => {
+  dispatch(getKitchenDetailsRequest());
+  try {
+    const token = localStorage.getItem('token');
+    const response = await axios.get(api.kitchenDetails(kitchenId), {
+      headers: {
+        token,
+      },
+    });
+    dispatch(getKitchenDetailsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getKitchenDetailsFailure());
+  }
+};
+
+export const createKitchenRequest = createAction('CREATE_KITCHEN_REQUEST');
+export const createKitchenFailure = createAction('CREATE_KITCHEN_FAILURE');
+export const createKitchenSuccess = createAction('CREATE_KITCHEN_SUCCESS');
+
+export const createKitchen = (params) => async (dispatch) => {
+  dispatch(createKitchenRequest());
+  try {
+    const token = localStorage.getItem('token');
+    await axios.post(api.kitchens(), params, {
+      headers: {
+        token,
+      },
+    });
+    dispatch(createKitchenSuccess());
+    message.success('Кухня успешно создана', 3);
+    history.push('/kitchens/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(createKitchenFailure());
+    message.error('Ошибка при создании кухни', 3);
   }
 };
