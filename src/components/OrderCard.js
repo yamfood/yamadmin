@@ -6,7 +6,7 @@ import {
   Popover,
   Button,
 } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
 
@@ -15,7 +15,7 @@ const { Countdown } = Statistic;
 
 const OrderCard = ({ order }) => {
   const dispatch = useDispatch();
-  const activeOrders = ((state) => state.activeOrders);
+  const activeOrders = useSelector((state) => state.activeOrders);
 
   const [visible, setVisible] = useState(false);
   const deadline = new Date(order.created_at).getTime() + 1000 * 60 * 60 * 10;
@@ -30,25 +30,40 @@ const OrderCard = ({ order }) => {
   };
 
 
-  const content = (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <Button
-        type="primary"
-        onClick={handleAccept}
-        loading={activeOrders.acceptStatus === 'request'}
+  const displayContent = () => {
+    switch (activeOrders.activeTabKey) {
+      case 2:
+        return (
+          <Button
+            type="danger"
+            onClick={handleСancel}
+            loading={activeOrders.cancelStatus === 'request'}
+          >
+            Отменить
+          </Button>
+        );
+      default:
+        return (
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button
+              type="primary"
+              onClick={handleAccept}
+              loading={activeOrders.acceptStatus === 'request'}
 
-      >
-          Принять
-      </Button>
-      <Button
-        type="danger"
-        onClick={handleСancel}
-        loading={activeOrders.cancelStatus === 'request'}
-      >
-          Отменить
-      </Button>
-    </div>
-  );
+            >
+              Принять
+            </Button>
+            <Button
+              type="danger"
+              onClick={handleСancel}
+              loading={activeOrders.cancelStatus === 'request'}
+            >
+              Отменить
+            </Button>
+          </div>
+        );
+    }
+  };
 
   return (
     <Card
@@ -60,7 +75,7 @@ const OrderCard = ({ order }) => {
           trigger="click"
           visible={visible}
           onVisibleChange={(visibility) => setVisible(visibility)}
-          content={content}
+          content={displayContent()}
           overlayStyle={{
             textAlign: 'center',
             width: 250,

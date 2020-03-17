@@ -17,26 +17,11 @@ import * as actions from '../actions';
 
 const { Content } = Layout;
 
-// const actionsCreators = {
-//   getProducts: actions.getProducts,
-//   deleteProduct: actions.deleteProduct,
-// };
-
-
-// const mapStateToProps = (state) => ({
-//   products: state.products,
-// });
-
 const Products = (props) => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products);
 
-  const {
-    history,
-    // products,
-    // getProducts,
-    // deleteProduct,
-  } = props;
+  const { history } = props;
 
   const columns = [
     {
