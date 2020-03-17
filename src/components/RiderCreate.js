@@ -6,29 +6,24 @@ import {
   Layout,
 } from 'antd';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
-
-const actionsCreators = {
-  createRider: actions.createRider,
-};
 
 const { Content } = Layout;
 
 const CreateRider = (props) => {
+  const dispatch = useDispatch();
+  const createStatus = useSelector((state) => state.riders.createRiderStatus);
+
   const { form } = props;
   const { getFieldDecorator } = form;
-  const {
-    createRider,
-    createStatus,
-  } = props;
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        createRider({ ...values, phone: parseInt(values.phone, 10) });
+        dispatch(actions.createRider({ ...values, phone: parseInt(values.phone, 10) }));
       }
     });
   };
@@ -86,12 +81,5 @@ const CreateRider = (props) => {
   );
 }
 
-const mapStateToProps = (state) => ({
-  createStatus: state.riders.createRiderStatus,
-});
-
 const WrappedForm = Form.create()(CreateRider);
-export default connect(
-  mapStateToProps,
-  actionsCreators,
-)(withRouter(WrappedForm));
+export default withRouter(WrappedForm);

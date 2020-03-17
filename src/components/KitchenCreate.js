@@ -6,36 +6,29 @@ import {
   Layout,
 } from 'antd';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
-
-const actionsCreators = {
-  createKitchen: actions.createKitchen,
-};
 
 const { Content } = Layout;
 
 const KitchenCreate = (props) => {
+  const dispatch = useDispatch();
+  const kitchens = useSelector((state) => state.kitchens);
   const { form } = props;
   const { getFieldDecorator } = form;
-  const {
-    createKitchen,
-    kitchens,
-  } = props;
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        createKitchen({
+        dispatch(actions.createKitchen({
           name: values.name,
           location: {
             longitude: parseFloat(values.longitude),
             latitude: parseFloat(values.latitude),
           },
-        })
+        }));
       }
     });
   };
@@ -95,12 +88,5 @@ const KitchenCreate = (props) => {
   );
 }
 
-const mapStateToProps = (state) => ({
-  kitchens: state.kitchens,
-});
-
 const WrappedForm = Form.create()(KitchenCreate);
-export default connect(
-  mapStateToProps,
-  actionsCreators,
-)(withRouter(WrappedForm));
+export default withRouter(WrappedForm);

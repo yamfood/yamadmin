@@ -6,7 +6,7 @@ import {
   Button,
   Icon,
 } from 'antd';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
 import PhoneSearchForm from './PhoneSearchForm';
@@ -15,28 +15,19 @@ import ClientDetails from './DisplayDetails';
 
 const { Content } = Layout;
 
-const actionsCreators = {
-  getClients: actions.getClients,
-  getClientDetails: actions.getClientDetails,
-  setIsBlockedClient: actions.setIsBlockedClient,
-};
-
-
-const mapStateToProps = (state) => ({
-  clients: state.clients,
-});
-
-const Clients = (props) => {
+const Clients = () => {
   const {
-    clients,
     getClients,
     getClientDetails,
     setIsBlockedClient,
-  } = props;
+  } = actions;
+
+  const dispatch = useDispatch();
+  const clients = useSelector((state) => state.clients);
 
   useEffect(() => {
     if (clients.status === null) {
-      getClients({ page: clients.page });
+      dispatch(getClients({ page: clients.page }));
     }
   });
 
@@ -68,13 +59,14 @@ const Clients = (props) => {
       render: (blocked, client) => (
         <Switch
           defaultChecked={blocked === true}
-          onChange={(checked) => setIsBlockedClient(client.id, { is_blocked: checked })}
+          onChange={(checked) => dispatch(setIsBlockedClient(client.id, { is_blocked: checked }))}
         />
       ),
     },
   ];
 
-  const loading = (clients.status === 'request' || clients.blockedStatus === 'request' || clients.detailsStatus === 'request');
+  const loading = [clients.status, clients.blockedStatus, clients.detailsStatus].includes('request');
+
   return (
     <Layout>
       <Content
@@ -86,7 +78,7 @@ const Clients = (props) => {
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Клиенты</h1>
-        <Button style={{ marginBottom: 20 }} onClick={() => getClients({ page: 1 })}><Icon type="reload" /></Button>
+        <Button style={{ marginBottom: 20 }} onClick={() => dispatch(getClients({ page: 1 }))}><Icon type="reload" /></Button>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <PhoneSearchForm getByPhone={getClients} />
           <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
@@ -109,6 +101,7 @@ const Clients = (props) => {
             2,
             getClients,
             clients.page,
+            dispatch,
           )}
           expandedRowRender={(record) => (
             <ul>
@@ -117,7 +110,7 @@ const Clients = (props) => {
           )}
           onExpand={(expanded, record) => {
             if (expanded) {
-              getClientDetails(record.id);
+              dispatch(getClientDetails(record.id));
             }
           }}
         />
@@ -126,7 +119,4 @@ const Clients = (props) => {
   )
 };
 
-export default connect(
-  mapStateToProps,
-  actionsCreators,
-)(withRouter(Clients));
+export default withRouter(Clients);

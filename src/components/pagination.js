@@ -1,9 +1,14 @@
-/* eslint-disable */
-const pagination = (total, pageSize, handlePage, currentPage) => ({
-  total: total,
+const pagination = (
+  totalCount,
+  pageSize,
+  handlePage,
+  currentPage,
+  dispatch,
+) => ({
+  total: totalCount,
   pageSize,
   onChange: (page) => {
-    handlePage({ page })
+    dispatch(handlePage({ page }))
   },
   current: currentPage,
 });

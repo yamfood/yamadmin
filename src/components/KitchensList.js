@@ -7,22 +7,14 @@ import {
 } from 'antd';
 
 import { withRouter } from 'react-router-dom'
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const actionsCreators = {
-  getKitchens: actions.getKitchens,
-};
-
-
-const mapStateToProps = (state) => ({
-  kitchens: state.kitchens,
-});
-
 const KitchensList = (props) => {
-  const { kitchens, getKitchens } = props;
+  const dispatch = useDispatch();
+  const kitchens = useSelector((state) => state.kitchens);
 
   const columns = [
     {
@@ -38,7 +30,7 @@ const KitchensList = (props) => {
   ];
 
   useEffect(() => {
-    getKitchens();
+    dispatch(actions.getKitchens());
   }, []);
 
   const loading = kitchens.status === 'request';
@@ -53,7 +45,7 @@ const KitchensList = (props) => {
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Кухни</h1>
-        <Button style={{ marginBottom: 20 }} onClick={getKitchens}><Icon type="reload" /></Button>
+        <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getKitchens())}><Icon type="reload" /></Button>
         <Button
           type="primary"
           onClick={() => {
@@ -80,7 +72,4 @@ const KitchensList = (props) => {
 };
 
 
-export default connect(
-  mapStateToProps,
-  actionsCreators,
-)(withRouter(KitchensList));
+export default withRouter(KitchensList);

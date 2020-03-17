@@ -6,38 +6,26 @@ import {
   Popover,
   Button,
 } from 'antd';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
-
-const actionCreators = {
-  acceptOrder: actions.acceptOrder,
-  cancelOrder: actions.cancelOrder,
-}
-
-const mapStateToProps = (state) => ({
-  activeOrders: state.activeOrders,
-});
-
 
 const { Meta } = Card;
 const { Countdown } = Statistic;
 
-const OrderCard = ({
-  order,
-  acceptOrder,
-  cancelOrder,
-  activeOrders,
-}) => {
+const OrderCard = ({ order }) => {
+  const dispatch = useDispatch();
+  const activeOrders = ((state) => state.activeOrders);
+
   const [visible, setVisible] = useState(false);
   const deadline = new Date(order.created_at).getTime() + 1000 * 60 * 60 * 10;
 
   const handleAccept = async () => {
-    await acceptOrder(order.id);
+    await dispatch(actions.acceptOrder(order.id));
     setVisible(false);
   }
   const handleСancel = async () => {
-    await cancelOrder(order.id);
+    await dispatch(actions.cancelOrder(order.id));
     setVisible(false);
   };
 
@@ -75,7 +63,7 @@ const OrderCard = ({
           content={content}
           overlayStyle={{
             textAlign: 'center',
-            width: 220,
+            width: 250,
           }}
         >
           <Icon type="ellipsis" />
@@ -106,7 +94,4 @@ const OrderCard = ({
   )
 };
 
-export default connect(
-  mapStateToProps,
-  actionCreators,
-)(withRouter(OrderCard));
+export default withRouter(OrderCard);

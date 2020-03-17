@@ -3,34 +3,21 @@ import {
   Layout,
   Tabs,
 } from 'antd';
-import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import OrdersTable from './OrdersTable';
 import * as actions from '../actions';
-
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
 
-
-const mapStateToProps = (state) => ({
-  orders: state.activeOrders,
-});
-
-
-const actionsCreator = {
-  getActiveOrders: actions.getActiveOrders,
-};
-
-
-const OrdersActive = (props) => {
-  const {
-    orders,
-    getActiveOrders,
-  } = props;
+const OrdersActive = () => {
+  const dispatch = useDispatch();
+  const orders = useSelector((state) => state.activeOrders);
 
   useEffect(() => {
-    setInterval(getActiveOrders, 5000);
-    getActiveOrders();
+    setInterval(() => dispatch(actions.getActiveOrders()), 5000);
+    dispatch(actions.getActiveOrders());
   }, []);
 
   return (
@@ -65,7 +52,4 @@ const OrdersActive = (props) => {
 };
 
 
-export default connect(
-  mapStateToProps,
-  actionsCreator,
-)(OrdersActive);
+export default withRouter(OrdersActive);

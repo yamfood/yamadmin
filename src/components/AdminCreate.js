@@ -7,30 +7,20 @@ import {
   Layout,
 } from 'antd';
 import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../actions';
 
 const { Content } = Layout;
-
-const mapStateToProps = (state) => ({
-  admin: state.admins,
-});
-
-const actionCreators = {
-  getAdminPermissions: actions.getAdminPermissions,
-  createAdmin: actions.createAdmin,
-}
-
 const AdminCreate = (props) => {
   const {
     form,
-    admin,
-    getAdminPermissions,
-    createAdmin,
   } = props;
 
+  const dispatch = useDispatch();
+  const admin = useSelector((state) => state.admins);
+
   useEffect(() => {
-    getAdminPermissions();
+    dispatch(actions.getAdminPermissions());
   }, []);
 
   const { getFieldDecorator } = form;
@@ -39,12 +29,12 @@ const AdminCreate = (props) => {
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
-        createAdmin({
+        dispatch(actions.createAdmin({
           ...values,
           payload: {
             permissions: values.payload,
           },
-        })
+        }));
       }
     });
   };
@@ -106,7 +96,4 @@ const AdminCreate = (props) => {
 };
 
 const WrappedForm = Form.create()(AdminCreate);
-export default connect(
-  mapStateToProps,
-  actionCreators,
-)(withRouter(WrappedForm));
+export default withRouter(WrappedForm)
