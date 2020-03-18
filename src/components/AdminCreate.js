@@ -12,10 +12,7 @@ import * as actions from '../actions';
 
 const { Content } = Layout;
 const AdminCreate = (props) => {
-  const {
-    form,
-  } = props;
-
+  const { form } = props;
   const dispatch = useDispatch();
   const admin = useSelector((state) => state.admins);
 
