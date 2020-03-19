@@ -11,7 +11,7 @@ const PhoneSearchForm = (props) => {
   useEffect(() => {
     props.form.validateFields();
   });
-  const { getByPhone, form } = props;
+  const { onSubmit, form } = props;
   const { getFieldDecorator } = form;
 
   const handleSubmit = (e) => {
@@ -20,13 +20,13 @@ const PhoneSearchForm = (props) => {
     props.form.validateFields((err, values) => {
       const { phone } = values;
       if (!err) {
-        dispatch(getByPhone({ phone }));
+        dispatch(onSubmit({ phone }));
       }
     });
   };
 
   return (
-    <Form layout="inline" onSubmit={handleSubmit}>
+    <Form style={{ marginLeft: 15 }} layout="inline" onSubmit={handleSubmit}>
       <Form.Item>
         {getFieldDecorator('phone')(
           <Input

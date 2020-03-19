@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Layout,
@@ -9,15 +9,14 @@ import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const KitchenDetail = (props) => {
+const KitchenDetail = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
   const kitchen = useSelector((state) => state.kitchens);
-  const { match } = props;
   const { details } = kitchen;
 
   useEffect(() => {
-    const kitchenId = match.params.id;
-    dispatch(actions.getKitchenDetails(kitchenId));
+    dispatch(actions.getKitchenDetails(id));
   }, []);
 
   return (
@@ -40,4 +39,4 @@ const KitchenDetail = (props) => {
   );
 };
 
-export default withRouter(KitchenDetail);
+export default KitchenDetail;

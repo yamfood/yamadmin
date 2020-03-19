@@ -10,7 +10,7 @@ import {
   EditOutlined,
 } from '@ant-design/icons';
 
-import { withRouter } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 import pagination from './pagination';
@@ -20,8 +20,9 @@ import DepositForm from './RiderDeposit';
 
 const { Content } = Layout;
 
-const RidersList = (props) => {
+const RidersList = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const riders = useSelector((state) => state.riders);
 
   const columns = [
@@ -54,7 +55,7 @@ const RidersList = (props) => {
         <Switch
           defaultChecked={blocked === true}
           onChange={(checked) => {
-            dispatch(actions.editRider({ params: { is_blocked: checked }, id: client.id }))
+            dispatch(actions.editRider({ is_blocked: checked }, client.id))
           }}
         />
       ),
@@ -68,7 +69,7 @@ const RidersList = (props) => {
           <Button
             type="link"
             onClick={() => {
-              props.history.push(`/riders/${record.id}/edit`);
+              history.push(`/riders/${record.id}/edit`);
             }}
           >
             <EditOutlined />
@@ -99,14 +100,19 @@ const RidersList = (props) => {
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Курьеры</h1>
-        <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getRiders({ page: 1 }))}><Icon type="reload" /></Button>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex' }}>
-            <PhoneSearchForm getByPhone={() => dispatch(actions.getRiders())} />
+            <Button
+              style={{ marginTop: 4 }}
+              onClick={() => dispatch(actions.getRiders({ page: 1 }))}
+            >
+              <Icon type="reload" />
+            </Button>
+            <PhoneSearchForm onSubmit={actions.getRiders} />
             <Button
               type="primary"
               onClick={() => {
-                props.history.push('/riders/create/');
+                history.push('/riders/create/');
               }}
               style={{ marginTop: '1%' }}
             >
@@ -128,7 +134,7 @@ const RidersList = (props) => {
           }))}
           pagination={pagination(
             riders.total,
-            2,
+            15,
             actions.getRiders,
             riders.page,
             dispatch,
@@ -155,4 +161,4 @@ const RidersList = (props) => {
   )
 };
 
-export default withRouter(RidersList);
+export default RidersList;

@@ -285,11 +285,14 @@ export const editRiderRequest = createAction('EDIT_RIDER_REQUEST');
 export const editRiderFailure = createAction('EDIT_RIDER_FAILURE');
 export const editRiderSuccess = createAction('EDIT_RIDER_SUCCESS');
 
-export const editRider = ({ params, id }) => async (dispatch) => {
+export const editRider = (riderParams, id) => async (dispatch) => {
   dispatch(editRiderRequest());
   try {
     const token = localStorage.getItem('token');
-    await axios.patch(api.riderDetails(id), params, {
+    await axios.patch(api.riderDetails(id), {
+      is_blocked: riderParams.is_blocked,
+      ...riderParams,
+    }, {
       headers: {
         token,
       },

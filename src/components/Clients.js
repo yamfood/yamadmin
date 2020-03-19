@@ -7,7 +7,6 @@ import {
   Icon,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
 import PhoneSearchForm from './PhoneSearchForm';
 import pagination from './pagination';
@@ -78,9 +77,11 @@ const Clients = () => {
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Клиенты</h1>
-        <Button style={{ marginBottom: 20 }} onClick={() => dispatch(getClients({ page: 1 }))}><Icon type="reload" /></Button>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <PhoneSearchForm getByPhone={getClients} />
+          <div style={{ display: 'flex' }}>
+            <Button style={{ marginBottom: 20, marginTop: '1%' }} onClick={() => dispatch(getClients({ page: 1 }))}><Icon type="reload" /></Button>
+            <PhoneSearchForm onSubmit={getClients} />
+          </div>
           <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
             <b>Кол-во:</b>
             {clients.total}
@@ -98,7 +99,7 @@ const Clients = () => {
           loading={loading}
           pagination={pagination(
             clients.total,
-            2,
+            15,
             getClients,
             clients.page,
             dispatch,
@@ -119,4 +120,4 @@ const Clients = () => {
   )
 };
 
-export default withRouter(Clients);
+export default Clients;

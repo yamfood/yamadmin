@@ -3,7 +3,6 @@ import {
   Layout,
   Tabs,
 } from 'antd';
-import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import OrdersTable from './OrdersTable';
 import * as actions from '../actions';
@@ -16,8 +15,9 @@ const OrdersActive = () => {
   const orders = useSelector((state) => state.activeOrders);
 
   useEffect(() => {
-    setInterval(() => dispatch(actions.getActiveOrders()), 5000);
     dispatch(actions.getActiveOrders());
+    const intervalId = setInterval(() => dispatch(actions.getActiveOrders()), 5000);
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -52,4 +52,4 @@ const OrdersActive = () => {
 };
 
 
-export default withRouter(OrdersActive);
+export default OrdersActive;
