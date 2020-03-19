@@ -6,31 +6,22 @@ import {
   Checkbox,
   Layout,
 } from 'antd';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../actions';
 
 const { Content } = Layout;
-
-const mapStateToProps = (state) => ({
-  admin: state.admins,
-});
-
-const actionCreators = {
-  getAdminPermissions: actions.getAdminPermissions,
-  createAdmin: actions.createAdmin,
-}
-
 const AdminCreate = (props) => {
   const {
     form,
-    admin,
-    getAdminPermissions,
-    createAdmin,
   } = props;
 
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const admin = useSelector((state) => state.admins);
+
   useEffect(() => {
-    getAdminPermissions();
+    dispatch(actions.getAdminPermissions());
   }, []);
 
   const { getFieldDecorator } = form;
@@ -39,12 +30,12 @@ const AdminCreate = (props) => {
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
-        createAdmin({
+        dispatch(actions.createAdmin({
           ...values,
           payload: {
             permissions: values.payload,
           },
-        })
+        }));
       }
     });
   };
@@ -84,7 +75,7 @@ const AdminCreate = (props) => {
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
-              <Button onClick={() => props.history.push('/admins/')}>
+              <Button onClick={() => history.push('/admins/')}>
                 Назад
               </Button>
             </Form.Item>
@@ -106,7 +97,4 @@ const AdminCreate = (props) => {
 };
 
 const WrappedForm = Form.create()(AdminCreate);
-export default connect(
-  mapStateToProps,
-  actionCreators,
-)(withRouter(WrappedForm));
+export default WrappedForm;

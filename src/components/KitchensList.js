@@ -6,23 +6,16 @@ import {
   Table,
 } from 'antd';
 
-import { withRouter } from 'react-router-dom'
-import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const actionsCreators = {
-  getKitchens: actions.getKitchens,
-};
-
-
-const mapStateToProps = (state) => ({
-  kitchens: state.kitchens,
-});
-
-const KitchensList = (props) => {
-  const { kitchens, getKitchens } = props;
+const KitchensList = () => {
+  const dispatch = useDispatch();
+  const kitchens = useSelector((state) => state.kitchens);
+  const history = useHistory();
 
   const columns = [
     {
@@ -38,7 +31,7 @@ const KitchensList = (props) => {
   ];
 
   useEffect(() => {
-    getKitchens();
+    dispatch(actions.getKitchens());
   }, []);
 
   const loading = kitchens.status === 'request';
@@ -53,11 +46,11 @@ const KitchensList = (props) => {
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Кухни</h1>
-        <Button style={{ marginBottom: 20 }} onClick={getKitchens}><Icon type="reload" /></Button>
+        <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getKitchens())}><Icon type="reload" /></Button>
         <Button
           type="primary"
           onClick={() => {
-            props.history.push('/kitchens/create/');
+            history.push('/kitchens/create/');
           }}
           style={{ marginLeft: 10 }}
         >
@@ -70,7 +63,7 @@ const KitchensList = (props) => {
           dataSource={kitchens.list.map((kitchen) => ({ ...kitchen, key: kitchen.id }))}
           onRow={(record) => ({
             onClick: () => {
-              props.history.push(`${record.id}/details/`);
+              history.push(`${record.id}/details/`);
             },
           })}
         />
@@ -80,7 +73,4 @@ const KitchensList = (props) => {
 };
 
 
-export default connect(
-  mapStateToProps,
-  actionsCreators,
-)(withRouter(KitchensList));
+export default KitchensList;

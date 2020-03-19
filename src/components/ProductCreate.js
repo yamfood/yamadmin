@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   Form,
   Layout,
@@ -12,25 +12,15 @@ import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const mapStateToProps = (state) => ({
-  products: state.products,
-});
-
-const actionCreators = {
-  getCategory: actions.getCategory,
-  createProduct: actions.createProduct,
-};
-
 const ProductCreate = (props) => {
-  const {
-    form,
-    getCategory,
-    products,
-    createProduct,
-  } = props;
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const products = useSelector((state) => state.products);
+
+  const { form } = props;
 
   useEffect(() => {
-    getCategory();
+    dispatch(actions.getCategory());
   }, [])
 
   const { getFieldDecorator } = form;
@@ -39,12 +29,12 @@ const ProductCreate = (props) => {
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
-        createProduct({
+        dispatch(actions.createProduct({
           ...values,
           price: parseInt(values.price, 10),
           energy: values.energy ? parseInt(values.energy, 10) : undefined,
           category_id: values.category_id ? parseInt(values.category_id, 10) : undefined,
-        });
+        }));
       }
     });
   };
@@ -56,6 +46,7 @@ const ProductCreate = (props) => {
           margin: '24px 16px',
           padding: 24,
           background: '#fff',
+          minHeight: 'auto',
         }}
       >
         <h1 style={{ textAlign: 'center', fontSize: 24 }}>Создание продукта</h1>
@@ -110,7 +101,7 @@ const ProductCreate = (props) => {
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
-              <Button onClick={() => props.history.push('/products')}>
+              <Button onClick={() => history.push('/products')}>
                   Назад
               </Button>
             </Form.Item>
@@ -132,8 +123,4 @@ const ProductCreate = (props) => {
 };
 
 const WrappedProductCreate = Form.create()(ProductCreate);
-
-export default connect(
-  mapStateToProps,
-  actionCreators,
-)(withRouter(WrappedProductCreate));
+export default WrappedProductCreate;

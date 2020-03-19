@@ -39,7 +39,7 @@ export const getClients = (params) => async (dispatch) => {
       },
       params: {
         ...params,
-        per_page: 2,
+        per_page: 15,
       },
     });
     dispatch(getClientsSuccess({ data: response.data }));
@@ -117,7 +117,7 @@ export const getRiders = (params) => async (dispatch) => {
       },
       params: {
         ...params,
-        per_page: 2,
+        per_page: 15,
       },
     });
     dispatch(getRidersSuccess({ data: response.data }));
@@ -244,9 +244,11 @@ export const setIsBlockedClient = (clientId, params) => async (dispatch) => {
       },
     });
     dispatch(setIsBlockedClientSuccess());
+    message.success('Клиент успешно блокирован', 3);
     dispatch(getClientDetails(clientId));
   } catch (error) {
     console.error(error);
+    message.error('Ошибка при блокировании клиента', 3);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
       dispatch(loginFailure());
@@ -283,11 +285,14 @@ export const editRiderRequest = createAction('EDIT_RIDER_REQUEST');
 export const editRiderFailure = createAction('EDIT_RIDER_FAILURE');
 export const editRiderSuccess = createAction('EDIT_RIDER_SUCCESS');
 
-export const editRider = ({ params, id }) => async (dispatch) => {
+export const editRider = (riderParams, id) => async (dispatch) => {
   dispatch(editRiderRequest());
   try {
     const token = localStorage.getItem('token');
-    await axios.patch(api.riderDetails(id), params, {
+    await axios.patch(api.riderDetails(id), {
+      is_blocked: riderParams.is_blocked,
+      ...riderParams,
+    }, {
       headers: {
         token,
       },

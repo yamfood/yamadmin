@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   Form,
   Layout,
@@ -12,32 +12,19 @@ import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const mapStateToProps = (state) => ({
-  products: state.products,
-});
-
-const actionCreators = {
-  getCategory: actions.getCategory,
-  getProductDetails: actions.getProductDetails,
-  editProduct: actions.editProduct,
-};
-
 const ProductCreate = (props) => {
-  const {
-    form,
-    getCategory,
-    products,
-    match,
-    getProductDetails,
-    editProduct,
-  } = props;
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const products = useSelector((state) => state.products);
+
+  const { form, match } = props;
 
   const { productDetails } = products;
 
   useEffect(() => {
     const productId = match.params.id;
-    getProductDetails(productId);
-    getCategory();
+    dispatch(actions.getProductDetails(productId));
+    dispatch(actions.getCategory());
   }, [])
 
   const { getFieldDecorator } = form;
@@ -46,11 +33,12 @@ const ProductCreate = (props) => {
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
-        editProduct({
+        dispatch(actions.editProduct({
           ...values,
           price: parseInt(values.price, 10),
           energy: values.energy ? parseInt(values.energy, 10) : undefined,
-        }, productDetails.id);
+          category_id: values.category_id === undefined ? null : values.category_id,
+        }, productDetails.id));
       }
     });
   };
@@ -62,6 +50,7 @@ const ProductCreate = (props) => {
           margin: '24px 16px',
           padding: 24,
           background: '#fff',
+          minHeight: 'auto',
         }}
       >
         <h1 style={{ textAlign: 'center', fontSize: 30 }}>Изменение продукта</h1>
@@ -74,6 +63,10 @@ const ProductCreate = (props) => {
               <Input disabled={products.productDetailsStatus === 'request'} />,
             )}
           </Form.Item>
+          <Form.Item>
+            <img alt={productDetails.name} style={{ width: 100 }} src={productDetails.photo} />
+          </Form.Item>
+          <hr />
           <Form.Item label="Уменьшенное изображение">
             {getFieldDecorator('thumbnail', {
               initialValue: productDetails.thumbnail
@@ -83,6 +76,14 @@ const ProductCreate = (props) => {
               <Input disabled={products.productDetailsStatus === 'request'} />,
             )}
           </Form.Item>
+          <Form.Item>
+            <img
+              alt={productDetails.thumbnail}
+              style={{ width: 100 }}
+              src={productDetails.thumbnail}
+            />
+          </Form.Item>
+          <hr />
           <Form.Item label="Название">
             {getFieldDecorator('name', {
               initialValue: productDetails.name ? productDetails.name : null,
@@ -129,8 +130,8 @@ const ProductCreate = (props) => {
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
-              <Button onClick={() => props.history.push('/products')}>
-                  Назад
+              <Button onClick={() => history.push('/products')}>
+                Назад
               </Button>
             </Form.Item>
             <Form.Item>
@@ -151,8 +152,4 @@ const ProductCreate = (props) => {
 };
 
 const WrappedProductCreate = Form.create()(ProductCreate);
-
-export default connect(
-  mapStateToProps,
-  actionCreators,
-)(withRouter(WrappedProductCreate));
+export default WrappedProductCreate;

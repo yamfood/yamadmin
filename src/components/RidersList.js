@@ -10,8 +10,8 @@ import {
   EditOutlined,
 } from '@ant-design/icons';
 
-import { withRouter } from 'react-router-dom'
-import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 import pagination from './pagination';
 import PhoneSearchForm from './PhoneSearchForm';
@@ -20,26 +20,10 @@ import DepositForm from './RiderDeposit';
 
 const { Content } = Layout;
 
-const actionsCreators = {
-  getRiders: actions.getRiders,
-  getRiderDetails: actions.getRiderDetails,
-  editRider: actions.editRider,
-  editDeposit: actions.editDeposit,
-};
-
-
-const mapStateToProps = (state) => ({
-  riders: state.riders,
-});
-
-const RidersList = (props) => {
-  const {
-    riders,
-    getRiders,
-    getRiderDetails,
-    editRider,
-    editDeposit,
-  } = props;
+const RidersList = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const riders = useSelector((state) => state.riders);
 
   const columns = [
     {
@@ -71,7 +55,7 @@ const RidersList = (props) => {
         <Switch
           defaultChecked={blocked === true}
           onChange={(checked) => {
-            editRider({ params: { is_blocked: checked }, id: client.id })
+            dispatch(actions.editRider({ is_blocked: checked }, client.id))
           }}
         />
       ),
@@ -85,7 +69,7 @@ const RidersList = (props) => {
           <Button
             type="link"
             onClick={() => {
-              props.history.push(`/riders/${record.id}/edit`);
+              history.push(`/riders/${record.id}/edit`);
             }}
           >
             <EditOutlined />
@@ -96,7 +80,7 @@ const RidersList = (props) => {
   ];
 
   useEffect(() => {
-    getRiders({ page: riders.page });
+    dispatch(actions.getRiders({ page: riders.page }));
   }, []);
 
   const loading = [
@@ -116,17 +100,25 @@ const RidersList = (props) => {
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Курьеры</h1>
-        <Button style={{ marginBottom: 20 }} onClick={() => getRiders({ page: 1 })}><Icon type="reload" /></Button>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <PhoneSearchForm getByPhone={getRiders} />
-          <Button
-            type="primary"
-            onClick={() => {
-              props.history.push('/riders/create/');
-            }}
-          >
-            Создать Курьера
-          </Button>
+          <div style={{ display: 'flex' }}>
+            <Button
+              style={{ marginTop: 4 }}
+              onClick={() => dispatch(actions.getRiders({ page: 1 }))}
+            >
+              <Icon type="reload" />
+            </Button>
+            <PhoneSearchForm onSubmit={actions.getRiders} />
+            <Button
+              type="primary"
+              onClick={() => {
+                history.push('/riders/create/');
+              }}
+              style={{ marginTop: '1%' }}
+            >
+              Создать Курьера
+            </Button>
+          </div>
           <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
             <b>Кол-во:  </b>
             {riders.total}
@@ -142,9 +134,10 @@ const RidersList = (props) => {
           }))}
           pagination={pagination(
             riders.total,
-            2,
-            getRiders,
+            15,
+            actions.getRiders,
             riders.page,
+            dispatch,
           )}
           expandedRowRender={(record) => (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -153,13 +146,13 @@ const RidersList = (props) => {
               </ul>
               <DepositForm
                 id={record.id}
-                editDeposit={editDeposit}
+                editDeposit={actions.editDeposit}
               />
             </div>
           )}
           onExpand={(expanded, record) => {
             if (expanded) {
-              getRiderDetails(record.id)
+              dispatch(actions.getRiderDetails(record.id));
             }
           }}
         />
@@ -168,8 +161,4 @@ const RidersList = (props) => {
   )
 };
 
-
-export default connect(
-  mapStateToProps,
-  actionsCreators,
-)(withRouter(RidersList));
+export default RidersList;

@@ -11,30 +11,16 @@ import {
   EditOutlined,
 } from '@ant-design/icons';
 
-import { withRouter } from 'react-router-dom'
-import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const actionsCreators = {
-  getAdmins: actions.getAdmins,
-  deleteAdmin: actions.deleteAdmin,
-  getAdminEditDetails: actions.getAdminEditDetails,
-};
-
-
-const mapStateToProps = (state) => ({
-  admins: state.admins,
-});
-
-const AdminsList = (props) => {
-  const {
-    admins,
-    getAdmins,
-    deleteAdmin,
-    getAdminEditDetails,
-  } = props;
+const AdminsList = () => {
+  const dispatch = useDispatch();
+  const admins = useSelector((state) => state.admins);
+  const history = useHistory();
 
   const columns = [
     {
@@ -61,8 +47,8 @@ const AdminsList = (props) => {
           <Button
             type="link"
             onClick={() => {
-              getAdminEditDetails(record);
-              props.history.push(`/admins/${record.id}/edit/`);
+              dispatch(actions.getAdminEditDetails(record));
+              history.push(`/admins/${record.id}/edit/`);
             }}
           >
             <EditOutlined />
@@ -77,7 +63,7 @@ const AdminsList = (props) => {
       render: (arg, record) => (
         <Popconfirm
           title="Вы уверены в удалении?"
-          onConfirm={() => deleteAdmin(record.id)}
+          onConfirm={() => dispatch(actions.deleteAdmin(record.id))}
           okText="Да"
           cancelText="Нет"
         >
@@ -88,7 +74,7 @@ const AdminsList = (props) => {
   ];
 
   useEffect(() => {
-    getAdmins();
+    dispatch(actions.getAdmins());
   }, []);
 
   const loading = admins.status === 'request' || admins.deleteAdminStatus === 'request';
@@ -105,14 +91,14 @@ const AdminsList = (props) => {
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Администраторы</h1>
         <Button
           style={{ marginBottom: 20 }}
-          onClick={getAdmins}
+          onClick={() => dispatch(actions.getAdmins())}
         >
           <Icon type="reload" />
         </Button>
         <Button
           type="primary"
           onClick={() => {
-            props.history.push('/admins/create/');
+            history.push('/admins/create/');
           }}
           style={{ marginLeft: 10 }}
         >
@@ -145,8 +131,4 @@ const AdminsList = (props) => {
   )
 };
 
-
-export default connect(
-  mapStateToProps,
-  actionsCreators,
-)(withRouter(AdminsList));
+export default AdminsList;

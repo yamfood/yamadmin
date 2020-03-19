@@ -5,30 +5,26 @@ import {
   Input,
   Layout,
 } from 'antd';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
-
-const actionsCreators = {
-  createRider: actions.createRider,
-};
 
 const { Content } = Layout;
 
 const CreateRider = (props) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const createStatus = useSelector((state) => state.riders.createRiderStatus);
+
   const { form } = props;
   const { getFieldDecorator } = form;
-  const {
-    createRider,
-    createStatus,
-  } = props;
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        createRider({ ...values, phone: parseInt(values.phone, 10) });
+        dispatch(actions.createRider({ ...values, phone: parseInt(values.phone, 10) }));
       }
     });
   };
@@ -55,7 +51,10 @@ const CreateRider = (props) => {
             {getFieldDecorator('phone', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
-              <Input type="number" />,
+              <Input
+                type="number"
+                prefix="+"
+              />,
             )}
           </Form.Item>
           <Form.Item label="Заметки">
@@ -65,7 +64,7 @@ const CreateRider = (props) => {
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
-              <Button onClick={() => props.history.push('/riders/')}>
+              <Button onClick={() => history.push('/riders/')}>
                   Назад
               </Button>
             </Form.Item>
@@ -86,12 +85,5 @@ const CreateRider = (props) => {
   );
 }
 
-const mapStateToProps = (state) => ({
-  createStatus: state.riders.createRiderStatus,
-});
-
 const WrappedForm = Form.create()(CreateRider);
-export default connect(
-  mapStateToProps,
-  actionsCreators,
-)(withRouter(WrappedForm));
+export default WrappedForm;
