@@ -6,7 +6,7 @@ import {
   Checkbox,
   Layout,
 } from 'antd';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../actions';
 
@@ -16,6 +16,7 @@ const AdminCreate = (props) => {
     form,
   } = props;
 
+  const history = useHistory();
   const dispatch = useDispatch();
   const admin = useSelector((state) => state.admins);
 
@@ -74,7 +75,7 @@ const AdminCreate = (props) => {
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
-              <Button onClick={() => props.history.push('/admins/')}>
+              <Button onClick={() => history.push('/admins/')}>
                 Назад
               </Button>
             </Form.Item>
@@ -96,4 +97,4 @@ const AdminCreate = (props) => {
 };
 
 const WrappedForm = Form.create()(AdminCreate);
-export default withRouter(WrappedForm)
+export default WrappedForm;

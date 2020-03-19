@@ -514,6 +514,7 @@ const auth = handleActions({
 
 const activeOrders = handleActions({
   [actions.getActiveOrdersRequest](state) {
+    console.log('loading: ', state.loading);
     return {
       ...state,
       status: 'request',
@@ -572,7 +573,7 @@ const activeOrders = handleActions({
   },
 }, {
   status: null,
-  loading: false,
+  loading: null,
   new: [],
   onKitchen: [],
   ready: [],

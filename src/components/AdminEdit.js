@@ -6,20 +6,11 @@ import {
   Checkbox,
   Layout,
 } from 'antd';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../actions';
 
 const { Content } = Layout;
-
-// const mapStateToProps = (state) => ({
-//   admins: state.admins,
-// });
-
-// const actionCreators = {
-//   getAdminPermissions: actions.getAdminPermissions,
-//   editAdmin: actions.editAdmin,
-// }
 
 const AdminEdit = (props) => {
   const {
@@ -28,6 +19,7 @@ const AdminEdit = (props) => {
 
   const dispatch = useDispatch();
   const admins = useSelector((state) => state.admins);
+  const history = useHistory();
 
   const { editingAdminDetails } = admins;
 
@@ -97,7 +89,7 @@ const AdminEdit = (props) => {
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
-              <Button onClick={() => props.history.push('/admins/')}>
+              <Button onClick={() => history.push('/admins/')}>
                 Назад
               </Button>
             </Form.Item>
@@ -119,4 +111,4 @@ const AdminEdit = (props) => {
 };
 
 const WrappedForm = Form.create()(AdminEdit);
-export default withRouter(WrappedForm);
+export default WrappedForm;

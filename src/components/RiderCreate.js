@@ -5,7 +5,7 @@ import {
   Input,
   Layout,
 } from 'antd';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 
@@ -13,6 +13,7 @@ const { Content } = Layout;
 
 const CreateRider = (props) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const createStatus = useSelector((state) => state.riders.createRiderStatus);
 
   const { form } = props;
@@ -50,7 +51,10 @@ const CreateRider = (props) => {
             {getFieldDecorator('phone', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
-              <Input type="number" />,
+              <Input
+                type="number"
+                prefix="+"
+              />,
             )}
           </Form.Item>
           <Form.Item label="Заметки">
@@ -60,7 +64,7 @@ const CreateRider = (props) => {
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
-              <Button onClick={() => props.history.push('/riders/')}>
+              <Button onClick={() => history.push('/riders/')}>
                   Назад
               </Button>
             </Form.Item>
@@ -82,4 +86,4 @@ const CreateRider = (props) => {
 }
 
 const WrappedForm = Form.create()(CreateRider);
-export default withRouter(WrappedForm);
+export default WrappedForm;

@@ -6,7 +6,7 @@ import {
   Switch,
   Layout,
 } from 'antd';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 
@@ -14,6 +14,7 @@ const { Content } = Layout;
 
 const RidersForm = (props) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const riders = useSelector((state) => state.riders);
   const {
     form,
@@ -36,9 +37,9 @@ const RidersForm = (props) => {
       if (!err) {
         dispatch(actions.editRider(
           {
-            params: { ...values, phone: parseInt(values.phone, 10) },
-            id: editRiderDetails.id,
+            ...values,
           },
+          editRiderDetails.id,
         ));
       }
     });
@@ -94,7 +95,7 @@ const RidersForm = (props) => {
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
-              <Button onClick={() => props.history.push('/riders/')}>
+              <Button onClick={() => history.push('/riders/')}>
                   Назад
               </Button>
             </Form.Item>
@@ -117,4 +118,4 @@ const RidersForm = (props) => {
 }
 
 const WrappedForm = Form.create()(RidersForm);
-export default withRouter(WrappedForm);
+export default WrappedForm;

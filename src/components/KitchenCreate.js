@@ -5,7 +5,7 @@ import {
   Input,
   Layout,
 } from 'antd';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 
@@ -13,6 +13,7 @@ const { Content } = Layout;
 
 const KitchenCreate = (props) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const kitchens = useSelector((state) => state.kitchens);
   const { form } = props;
   const { getFieldDecorator } = form;
@@ -67,7 +68,7 @@ const KitchenCreate = (props) => {
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
-              <Button onClick={() => props.history.push('/kitchens/')}>
+              <Button onClick={() => history.push('/kitchens/')}>
                 Назад
               </Button>
             </Form.Item>
@@ -89,4 +90,4 @@ const KitchenCreate = (props) => {
 }
 
 const WrappedForm = Form.create()(KitchenCreate);
-export default withRouter(WrappedForm);
+export default WrappedForm;
