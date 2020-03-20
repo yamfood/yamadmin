@@ -30,17 +30,23 @@ const OrdersActive = () => {
       }}
     >
       <h1 style={{ fontSize: 30, textAlign: 'center' }}>Заказы</h1>
-      <Tabs defaultActiveKey="1" size="small">
+      <Tabs
+        defaultActiveKey="1"
+        size="small"
+        onChange={(activeKey) => {
+          dispatch(actions.activeOrderTab(activeKey));
+        }}
+      >
         <TabPane tab={`Новые (${orders.new.length})`} key="1">
           <OrdersTable orders={orders.new} loading={orders.loading} />
         </TabPane>
         <TabPane tab={`На кухне (${orders.onKitchen.length})`} key="2">
           <OrdersTable orders={orders.onKitchen} loading={orders.loading} />
         </TabPane>
-        <TabPane tab={`Готовы (${orders.ready.length})`} key="4">
+        <TabPane tab={`Готовы (${orders.ready.length})`} key="3">
           <OrdersTable orders={orders.ready} loading={orders.loading} />
         </TabPane>
-        <TabPane tab={`В пути (${orders.onWay.length})`} key="3">
+        <TabPane tab={`В пути (${orders.onWay.length})`} key="4">
           <OrdersTable orders={orders.onWay} loading={orders.loading} />
         </TabPane>
         <TabPane tab={`Опаздывают (${orders.late.length})`} key="5">
