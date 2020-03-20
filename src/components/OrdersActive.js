@@ -26,7 +26,7 @@ const OrdersActive = () => {
         margin: '24px 16px',
         padding: 24,
         background: '#fff',
-        minHeight: 280,
+        minHeight: 'auto',
       }}
     >
       <h1 style={{ fontSize: 30, textAlign: 'center' }}>Заказы</h1>
@@ -43,14 +43,8 @@ const OrdersActive = () => {
         <TabPane tab={`На кухне (${orders.onKitchen.length})`} key="2">
           <OrdersTable orders={orders.onKitchen} loading={orders.loading} />
         </TabPane>
-        <TabPane tab={`Готовы (${orders.ready.length})`} key="3">
-          <OrdersTable orders={orders.ready} loading={orders.loading} />
-        </TabPane>
-        <TabPane tab={`В пути (${orders.onWay.length})`} key="4">
+        <TabPane tab={`В пути (${orders.onWay.length})`} key="3">
           <OrdersTable orders={orders.onWay} loading={orders.loading} />
-        </TabPane>
-        <TabPane tab={`Опаздывают (${orders.late.length})`} key="5">
-          <OrdersTable orders={orders.late} loading={orders.loading} />
         </TabPane>
       </Tabs>
     </Content>
