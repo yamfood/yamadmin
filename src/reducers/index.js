@@ -570,6 +570,12 @@ const activeOrders = handleActions({
       cancelStatus: 'success',
     };
   },
+  [actions.activeOrderTab](state, { payload }) {
+    return {
+      ...state,
+      activeTabKey: parseInt(payload, 10),
+    }
+  },
 }, {
   status: null,
   loading: null,
@@ -578,6 +584,7 @@ const activeOrders = handleActions({
   ready: [],
   onWay: [],
   late: [],
+  activeTabKey: 1,
 });
 
 const orderDetails = handleActions({
