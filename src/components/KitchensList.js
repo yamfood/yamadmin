@@ -6,15 +6,16 @@ import {
   Table,
 } from 'antd';
 
-import { withRouter } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const KitchensList = (props) => {
+const KitchensList = () => {
   const dispatch = useDispatch();
   const kitchens = useSelector((state) => state.kitchens);
+  const history = useHistory();
 
   const columns = [
     {
@@ -49,7 +50,7 @@ const KitchensList = (props) => {
         <Button
           type="primary"
           onClick={() => {
-            props.history.push('/kitchens/create/');
+            history.push('/kitchens/create/');
           }}
           style={{ marginLeft: 10 }}
         >
@@ -62,7 +63,7 @@ const KitchensList = (props) => {
           dataSource={kitchens.list.map((kitchen) => ({ ...kitchen, key: kitchen.id }))}
           onRow={(record) => ({
             onClick: () => {
-              props.history.push(`${record.id}/details/`);
+              history.push(`${record.id}/details/`);
             },
           })}
         />
@@ -72,4 +73,4 @@ const KitchensList = (props) => {
 };
 
 
-export default withRouter(KitchensList);
+export default KitchensList;

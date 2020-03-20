@@ -11,15 +11,16 @@ import {
   EditOutlined,
 } from '@ant-design/icons';
 
-import { withRouter } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const AdminsList = (props) => {
+const AdminsList = () => {
   const dispatch = useDispatch();
   const admins = useSelector((state) => state.admins);
+  const history = useHistory();
 
   const columns = [
     {
@@ -47,7 +48,7 @@ const AdminsList = (props) => {
             type="link"
             onClick={() => {
               dispatch(actions.getAdminEditDetails(record));
-              props.history.push(`/admins/${record.id}/edit/`);
+              history.push(`/admins/${record.id}/edit/`);
             }}
           >
             <EditOutlined />
@@ -97,7 +98,7 @@ const AdminsList = (props) => {
         <Button
           type="primary"
           onClick={() => {
-            props.history.push('/admins/create/');
+            history.push('/admins/create/');
           }}
           style={{ marginLeft: 10 }}
         >
@@ -130,5 +131,4 @@ const AdminsList = (props) => {
   )
 };
 
-
-export default withRouter(AdminsList);
+export default AdminsList;

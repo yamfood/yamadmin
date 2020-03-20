@@ -7,7 +7,6 @@ import {
   Button,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 import * as actions from '../actions';
 
 const { Meta } = Card;
@@ -109,4 +108,4 @@ const OrderCard = ({ order }) => {
   )
 };
 
-export default withRouter(OrderCard);
+export default OrderCard;

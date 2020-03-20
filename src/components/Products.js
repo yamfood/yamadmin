@@ -11,17 +11,16 @@ import {
   EditOutlined,
 } from '@ant-design/icons';
 
-import { withRouter } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import * as actions from '../actions';
 
 const { Content } = Layout;
 
-const Products = (props) => {
+const Products = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const products = useSelector((state) => state.products);
-
-  const { history } = props;
 
   const columns = [
     {
@@ -62,7 +61,7 @@ const Products = (props) => {
             type="link"
             onClick={(e) => {
               e.stopPropagation();
-              props.history.push(`/products/${record.id}/edit`);
+              history.push(`/products/${record.id}/edit`);
             }}
           >
             <EditOutlined />
@@ -134,4 +133,4 @@ const Products = (props) => {
 };
 
 
-export default withRouter(Products);
+export default Products;

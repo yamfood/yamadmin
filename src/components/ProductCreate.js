@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
   Form,
   Layout,
@@ -14,6 +14,7 @@ const { Content } = Layout;
 
 const ProductCreate = (props) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const products = useSelector((state) => state.products);
 
   const { form } = props;
@@ -100,7 +101,7 @@ const ProductCreate = (props) => {
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
-              <Button onClick={() => props.history.push('/products')}>
+              <Button onClick={() => history.push('/products')}>
                   Назад
               </Button>
             </Form.Item>
@@ -122,5 +123,4 @@ const ProductCreate = (props) => {
 };
 
 const WrappedProductCreate = Form.create()(ProductCreate);
-
-export default withRouter(WrappedProductCreate);
+export default WrappedProductCreate;
