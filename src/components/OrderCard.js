@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Card,
   Icon,
-  Statistic,
+  // Statistic,
   Popover,
   Button,
 } from 'antd';
@@ -10,14 +10,14 @@ import { useDispatch } from 'react-redux';
 import * as actions from '../actions';
 
 const { Meta } = Card;
-const { Countdown } = Statistic;
+// const { Countdown } = Statistic;
 
 const OrderCard = ({ order }) => {
   const dispatch = useDispatch();
   const activeOrders = ((state) => state.activeOrders);
 
   const [visible, setVisible] = useState(false);
-  const deadline = new Date(order.created_at).getTime() + 1000 * 60 * 60 * 10;
+  // const deadline = new Date(order.created_at).getTime() + 1000 * 60 * 60 * 10;
 
   const handleAccept = async () => {
     await dispatch(actions.acceptOrder(order.id));
@@ -37,17 +37,31 @@ const OrderCard = ({ order }) => {
         loading={activeOrders.acceptStatus === 'request'}
 
       >
-          Принять
+        Принять
       </Button>
       <Button
         type="danger"
         onClick={handleСancel}
         loading={activeOrders.cancelStatus === 'request'}
       >
-          Отменить
+        Отменить
       </Button>
     </div>
   );
+
+  const formattingTime = (time) => {
+    if (time < 10) {
+      return `0${time}`;
+    }
+    return time;
+  }
+
+  const dispalyTime = (date) => {
+    const time = new Date(date);
+    return `
+      ${time.toLocaleDateString()} ${formattingTime(time.getHours())}:${formattingTime(time.getMinutes())}:${formattingTime(time.getSeconds())}
+    `
+  }
 
   return (
     <Card
@@ -88,7 +102,7 @@ const OrderCard = ({ order }) => {
       {order.comment}
       <br />
       <br />
-      <Countdown prefix="⏱️" value={deadline} format="mm:ss" />
+      {dispalyTime(order.created_at)}
     </Card>
   )
 };
