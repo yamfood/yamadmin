@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { httpClient } from '../http-client';
 import { message } from 'antd';
 import { createAction } from 'redux-actions';
 import api from '../apiRoutes';
@@ -11,7 +11,7 @@ export const loginSuccess = createAction('LOGIN_SUCCESS');
 export const login = (username, password) => async (dispatch) => {
   dispatch(loginRequest());
   try {
-    const response = await axios.post(api.login(), {
+    const response = await httpClient.post(api.login(), {
       login: username,
       password,
     });
@@ -32,11 +32,7 @@ export const getClientsSuccess = createAction('GET_CLIENTS_SUCCESS');
 export const getClients = (params) => async (dispatch) => {
   dispatch(getClientsRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.clients(), {
-      headers: {
-        token,
-      },
+    const response = await httpClient.get(api.clients(), {
       params: {
         ...params,
         per_page: 15,
@@ -60,12 +56,7 @@ export const getKitchensSuccess = createAction('GET_KITCHENS_SUCCESS');
 export const getKitchens = () => async (dispatch) => {
   dispatch(getKitchensRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.kitchens(), {
-      headers: {
-        token,
-      },
-    });
+    const response = await httpClient.get(api.kitchens());
     dispatch(getKitchensSuccess({ data: response.data }));
   } catch (error) {
     console.log(error);
@@ -85,12 +76,7 @@ export const getProductsSuccess = createAction('GET_PRODUCTS_SUCCESS');
 export const getProducts = () => async (dispatch) => {
   dispatch(getProductsRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.products(), {
-      headers: {
-        token,
-      },
-    });
+    const response = await httpClient.get(api.products());
     dispatch(getProductsSuccess({ data: response.data }));
   } catch (error) {
     console.log(error);
@@ -110,11 +96,7 @@ export const getRidersSuccess = createAction('GET_RIDERS_SUCCESS');
 export const getRiders = (params) => async (dispatch) => {
   dispatch(getRidersRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.riders(), {
-      headers: {
-        token,
-      },
+    const response = await httpClient.get(api.riders(), {
       params: {
         ...params,
         per_page: 15,
@@ -139,12 +121,7 @@ export const getAdminsSuccess = createAction('GET_ADMINS_SUCCESS');
 export const getAdmins = () => async (dispatch) => {
   dispatch(getAdminsRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.admins(), {
-      headers: {
-        token,
-      },
-    });
+    const response = await httpClient.get(api.admins());
     dispatch(getAdminsSuccess({ data: response.data }));
   } catch (error) {
     console.log(error);
@@ -164,12 +141,7 @@ export const getOrderDetailsSuccess = createAction('GET_ORDER_DETAILS_SUCCESS');
 export const getOrderDetails = (id) => async (dispatch) => {
   dispatch(getOrderDetailsRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.orderDetails(id), {
-      headers: {
-        token,
-      },
-    });
+    const response = await httpClient.get(api.orderDetails(id));
     dispatch(getOrderDetailsSuccess({ data: response.data }));
   } catch (error) {
     console.log(error);
@@ -189,12 +161,7 @@ export const getActiveOrdersSuccess = createAction('GET_ACTIVE_ORDERS_SUCCESS');
 export const getActiveOrders = () => async (dispatch) => {
   dispatch(getActiveOrdersRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.orders(), {
-      headers: {
-        token,
-      },
-    });
+    const response = await httpClient.get(api.orders());
     dispatch(getActiveOrdersSuccess({ data: response.data }));
   } catch (error) {
     console.log(error);
@@ -213,12 +180,7 @@ export const getClientDetailsSuccess = createAction('GET_CLIENTDETAILS_SUCCESS')
 export const getClientDetails = (clientId) => async (dispatch) => {
   dispatch(getClientDetailsRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.clientDetails(clientId), {
-      headers: {
-        token,
-      },
-    });
+    const response = await httpClient.get(api.clientDetails(clientId));
     dispatch(getClientDetailsSuccess({ data: response.data, clientId }));
   } catch (error) {
     console.error(error);
@@ -237,12 +199,7 @@ export const setIsBlockedClientSuccess = createAction('SET_IS_BLOCKED_CLIENT_SUC
 export const setIsBlockedClient = (clientId, params) => async (dispatch) => {
   dispatch(setIsBlockedClientRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.patch(api.clientDetails(clientId), params, {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.patch(api.clientDetails(clientId), params);
     dispatch(setIsBlockedClientSuccess());
     message.success('Клиент успешно блокирован', 3);
     dispatch(getClientDetails(clientId));
@@ -264,12 +221,7 @@ export const getRiderDetailsSuccess = createAction('GET_RIDER_DETAILS_SUCCESS');
 export const getRiderDetails = (riderId) => async (dispatch) => {
   dispatch(getRiderDetailsRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.riderDetails(riderId), {
-      headers: {
-        token,
-      },
-    });
+    const response = await httpClient.get(api.riderDetails(riderId));
     dispatch(getRiderDetailsSuccess({ data: response.data, riderId }));
   } catch (error) {
     console.error(error);
@@ -288,14 +240,9 @@ export const editRiderSuccess = createAction('EDIT_RIDER_SUCCESS');
 export const editRider = (riderParams, id) => async (dispatch) => {
   dispatch(editRiderRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.patch(api.riderDetails(id), {
+    await httpClient.patch(api.riderDetails(id), {
       is_blocked: riderParams.is_blocked,
       ...riderParams,
-    }, {
-      headers: {
-        token,
-      },
     });
     dispatch(editRiderSuccess());
     history.push('/riders/');
@@ -318,12 +265,7 @@ export const createRiderSuccess = createAction('CREATE_RIDER_SUCCESS');
 export const createRider = (params) => async (dispatch) => {
   dispatch(createRiderRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.post(api.riders(), params, {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.post(api.riders(), params);
     dispatch(createRiderSuccess());
     message.success('Курьер успешно создан', 3);
     history.push('/riders/')
@@ -345,12 +287,7 @@ export const editDepositSuccess = createAction('EDIT_DEPOSIT_SUCCESS');
 export const editDeposit = (deposit, id) => async (dispatch) => {
   dispatch(editDepositRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.post(api.riderDeposit(id), deposit, {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.post(api.riderDeposit(id), deposit);
     dispatch(editDepositSuccess());
     message.success('Депозит успешно изменен', 3);
     dispatch(getRiderDetails(id));
@@ -372,12 +309,7 @@ export const cancelOrderSuccess = createAction('CANCEL_ORDER_SUCCESS');
 export const cancelOrder = (orderId) => async (dispatch) => {
   dispatch(cancelOrderRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.post(api.cancelOrder(orderId), {}, {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.post(api.cancelOrder(orderId));
     dispatch(cancelOrderSuccess());
     message.success('Заказ успешно отменен', 3);
     dispatch(getActiveOrders());
@@ -399,12 +331,7 @@ export const deleteAdminSuccess = createAction('DELETE_ADMIN_SUCCESS');
 export const deleteAdmin = (id) => async (dispatch) => {
   dispatch(deleteAdminRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.delete(api.deleteAdmin(id), {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.delete(api.deleteAdmin(id));
     await dispatch(deleteAdminSuccess());
     message.success('Админ успешно удален', 3);
     dispatch(getAdmins());
@@ -428,12 +355,7 @@ export const getAdminPermissionsSuccess = createAction('GET_ADMIN_PERMISSIONS_SU
 export const getAdminPermissions = () => async (dispatch) => {
   dispatch(getAdminPermissionsRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.adminPermissions(), {
-      headers: {
-        token,
-      },
-    });
+    const response = await httpClient.get(api.adminPermissions());
     dispatch(getAdminPermissionsSuccess({ data: response.data }));
   } catch (error) {
     console.error(error);
@@ -453,12 +375,7 @@ export const editAdminSuccess = createAction('EDIT_ADMIN_SUCCESS');
 export const editAdmin = (params, id) => async (dispatch) => {
   dispatch(editAdminRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.patch(api.editAdmin(id), params, {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.patch(api.editAdmin(id), params);
     dispatch(editAdminSuccess());
     message.success('Админ успешно изменен', 3);
     history.push('/admins/');
@@ -480,12 +397,7 @@ export const createAdminSuccess = createAction('CREATE_ADMIN_SUCCESS');
 export const createAdmin = (params) => async (dispatch) => {
   dispatch(createAdminRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.post(api.admins(), params, {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.post(api.admins(), params);
     dispatch(createAdminSuccess());
     message.success('Админ успешно создан', 3);
     history.push('/admins/');
@@ -507,12 +419,7 @@ export const acceptOrderSuccess = createAction('ACCEPT_ORDER_SUCCESS');
 export const acceptOrder = (orderId) => async (dispatch) => {
   dispatch(acceptOrderRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.post(api.acceptOrder(orderId), {}, {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.post(api.acceptOrder(orderId));
     dispatch(acceptOrderSuccess());
     message.success('Заказ успешно принят', 3);
     dispatch(getActiveOrders());
@@ -534,12 +441,7 @@ export const getCategorySuccess = createAction('GET_CATEGORY_SUCCESS');
 export const getCategory = () => async (dispatch) => {
   dispatch(getCategoryRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.productsCategory(), {
-      headers: {
-        token,
-      },
-    });
+    const response = await httpClient.get(api.productsCategory());
     dispatch(getCategorySuccess({ data: response.data }));
   } catch (error) {
     console.error(error);
@@ -558,12 +460,7 @@ export const getProductDetailsSuccess = createAction('GET_PRODUCT_DETAILS_SUCCES
 export const getProductDetails = (productId) => async (dispatch) => {
   dispatch(getProductDetailsRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.product(productId), {
-      headers: {
-        token,
-      },
-    });
+    const response = await httpClient.get(api.product(productId));
     dispatch(getProductDetailsSuccess({ data: response.data }));
   } catch (error) {
     console.error(error);
@@ -582,12 +479,7 @@ export const createProductSuccess = createAction('CREATE_PRODUCT_SUCCESS');
 export const createProduct = (params) => async (dispatch) => {
   dispatch(createProductRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.post(api.products(), params, {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.post(api.products(), params);
     dispatch(createProductSuccess());
     message.success('Продукт успешно создан', 3);
     history.push('/products/');
@@ -610,12 +502,7 @@ export const deleteProductSuccess = createAction('DELETE_PRODUCT_SUCCESS');
 export const deleteProduct = (id) => async (dispatch) => {
   dispatch(deleteProductRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.delete(api.product(id), {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.delete(api.product(id));
     dispatch(deleteProductSuccess());
     message.success('Продукт успешно удален', 3);
     dispatch(getProducts());
@@ -637,12 +524,7 @@ export const editProductSuccess = createAction('EDIT_PRODUCT_SUCCESS');
 export const editProduct = (params, productId) => async (dispatch) => {
   dispatch(editProductRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.patch(api.product(productId), params, {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.patch(api.product(productId), params);
     dispatch(editProductSuccess());
     message.success('Продукт успешно изменен', 3);
     history.push('/products');
@@ -665,12 +547,7 @@ export const getKitchenDetailsSuccess = createAction('GET_KITCHEN_DETAILS_SUCCES
 export const getKitchenDetails = (kitchenId) => async (dispatch) => {
   dispatch(getKitchenDetailsRequest());
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get(api.kitchenDetails(kitchenId), {
-      headers: {
-        token,
-      },
-    });
+    const response = await httpClient.get(api.kitchenDetails(kitchenId));
     dispatch(getKitchenDetailsSuccess({ data: response.data }));
   } catch (error) {
     console.error(error);
@@ -689,12 +566,7 @@ export const createKitchenSuccess = createAction('CREATE_KITCHEN_SUCCESS');
 export const createKitchen = (params) => async (dispatch) => {
   dispatch(createKitchenRequest());
   try {
-    const token = localStorage.getItem('token');
-    await axios.post(api.kitchens(), params, {
-      headers: {
-        token,
-      },
-    });
+    await httpClient.post(api.kitchens(), params);
     dispatch(createKitchenSuccess());
     message.success('Кухня успешно создана', 3);
     history.push('/kitchens/');
