@@ -135,9 +135,10 @@ const OrderCard = ({ order }) => {
           {order.comment}
         </p>
       )}
-      <br />
-      ⏲
-      {dispalyTime(order.created_at)}
+      <p>
+        <span style={{ marginBottom: 0 }} role="img" aria-label="">⏲</span>
+        {dispalyTime(order.created_at)}
+      </p>
     </Card>
   )
 };
