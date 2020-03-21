@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Card,
   Icon,
-  // Statistic,
   Popover,
   Button,
 } from 'antd';
