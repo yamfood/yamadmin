@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 
 const { Meta } = Card;
-// const { Countdown } = Statistic;
 
 const OrderCard = ({ order }) => {
   const dispatch = useDispatch();
@@ -80,10 +79,16 @@ const OrderCard = ({ order }) => {
 
   return (
     <Card
-      style={{ width: 300, margin: 10 }}
+      style={{
+        width: 300,
+        margin: 10,
+        border: '1px solid red',
+        maxHeight: 'auto',
+      }}
       actions={[
-        <Icon type="eye" onClick={() => window.open(`/orders/${order.id}/`, '_blank')} />,
+        <Icon style={{ border: '1px solid blue' }} type="eye" onClick={() => window.open(`/orders/${order.id}/`, '_blank')} />,
         <Popover
+          style={{ bottom: 0 }}
           title="Действия"
           trigger="click"
           visible={visible}
@@ -94,29 +99,49 @@ const OrderCard = ({ order }) => {
             width: 250,
           }}
         >
-          <Icon type="ellipsis" />
+          <Icon type="ellipsis" style={{ border: '1px solid green' }} />
         </Popover>,
       ]}
+      bodyStyle={{ border: '1px solid yellow' }}
+      actionsStyle={{ border: '1px solid purple' }}
     >
       <Meta
         title={`# ${order.id}`}
+        style={{ border: '1px solid purple' }}
       />
+      {order.name === null ? null : (
+        <div>
+          <br />
+            😃
+          {order.name}
+        </div>
+      )}
+      {order.phone === null ? null : `📞 +${order.phone}`}
+      {order.rider_name === null ? null : (
+        <div>
+          <br />
+          🚲
+          {order.rider_name}
+        </div>
+      )}
+      {order.rider_phone === null ? null : `📱 ${order.rider_phone}`}
+      {order.total_sum === null ? null : (
+        <div>
+          <br />
+          💰
+          {order.total_sum.toLocaleString('ru')}
+          сум
+        </div>
+      )}
+      {order.kitchen === null ? null : `🏠 ${order.kitchen}`}
+      {order.comment === null ? null : (
+        <p>
+          💬
+          {order.comment}
+        </p>
+      )}
       <br />
-      😃
-      <strong>{order.name}</strong>
-      <br />
-      📞+
-      {order.phone}
-      <br />
-      <br />
-      💰
-      {order.total_sum.toLocaleString('ru')}
-      сум
-      <br />
-      💬
-      {order.comment}
-      <br />
-      <br />
+      ⏲
       {dispalyTime(order.created_at)}
     </Card>
   )
