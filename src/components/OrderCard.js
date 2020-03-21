@@ -16,7 +16,6 @@ const OrderCard = ({ order }) => {
   const activeOrders = useSelector((state) => state.activeOrders);
 
   const [visible, setVisible] = useState(false);
-  // const deadline = new Date(order.created_at).getTime() + 1000 * 60 * 60 * 10;
 
   const handleAccept = async () => {
     await dispatch(actions.acceptOrder(order.id));
@@ -82,11 +81,9 @@ const OrderCard = ({ order }) => {
       style={{
         width: 300,
         margin: 10,
-        border: '1px solid red',
-        maxHeight: 'auto',
       }}
       actions={[
-        <Icon style={{ border: '1px solid blue' }} type="eye" onClick={() => window.open(`/orders/${order.id}/`, '_blank')} />,
+        <Icon type="eye" onClick={() => window.open(`/orders/${order.id}/`, '_blank')} />,
         <Popover
           style={{ bottom: 0 }}
           title="Действия"
@@ -99,15 +96,13 @@ const OrderCard = ({ order }) => {
             width: 250,
           }}
         >
-          <Icon type="ellipsis" style={{ border: '1px solid green' }} />
+          <Icon type="ellipsis" />
         </Popover>,
       ]}
-      bodyStyle={{ border: '1px solid yellow' }}
-      actionsStyle={{ border: '1px solid purple' }}
+      bodyStyle={{ height: 300 }}
     >
       <Meta
         title={`# ${order.id}`}
-        style={{ border: '1px solid purple' }}
       />
       {order.name === null ? null : (
         <div>
@@ -136,7 +131,7 @@ const OrderCard = ({ order }) => {
       {order.kitchen === null ? null : `🏠 ${order.kitchen}`}
       {order.comment === null ? null : (
         <p>
-          💬
+          <span role="img" aria-label="">💬</span>
           {order.comment}
         </p>
       )}
