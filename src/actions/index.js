@@ -724,9 +724,7 @@ export const getFinishedOrders = (params) => async (dispatch) => {
       headers: {
         token,
       },
-      params: {
-        ...params,
-      },
+      params,
     });
     dispatch(getFinishedOrdersSuccess({ data: response.data }));
   } catch (error) {

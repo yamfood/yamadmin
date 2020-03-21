@@ -3,8 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Layout,
   Table,
+  Button,
+  Icon,
 } from 'antd';
 import * as actions from '../actions';
+import OrdersFinishedForm from './OrdersFinishedForm';
 
 const { Content } = Layout;
 
@@ -44,11 +47,6 @@ const OrdersFinished = () => {
       key: 'status',
     },
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
       title: 'Комменты',
       dataIndex: 'comment',
       key: 'comment',
@@ -85,7 +83,7 @@ const OrdersFinished = () => {
     },
   ];
   useEffect(() => {
-    dispatch(actions.getFinishedOrders())
+    dispatch(actions.getFinishedOrders());
   }, []);
 
   const loading = orders.status === 'request';
@@ -97,9 +95,18 @@ const OrdersFinished = () => {
           margin: '24px 16px',
           padding: 24,
           background: '#fff',
+          minHeight: 'auto',
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Завершенные Заказы</h1>
+        <div style={{ display: 'flex', marginBottom: 10 }}>
+          <Button
+            onClick={() => dispatch(actions.getFinishedOrders())}
+          >
+            <Icon type="reload" />
+          </Button>
+          <OrdersFinishedForm />
+        </div>
         <Table
           bordered="true"
           size="small"
