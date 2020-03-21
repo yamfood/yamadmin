@@ -711,9 +711,9 @@ export const createKitchen = (params) => async (dispatch) => {
 
 export const activeOrderTab = createAction('ACTIVE_ORDER_TAB');
 
-export const getFinishedOrdersRequest = createAction('CREATE_KITCHEN_REQUEST');
-export const getFinishedOrdersFailure = createAction('CREATE_KITCHEN_FAILURE');
-export const getFinishedOrdersSuccess = createAction('CREATE_KITCHEN_SUCCESS');
+export const getFinishedOrdersRequest = createAction('GET_FINISHED_ORDERS_REQUEST');
+export const getFinishedOrdersFailure = createAction('GET_FINISHED_ORDERS_FAILURE');
+export const getFinishedOrdersSuccess = createAction('GET_FINISHED_ORDERS_SUCCESS');
 
 export const getFinishedOrders = (params) => async (dispatch) => {
   dispatch(getFinishedOrdersRequest());
@@ -726,10 +726,9 @@ export const getFinishedOrders = (params) => async (dispatch) => {
       },
       params: {
         ...params,
-      }
+      },
     });
-    console.log('response: ', response);
-    dispatch(getFinishedOrdersSuccess());
+    dispatch(getFinishedOrdersSuccess({ data: response.data }));
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
