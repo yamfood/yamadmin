@@ -20,4 +20,5 @@ export default {
   adminPermissions: () => [host, 'admins/permissions/'].join('/'),
   riderDetails: (id) => [host, `riders/${id}/`].join('/'),
   riderDeposit: (id) => [host, `riders/${id}/deposit/`].join('/'),
+  getFinishedOrder: () => [host, 'orders/finished/'].join('/'),
 };

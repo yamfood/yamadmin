@@ -710,3 +710,32 @@ export const createKitchen = (params) => async (dispatch) => {
 };
 
 export const activeOrderTab = createAction('ACTIVE_ORDER_TAB');
+
+export const getFinishedOrdersRequest = createAction('CREATE_KITCHEN_REQUEST');
+export const getFinishedOrdersFailure = createAction('CREATE_KITCHEN_FAILURE');
+export const getFinishedOrdersSuccess = createAction('CREATE_KITCHEN_SUCCESS');
+
+export const getFinishedOrders = (params) => async (dispatch) => {
+  dispatch(getFinishedOrdersRequest());
+  try {
+    console.log('this is params: ', params);
+    const token = localStorage.getItem('token');
+    const response = await axios.get(api.getFinishedOrder(), {
+      headers: {
+        token,
+      },
+      params: {
+        ...params,
+      }
+    });
+    console.log('response: ', response);
+    dispatch(getFinishedOrdersSuccess());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getFinishedOrdersFailure());
+  }
+};
