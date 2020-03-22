@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import axios from 'axios';
 
 export const httpClient = axios.create();
@@ -7,7 +8,7 @@ httpClient.interceptors.request.use(
     const token = localStorage.getItem('token');
 
     if (token) {
-      config.headers = {...config.headers, token}
+      config.headers = { ...config.headers, token }
     }
 
     return config;

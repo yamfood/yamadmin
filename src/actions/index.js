@@ -580,3 +580,5 @@ export const createKitchen = (params) => async (dispatch) => {
     message.error('Ошибка при создании кухни', 3);
   }
 };
+
+export const activeOrderTab = createAction('ACTIVE_ORDER_TAB');

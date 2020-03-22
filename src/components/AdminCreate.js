@@ -47,6 +47,7 @@ const AdminCreate = (props) => {
           margin: '24px 16px',
           padding: 24,
           background: '#fff',
+          minHeight: 'auto',
         }}
       >
         <Form onSubmit={handleSubmit}>
