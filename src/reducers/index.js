@@ -514,7 +514,6 @@ const auth = handleActions({
 
 const activeOrders = handleActions({
   [actions.getActiveOrdersRequest](state) {
-    console.log('loading: ', state.loading);
     return {
       ...state,
       status: 'request',

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   Card,
   Icon,
-  Statistic,
   Popover,
   Button,
 } from 'antd';
@@ -10,14 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 
 const { Meta } = Card;
-const { Countdown } = Statistic;
 
 const OrderCard = ({ order }) => {
   const dispatch = useDispatch();
   const activeOrders = useSelector((state) => state.activeOrders);
 
   const [visible, setVisible] = useState(false);
-  const deadline = new Date(order.created_at).getTime() + 1000 * 60 * 60 * 10;
 
   const handleAccept = async () => {
     await dispatch(actions.acceptOrder(order.id));
@@ -62,14 +59,32 @@ const OrderCard = ({ order }) => {
           </div>
         );
     }
-  };
+  }
+
+  const formattingTime = (time) => {
+    if (time < 10) {
+      return `0${time}`;
+    }
+    return time;
+  }
+
+  const dispalyTime = (date) => {
+    const time = new Date(date);
+    return `
+      ${time.toLocaleDateString()} ${formattingTime(time.getHours())}:${formattingTime(time.getMinutes())}:${formattingTime(time.getSeconds())}
+    `
+  }
 
   return (
     <Card
-      style={{ width: 300, margin: 10 }}
+      style={{
+        width: 300,
+        margin: 10,
+      }}
       actions={[
         <Icon type="eye" onClick={() => window.open(`/orders/${order.id}/`, '_blank')} />,
         <Popover
+          style={{ bottom: 0 }}
           title="Действия"
           trigger="click"
           visible={visible}
@@ -83,27 +98,46 @@ const OrderCard = ({ order }) => {
           <Icon type="ellipsis" />
         </Popover>,
       ]}
+      bodyStyle={{ height: 300 }}
     >
       <Meta
         title={`# ${order.id}`}
       />
-      <br />
-      😃
-      <strong>{order.name}</strong>
-      <br />
-      📞+
-      {order.phone}
-      <br />
-      <br />
-      💰
-      {order.total_sum.toLocaleString('ru')}
-      сум
-      <br />
-      💬
-      {order.comment}
-      <br />
-      <br />
-      <Countdown prefix="⏱️" value={deadline} format="mm:ss" />
+      {order.name === null ? null : (
+        <div>
+          <br />
+            😃
+          {order.name}
+        </div>
+      )}
+      {order.phone === null ? null : `📞 +${order.phone}`}
+      {order.rider_name === null ? null : (
+        <div>
+          <br />
+          🚲
+          {order.rider_name}
+        </div>
+      )}
+      {order.rider_phone === null ? null : `📱 ${order.rider_phone}`}
+      {order.total_sum === null ? null : (
+        <div>
+          <br />
+          💰
+          {order.total_sum.toLocaleString('ru')}
+          сум
+        </div>
+      )}
+      {order.kitchen === null ? null : `🏠 ${order.kitchen}`}
+      {order.comment === null ? null : (
+        <p>
+          <span role="img" aria-label="">💬</span>
+          {order.comment}
+        </p>
+      )}
+      <p>
+        <span style={{ marginBottom: 0 }} role="img" aria-label="">⏲</span>
+        {dispalyTime(order.created_at)}
+      </p>
     </Card>
   )
 };
