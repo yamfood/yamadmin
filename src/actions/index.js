@@ -388,7 +388,7 @@ export const cancelOrder = (orderId) => async (dispatch) => {
       dispatch(loginFailure());
     }
     dispatch(cancelOrderFailure());
-    message.error('Ошибка при отменении заказа', 3);
+    message.error('Ошибка при отмене заказа', 3);
   }
 };
 
@@ -718,7 +718,6 @@ export const getFinishedOrdersSuccess = createAction('GET_FINISHED_ORDERS_SUCCES
 export const getFinishedOrders = (params) => async (dispatch) => {
   dispatch(getFinishedOrdersRequest());
   try {
-    console.log('this is params: ', params);
     const token = localStorage.getItem('token');
     const response = await axios.get(api.getFinishedOrder(), {
       headers: {
