@@ -16,72 +16,19 @@ const OrdersFinished = () => {
   const orders = useSelector((state) => state.finishedOrders);
 
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: 'Клиент',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Телефон',
-      dataIndex: 'phone',
-      key: 'phone',
-    },
-    {
-      title: 'Кухня',
-      dataIndex: 'kitchen',
-      key: 'kitchen',
-    },
-    {
-      title: 'Сумма',
-      dataIndex: 'total_sum',
-      key: 'total_sum',
-    },
-    {
-      title: 'Статус заказа',
-      dataIndex: 'status',
-      key: 'status',
-    },
-    {
-      title: 'Комменты',
-      dataIndex: 'comment',
-      key: 'comment',
-    },
-    {
-      title: 'Имя Курьeра',
-      dataIndex: 'rider_name',
-      key: 'rider_name',
-    },
-    {
-      title: 'Телефон Курьера',
-      dataIndex: 'rider_phone',
-      key: 'rider_phone',
-    },
-    {
-      title: 'Дата создания',
-      dataIndex: 'created_at',
-      key: 'created_at',
-    },
-    {
-      title: 'Локация',
-      children: [
-        {
-          title: 'Долгота',
-          dataIndex: 'longitude',
-          key: 'longitude',
-        },
-        {
-          title: 'Широта',
-          dataIndex: 'latitude',
-          key: 'latitude',
-        },
-      ],
-    },
+    { title: 'ID', dataIndex: 'id', key: 'id' },
+    { title: 'Клиент', dataIndex: 'name', key: 'name' },
+    { title: 'Телефон', dataIndex: 'phone', key: 'phone' },
+    { title: 'Кухня', dataIndex: 'kitchen', key: 'kitchen' },
+    { title: 'Сумма', dataIndex: 'total_sum', key: 'total_sum' },
+    { title: 'Статус заказа', dataIndex: 'status', key: 'status' },
+    { title: 'Комменты', dataIndex: 'comment', key: 'comment' },
+    { title: 'Имя Курьeра', dataIndex: 'rider_name', key: 'rider_name' },
+    { title: 'Телефон Курьера', dataIndex: 'rider_phone', key: 'rider_phone' },
+    { title: 'Дата создания', dataIndex: 'created_at', key: 'created_at' },
+    { title: 'Локация', children: [{ title: 'Долгота', dataIndex: 'longitude', key: 'longitude' }, { title: 'Широта', dataIndex: 'latitude', key: 'latitude' }] },
   ];
+
   useEffect(() => {
     dispatch(actions.getFinishedOrders());
   }, []);

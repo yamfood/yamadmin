@@ -17,7 +17,6 @@ const OrdersFinishedForm = (props) => {
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('this is values: ', values);
         dispatch(getFinishedOrders(values));
       }
     });
