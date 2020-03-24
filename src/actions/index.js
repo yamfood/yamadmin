@@ -56,8 +56,7 @@ export const getKitchensSuccess = createAction('GET_KITCHENS_SUCCESS');
 export const getKitchens = () => async (dispatch) => {
   dispatch(getKitchensRequest());
   try {
-    const response = await httpClient.get(api.kitchens(), {
-    });
+    const response = await httpClient.get(api.kitchens());
     dispatch(getKitchensSuccess({ data: response.data }));
   } catch (error) {
     console.log(error);
@@ -77,8 +76,7 @@ export const getProductsSuccess = createAction('GET_PRODUCTS_SUCCESS');
 export const getProducts = () => async (dispatch) => {
   dispatch(getProductsRequest());
   try {
-    const response = await httpClient.get(api.products(), {
-    });
+    const response = await httpClient.get(api.products());
     dispatch(getProductsSuccess({ data: response.data }));
   } catch (error) {
     console.log(error);
@@ -123,8 +121,7 @@ export const getAdminsSuccess = createAction('GET_ADMINS_SUCCESS');
 export const getAdmins = () => async (dispatch) => {
   dispatch(getAdminsRequest());
   try {
-    const response = await httpClient.get(api.admins(), {
-    });
+    const response = await httpClient.get(api.admins());
     dispatch(getAdminsSuccess({ data: response.data }));
   } catch (error) {
     console.log(error);
@@ -144,8 +141,7 @@ export const getOrderDetailsSuccess = createAction('GET_ORDER_DETAILS_SUCCESS');
 export const getOrderDetails = (id) => async (dispatch) => {
   dispatch(getOrderDetailsRequest());
   try {
-    const response = await httpClient.get(api.orderDetails(id), {
-    });
+    const response = await httpClient.get(api.orderDetails(id));
     dispatch(getOrderDetailsSuccess({ data: response.data }));
   } catch (error) {
     console.log(error);
@@ -165,8 +161,7 @@ export const getActiveOrdersSuccess = createAction('GET_ACTIVE_ORDERS_SUCCESS');
 export const getActiveOrders = () => async (dispatch) => {
   dispatch(getActiveOrdersRequest());
   try {
-    const response = await httpClient.get(api.orders(), {
-    });
+    const response = await httpClient.get(api.orders());
     dispatch(getActiveOrdersSuccess({ data: response.data }));
   } catch (error) {
     console.log(error);
@@ -185,8 +180,7 @@ export const getClientDetailsSuccess = createAction('GET_CLIENTDETAILS_SUCCESS')
 export const getClientDetails = (clientId) => async (dispatch) => {
   dispatch(getClientDetailsRequest());
   try {
-    const response = await httpClient.get(api.clientDetails(clientId), {
-    });
+    const response = await httpClient.get(api.clientDetails(clientId));
     dispatch(getClientDetailsSuccess({ data: response.data, clientId }));
   } catch (error) {
     console.error(error);
@@ -205,8 +199,7 @@ export const setIsBlockedClientSuccess = createAction('SET_IS_BLOCKED_CLIENT_SUC
 export const setIsBlockedClient = (clientId, params) => async (dispatch) => {
   dispatch(setIsBlockedClientRequest());
   try {
-    await httpClient.patch(api.clientDetails(clientId), params, {
-    });
+    await httpClient.patch(api.clientDetails(clientId), params);
     dispatch(setIsBlockedClientSuccess());
     message.success('Клиент успешно блокирован', 3);
     dispatch(getClientDetails(clientId));
@@ -228,8 +221,7 @@ export const getRiderDetailsSuccess = createAction('GET_RIDER_DETAILS_SUCCESS');
 export const getRiderDetails = (riderId) => async (dispatch) => {
   dispatch(getRiderDetailsRequest());
   try {
-    const response = await httpClient.get(api.riderDetails(riderId), {
-    });
+    const response = await httpClient.get(api.riderDetails(riderId));
     dispatch(getRiderDetailsSuccess({ data: response.data, riderId }));
   } catch (error) {
     console.error(error);
@@ -251,7 +243,6 @@ export const editRider = (riderParams, id) => async (dispatch) => {
     await httpClient.patch(api.riderDetails(id), {
       is_blocked: riderParams.is_blocked,
       ...riderParams,
-    }, {
     });
     dispatch(editRiderSuccess());
     history.push('/riders/');
@@ -274,8 +265,7 @@ export const createRiderSuccess = createAction('CREATE_RIDER_SUCCESS');
 export const createRider = (params) => async (dispatch) => {
   dispatch(createRiderRequest());
   try {
-    await httpClient.post(api.riders(), params, {
-    });
+    await httpClient.post(api.riders(), params);
     dispatch(createRiderSuccess());
     message.success('Курьер успешно создан', 3);
     history.push('/riders/')
@@ -297,8 +287,7 @@ export const editDepositSuccess = createAction('EDIT_DEPOSIT_SUCCESS');
 export const editDeposit = (deposit, id) => async (dispatch) => {
   dispatch(editDepositRequest());
   try {
-    await httpClient.post(api.riderDeposit(id), deposit, {
-    });
+    await httpClient.post(api.riderDeposit(id), deposit);
     dispatch(editDepositSuccess());
     message.success('Депозит успешно изменен', 3);
     dispatch(getRiderDetails(id));
@@ -320,8 +309,7 @@ export const cancelOrderSuccess = createAction('CANCEL_ORDER_SUCCESS');
 export const cancelOrder = (orderId) => async (dispatch) => {
   dispatch(cancelOrderRequest());
   try {
-    await httpClient.post(api.cancelOrder(orderId), {}, {
-    });
+    await httpClient.post(api.cancelOrder(orderId));
     dispatch(cancelOrderSuccess());
     message.success('Заказ успешно отменен', 3);
     dispatch(getActiveOrders());
@@ -343,8 +331,7 @@ export const deleteAdminSuccess = createAction('DELETE_ADMIN_SUCCESS');
 export const deleteAdmin = (id) => async (dispatch) => {
   dispatch(deleteAdminRequest());
   try {
-    await httpClient.delete(api.deleteAdmin(id), {
-    });
+    await httpClient.delete(api.deleteAdmin(id));
     await dispatch(deleteAdminSuccess());
     message.success('Админ успешно удален', 3);
     dispatch(getAdmins());
@@ -368,8 +355,7 @@ export const getAdminPermissionsSuccess = createAction('GET_ADMIN_PERMISSIONS_SU
 export const getAdminPermissions = () => async (dispatch) => {
   dispatch(getAdminPermissionsRequest());
   try {
-    const response = await httpClient.get(api.adminPermissions(), {
-    });
+    const response = await httpClient.get(api.adminPermissions());
     dispatch(getAdminPermissionsSuccess({ data: response.data }));
   } catch (error) {
     console.error(error);
@@ -389,8 +375,7 @@ export const editAdminSuccess = createAction('EDIT_ADMIN_SUCCESS');
 export const editAdmin = (params, id) => async (dispatch) => {
   dispatch(editAdminRequest());
   try {
-    await httpClient.patch(api.editAdmin(id), params, {
-    });
+    await httpClient.patch(api.editAdmin(id), params);
     dispatch(editAdminSuccess());
     message.success('Админ успешно изменен', 3);
     history.push('/admins/');
@@ -412,8 +397,7 @@ export const createAdminSuccess = createAction('CREATE_ADMIN_SUCCESS');
 export const createAdmin = (params) => async (dispatch) => {
   dispatch(createAdminRequest());
   try {
-    await httpClient.post(api.admins(), params, {
-    });
+    await httpClient.post(api.admins(), params);
     dispatch(createAdminSuccess());
     message.success('Админ успешно создан', 3);
     history.push('/admins/');
@@ -435,8 +419,7 @@ export const acceptOrderSuccess = createAction('ACCEPT_ORDER_SUCCESS');
 export const acceptOrder = (orderId) => async (dispatch) => {
   dispatch(acceptOrderRequest());
   try {
-    await httpClient.post(api.acceptOrder(orderId), {}, {
-    });
+    await httpClient.post(api.acceptOrder(orderId));
     dispatch(acceptOrderSuccess());
     message.success('Заказ успешно принят', 3);
     dispatch(getActiveOrders());
@@ -458,8 +441,7 @@ export const getCategorySuccess = createAction('GET_CATEGORY_SUCCESS');
 export const getCategory = () => async (dispatch) => {
   dispatch(getCategoryRequest());
   try {
-    const response = await httpClient.get(api.productsCategory(), {
-    });
+    const response = await httpClient.get(api.productsCategory());
     dispatch(getCategorySuccess({ data: response.data }));
   } catch (error) {
     console.error(error);
@@ -478,8 +460,7 @@ export const getProductDetailsSuccess = createAction('GET_PRODUCT_DETAILS_SUCCES
 export const getProductDetails = (productId) => async (dispatch) => {
   dispatch(getProductDetailsRequest());
   try {
-    const response = await httpClient.get(api.product(productId), {
-    });
+    const response = await httpClient.get(api.product(productId));
     dispatch(getProductDetailsSuccess({ data: response.data }));
   } catch (error) {
     console.error(error);
@@ -498,8 +479,7 @@ export const createProductSuccess = createAction('CREATE_PRODUCT_SUCCESS');
 export const createProduct = (params) => async (dispatch) => {
   dispatch(createProductRequest());
   try {
-    await httpClient.post(api.products(), params, {
-    });
+    await httpClient.post(api.products(), params);
     dispatch(createProductSuccess());
     message.success('Продукт успешно создан', 3);
     history.push('/products/');
@@ -522,8 +502,7 @@ export const deleteProductSuccess = createAction('DELETE_PRODUCT_SUCCESS');
 export const deleteProduct = (id) => async (dispatch) => {
   dispatch(deleteProductRequest());
   try {
-    await httpClient.delete(api.product(id), {
-    });
+    await httpClient.delete(api.product(id));
     dispatch(deleteProductSuccess());
     message.success('Продукт успешно удален', 3);
     dispatch(getProducts());
@@ -545,8 +524,7 @@ export const editProductSuccess = createAction('EDIT_PRODUCT_SUCCESS');
 export const editProduct = (params, productId) => async (dispatch) => {
   dispatch(editProductRequest());
   try {
-    await httpClient.patch(api.product(productId), params, {
-    });
+    await httpClient.patch(api.product(productId), params);
     dispatch(editProductSuccess());
     message.success('Продукт успешно изменен', 3);
     history.push('/products');
@@ -569,8 +547,7 @@ export const getKitchenDetailsSuccess = createAction('GET_KITCHEN_DETAILS_SUCCES
 export const getKitchenDetails = (kitchenId) => async (dispatch) => {
   dispatch(getKitchenDetailsRequest());
   try {
-    const response = await httpClient.get(api.kitchenDetails(kitchenId), {
-    });
+    const response = await httpClient.get(api.kitchenDetails(kitchenId));
     dispatch(getKitchenDetailsSuccess({ data: response.data }));
   } catch (error) {
     console.error(error);
@@ -589,8 +566,7 @@ export const createKitchenSuccess = createAction('CREATE_KITCHEN_SUCCESS');
 export const createKitchen = (params) => async (dispatch) => {
   dispatch(createKitchenRequest());
   try {
-    await httpClient.post(api.kitchens(), params, {
-    });
+    await httpClient.post(api.kitchens(), params);
     dispatch(createKitchenSuccess());
     message.success('Кухня успешно создана', 3);
     history.push('/kitchens/');
