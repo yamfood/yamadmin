@@ -97,6 +97,7 @@ const RidersList = () => {
           margin: '24px 16px',
           padding: 24,
           background: '#fff',
+          minHeight: 'auto',
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Курьеры</h1>
