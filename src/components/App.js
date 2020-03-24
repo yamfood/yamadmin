@@ -23,6 +23,7 @@ import ProductEdit from './ProductEdit';
 import ProductCreate from './ProductCreate';
 import KitchenDetails from './KitchenDetails';
 import KitchenCreate from './KitchenCreate';
+import OrdersFinished from './OrdersFinished';
 
 
 const App = () => (
@@ -44,9 +45,10 @@ const App = () => (
         <PrivateRoute exact path="/admins/create/" component={AdminCreate} />
         <PrivateRoute exact path="/riders" component={RidersList} />
         <PrivateRoute exact path="/riders/:id/edit/" component={RiderEdit} />
-        <PrivateRoute path="/orders/active/" component={OrdersActive} />
+        <PrivateRoute exact path="/orders/active/" component={OrdersActive} />
         <PrivateRoute exact path="/riders/create/" component={RiderCreate} />
-        <PrivateRoute path="/orders/:id/" component={OrderDetails} />
+        <PrivateRoute exact path="/orders/finished/" component={OrdersFinished} />
+        <PrivateRoute exact path="/orders/:id/" component={OrderDetails} />
         <PrivateRoute path="/" component={Home} />
       </Switch>
     </Router>

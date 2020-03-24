@@ -1,6 +1,6 @@
-import { httpClient } from '../http-client';
 import { message } from 'antd';
 import { createAction } from 'redux-actions';
+import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
 
@@ -320,7 +320,7 @@ export const cancelOrder = (orderId) => async (dispatch) => {
       dispatch(loginFailure());
     }
     dispatch(cancelOrderFailure());
-    message.error('Ошибка при отменении заказа', 3);
+    message.error('Ошибка при отмене заказа', 3);
   }
 };
 
@@ -582,3 +582,24 @@ export const createKitchen = (params) => async (dispatch) => {
 };
 
 export const activeOrderTab = createAction('ACTIVE_ORDER_TAB');
+
+export const getFinishedOrdersRequest = createAction('GET_FINISHED_ORDERS_REQUEST');
+export const getFinishedOrdersFailure = createAction('GET_FINISHED_ORDERS_FAILURE');
+export const getFinishedOrdersSuccess = createAction('GET_FINISHED_ORDERS_SUCCESS');
+
+export const getFinishedOrders = (params) => async (dispatch) => {
+  dispatch(getFinishedOrdersRequest());
+  try {
+    const response = await httpClient.get(api.getFinishedOrder(), {
+      params,
+    });
+    dispatch(getFinishedOrdersSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getFinishedOrdersFailure());
+  }
+};
