@@ -52,6 +52,12 @@ const Products = () => {
       render: (text) => `${text} кКал`,
     },
     {
+      title: 'Категория',
+      dataIndex: 'category',
+      key: 'category',
+      render: (category, product) => `${product.emoji} ${category}`,
+    },
+    {
       title: 'Изменить',
       dataIndex: 'edit',
       key: 'edit',

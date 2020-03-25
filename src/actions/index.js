@@ -588,10 +588,14 @@ export const getFinishedOrdersFailure = createAction('GET_FINISHED_ORDERS_FAILUR
 export const getFinishedOrdersSuccess = createAction('GET_FINISHED_ORDERS_SUCCESS');
 
 export const getFinishedOrders = (params) => async (dispatch) => {
+  console.log('params: ', params);
   dispatch(getFinishedOrdersRequest());
   try {
     const response = await httpClient.get(api.getFinishedOrder(), {
-      params,
+      params: {
+        ...params,
+        per_page: 15,
+      },
     });
     dispatch(getFinishedOrdersSuccess({ data: response.data }));
   } catch (error) {
