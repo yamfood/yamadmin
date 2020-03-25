@@ -101,7 +101,7 @@ const OrdersFinished = () => {
           <OrdersFinishedForm />
         </div>
         <Table
-          bordered="true"
+          bordered={!(0 === false)}
           size="small"
           columns={columns}
           loading={loading}

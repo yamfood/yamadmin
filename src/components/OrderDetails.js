@@ -18,7 +18,6 @@ const actionsCreator = {
 
 const OrderDetails = (props) => {
   const { order = null, getOrderDetails, match } = props;
-  console.log('this is props: ', props);
   var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
   useEffect(() => {
