@@ -591,7 +591,10 @@ export const getFinishedOrders = (params) => async (dispatch) => {
   dispatch(getFinishedOrdersRequest());
   try {
     const response = await httpClient.get(api.getFinishedOrder(), {
-      params,
+      params: {
+        ...params,
+        per_page: 15,
+      },
     });
     dispatch(getFinishedOrdersSuccess({ data: response.data }));
   } catch (error) {

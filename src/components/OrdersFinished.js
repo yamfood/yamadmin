@@ -8,6 +8,7 @@ import {
 } from 'antd';
 import * as actions from '../actions';
 import OrdersFinishedForm from './OrdersFinishedForm';
+import pagination from './pagination';
 
 const { Content } = Layout;
 
@@ -15,18 +16,63 @@ const OrdersFinished = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.finishedOrders);
 
+  const formattingTime = (time) => {
+    if (time < 10) {
+      return `0${time}`;
+    }
+    return time;
+  }
+
+  const dispalyTime = (date) => {
+    const time = new Date(date);
+    return `
+      ${time.toLocaleDateString()} ${formattingTime(time.getHours())}:${formattingTime(time.getMinutes())}:${formattingTime(time.getSeconds())}
+    `
+  }
+
   const columns = [
-    { title: 'ID', dataIndex: 'id', key: 'id' },
+    {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+      render: (id) => <a href={`/orders/${id}/`} target="blank">{id}</a>,
+      fixed: true,
+      width: 60,
+    },
     { title: 'Клиент', dataIndex: 'name', key: 'name' },
     { title: 'Телефон', dataIndex: 'phone', key: 'phone' },
     { title: 'Кухня', dataIndex: 'kitchen', key: 'kitchen' },
-    { title: 'Сумма', dataIndex: 'total_sum', key: 'total_sum' },
-    { title: 'Статус заказа', dataIndex: 'status', key: 'status' },
-    { title: 'Комменты', dataIndex: 'comment', key: 'comment' },
+    {
+      title: 'Сумма',
+      dataIndex: 'total_sum',
+      key: 'total_sum',
+      render: (money) => `${money.toLocaleString('ru')} сум`,
+    },
+    {
+      title: 'Статус',
+      dataIndex: 'status',
+      key: 'status',
+      render: (text) => {
+        switch (text) {
+          case 'canceled':
+            return <p style={{ fontWeight: 'bold', color: 'red' }}>Отменен</p>;
+          case 'finished':
+            return <p style={{ fontWeight: 'bold', color: 'green' }}>Завершен</p>;
+          default:
+        }
+        return null;
+      },
+    },
+    { title: 'Комментарий', dataIndex: 'comment', key: 'comment' },
     { title: 'Имя Курьeра', dataIndex: 'rider_name', key: 'rider_name' },
     { title: 'Телефон Курьера', dataIndex: 'rider_phone', key: 'rider_phone' },
-    { title: 'Дата создания', dataIndex: 'created_at', key: 'created_at' },
-    { title: 'Локация', children: [{ title: 'Долгота', dataIndex: 'longitude', key: 'longitude' }, { title: 'Широта', dataIndex: 'latitude', key: 'latitude' }] },
+    {
+      title: 'Дата создания',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (time) => dispalyTime(time),
+    },
+    { title: 'Адрес', dataIndex: 'address', key: 'address' },
   ];
 
   useEffect(() => {
@@ -46,7 +92,7 @@ const OrdersFinished = () => {
         }}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Завершенные Заказы</h1>
-        <div style={{ display: 'flex', marginBottom: 10 }}>
+        <div style={{ display: 'flex', marginBottom: 10, flexWrap: 'wrap' }}>
           <Button
             onClick={() => dispatch(actions.getFinishedOrders())}
           >
@@ -55,7 +101,7 @@ const OrdersFinished = () => {
           <OrdersFinishedForm />
         </div>
         <Table
-          bordered="true"
+          bordered
           size="small"
           columns={columns}
           loading={loading}
@@ -65,6 +111,14 @@ const OrdersFinished = () => {
             longitude: order.location.longitude,
             latitude: order.location.latitude,
           }))}
+          scroll={{ x: 1600 }}
+          pagination={pagination(
+            orders.total,
+            15,
+            actions.getFinishedOrders,
+            orders.page,
+            dispatch,
+          )}
         />
       </Content>
     </Layout>

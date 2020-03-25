@@ -26,7 +26,7 @@ const OrdersFinishedForm = (props) => {
     <Form style={{ marginLeft: 15 }} layout="inline" onSubmit={handleSubmit}>
       <Form.Item label="ID Заказа">
         {getFieldDecorator('order_id')(
-          <Input type="number" />,
+          <Input type="number" style={{ width: 85 }} />,
         )}
       </Form.Item>
       <Form.Item label="Номер Клиента">
@@ -35,6 +35,7 @@ const OrdersFinishedForm = (props) => {
             prefix="+"
             placeholder="Номер"
             type="number"
+            style={{ width: 155 }}
           />,
         )}
       </Form.Item>
@@ -44,6 +45,7 @@ const OrdersFinishedForm = (props) => {
             prefix="+"
             placeholder="Номер"
             type="number"
+            style={{ width: 155 }}
           />,
         )}
       </Form.Item>
