@@ -611,6 +611,33 @@ const orderDetails = handleActions({
   status: null,
 });
 
+const finishedOrders = handleActions({
+  [actions.getFinishedOrdersRequest](state) {
+    return {
+      ...state,
+      status: 'request',
+    };
+  },
+  [actions.getFinishedOrdersFailure](state) {
+    return {
+      ...state,
+      status: 'failed',
+    };
+  },
+  [actions.getFinishedOrdersSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      status: 'success',
+      list: data.data,
+      total: data.count,
+      page: data.page,
+    }
+  },
+}, {
+  list: [],
+  page: 1,
+});
+
 
 export default combineReducers({
   clients,
@@ -621,4 +648,5 @@ export default combineReducers({
   admins,
   activeOrders,
   orderDetails,
+  finishedOrders,
 });

@@ -18,7 +18,6 @@ const actionsCreator = {
 
 const OrderDetails = (props) => {
   const { order = null, getOrderDetails, match } = props;
-
   var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
   useEffect(() => {
@@ -48,7 +47,7 @@ const OrderDetails = (props) => {
         margin: '24px 16px',
         padding: 24,
         background: '#fff',
-        minHeight: 280,
+        minHeight: 'auto',
       }}
     >
       {order !== null

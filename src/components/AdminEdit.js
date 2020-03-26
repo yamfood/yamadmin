@@ -80,6 +80,7 @@ const AdminEdit = (props) => {
               <Checkbox.Group>
                 {admins.permissions.map((permission) => (
                   <Checkbox
+                    key={permission}
                     value={permission}
                   >
                     {permission}
