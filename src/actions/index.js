@@ -566,7 +566,18 @@ export const createKitchenSuccess = createAction('CREATE_KITCHEN_SUCCESS');
 export const createKitchen = (params) => async (dispatch) => {
   dispatch(createKitchenRequest());
   try {
-    await httpClient.post(api.kitchens(), params);
+    await httpClient.post(api.kitchens(), {
+      name: params.name,
+      location: {
+        longitude: parseFloat(params.longitude),
+        latitude: parseFloat(params.latitude),
+      },
+      start_at: params.startAt,
+      end_at: params.endAt,
+      payload: {
+        test: params.test,
+      },
+    });
     dispatch(createKitchenSuccess());
     message.success('Кухня успешно создана', 3);
     history.push('/kitchens/');

@@ -66,7 +66,7 @@ const AdminCreate = (props) => {
             )}
           </Form.Item>
           <Form.Item label="Permissions" disabled={admin.permissionStatus}>
-            {getFieldDecorator('payload')(
+            {getFieldDecorator('test')(
               <Checkbox.Group>
                 {admin.permissions.map((permission) => (
                   <Checkbox value={permission}>{permission}</Checkbox>
