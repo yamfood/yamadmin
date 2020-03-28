@@ -574,9 +574,7 @@ export const createKitchen = (params) => async (dispatch) => {
       },
       start_at: params.startAt,
       end_at: params.endAt,
-      payload: {
-        test: params.test,
-      },
+      payload: JSON.parse(params.payload),
     });
     dispatch(createKitchenSuccess());
     message.success('Кухня успешно создана', 3);

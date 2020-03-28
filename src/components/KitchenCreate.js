@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Form,
   Button,
@@ -8,17 +8,16 @@ import {
 } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import * as actions from '../actions';
 
 const { Content } = Layout;
+const { TextArea } = Input;
 
 const KitchenCreate = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const kitchens = useSelector((state) => state.kitchens);
-  const [startAt, setStartTime] = useState();
-  const [endAt, setEndTime] = useState();
-
   const { form } = props;
   const { getFieldDecorator } = form;
 
@@ -27,18 +26,14 @@ const KitchenCreate = (props) => {
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        dispatch(actions.createKitchen({ ...values, startAt, endAt }));
+        dispatch(actions.createKitchen({
+          ...values,
+          startAt: moment(values.startAt).format('HH:mm'),
+          endAt: moment(values.endAt).format('HH:mm'),
+        }));
       }
     });
   };
-
-  const handleEndTime = (time, timeString) => {
-    setStartTime(timeString);
-  }
-
-  const handleStartTime = (time, timeString) => {
-    setEndTime(timeString);
-  }
 
   const format = 'HH:mm';
 
@@ -76,23 +71,25 @@ const KitchenCreate = (props) => {
             )}
           </Form.Item>
           <Form.Item label="Техническая информация">
-            {getFieldDecorator('test')(
-              <Input />,
+            {getFieldDecorator('payload', {
+              initialValue: '{ }',
+            })(
+              <TextArea
+                autoSize={{ minRows: 4 }}
+              />,
             )}
           </Form.Item>
-          <Form.Item label="Начало">
+          <Form.Item label="Открывается">
             {getFieldDecorator('startAt')(
               <TimePicker
-                onChange={handleStartTime}
                 format={format}
                 placeholder="время"
               />,
             )}
           </Form.Item>
-          <Form.Item label="Конец">
+          <Form.Item label="Закрывается">
             {getFieldDecorator('endAt')(
               <TimePicker
-                onChange={handleEndTime}
                 format={format}
                 placeholder="время"
               />,
