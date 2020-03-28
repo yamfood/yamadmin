@@ -4,12 +4,14 @@ import {
   Button,
   Input,
   Layout,
+  TimePicker,
 } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 
 const { Content } = Layout;
+const { TextArea } = Input;
 
 const KitchenCreate = (props) => {
   const dispatch = useDispatch();
@@ -23,16 +25,12 @@ const KitchenCreate = (props) => {
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        dispatch(actions.createKitchen({
-          name: values.name,
-          location: {
-            longitude: parseFloat(values.longitude),
-            latitude: parseFloat(values.latitude),
-          },
-        }));
+        dispatch(actions.createKitchen(values));
       }
     });
   };
+
+  const format = 'HH:mm';
 
   return (
     <Layout>
@@ -44,7 +42,7 @@ const KitchenCreate = (props) => {
           minHeight: 'auto',
         }}
       >
-        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Создания Курьера</h1>
+        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Создания Кухни</h1>
         <Form onSubmit={handleSubmit}>
           <Form.Item label="Название">
             {getFieldDecorator('name', {
@@ -65,6 +63,31 @@ const KitchenCreate = (props) => {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Input />,
+            )}
+          </Form.Item>
+          <Form.Item label="Техническая информация">
+            {getFieldDecorator('payload', {
+              initialValue: '{ }',
+            })(
+              <TextArea
+                autoSize={{ minRows: 4 }}
+              />,
+            )}
+          </Form.Item>
+          <Form.Item label="Открывается">
+            {getFieldDecorator('startAt')(
+              <TimePicker
+                format={format}
+                placeholder="время"
+              />,
+            )}
+          </Form.Item>
+          <Form.Item label="Закрывается">
+            {getFieldDecorator('endAt')(
+              <TimePicker
+                format={format}
+                placeholder="время"
+              />,
             )}
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>

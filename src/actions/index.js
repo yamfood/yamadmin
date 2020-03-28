@@ -1,8 +1,10 @@
 import { message } from 'antd';
 import { createAction } from 'redux-actions';
+import moment from 'moment';
 import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
+
 
 export const loginRequest = createAction('LOGIN_REQUEST');
 export const loginFailure = createAction('LOGIN_FAILURE');
@@ -566,7 +568,16 @@ export const createKitchenSuccess = createAction('CREATE_KITCHEN_SUCCESS');
 export const createKitchen = (params) => async (dispatch) => {
   dispatch(createKitchenRequest());
   try {
-    await httpClient.post(api.kitchens(), params);
+    await httpClient.post(api.kitchens(), {
+      name: params.name,
+      location: {
+        longitude: parseFloat(params.longitude),
+        latitude: parseFloat(params.latitude),
+      },
+      start_at: moment(params.startAt).format('HH:mm'),
+      end_at: moment(params.endAt).format('HH:mm'),
+      payload: JSON.parse(params.payload),
+    });
     dispatch(createKitchenSuccess());
     message.success('Кухня успешно создана', 3);
     history.push('/kitchens/');
