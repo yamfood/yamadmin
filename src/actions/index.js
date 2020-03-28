@@ -1,8 +1,10 @@
 import { message } from 'antd';
 import { createAction } from 'redux-actions';
+import moment from 'moment';
 import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
+
 
 export const loginRequest = createAction('LOGIN_REQUEST');
 export const loginFailure = createAction('LOGIN_FAILURE');
@@ -572,8 +574,8 @@ export const createKitchen = (params) => async (dispatch) => {
         longitude: parseFloat(params.longitude),
         latitude: parseFloat(params.latitude),
       },
-      start_at: params.startAt,
-      end_at: params.endAt,
+      start_at: moment(params.startAt).format('HH:mm'),
+      end_at: moment(params.endAt).format('HH:mm'),
       payload: JSON.parse(params.payload),
     });
     dispatch(createKitchenSuccess());

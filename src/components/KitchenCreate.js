@@ -8,7 +8,6 @@ import {
 } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
 import * as actions from '../actions';
 
 const { Content } = Layout;
@@ -26,11 +25,7 @@ const KitchenCreate = (props) => {
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        dispatch(actions.createKitchen({
-          ...values,
-          startAt: moment(values.startAt).format('HH:mm'),
-          endAt: moment(values.endAt).format('HH:mm'),
-        }));
+        dispatch(actions.createKitchen(values));
       }
     });
   };
