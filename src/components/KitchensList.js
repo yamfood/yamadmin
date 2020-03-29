@@ -28,6 +28,22 @@ const KitchensList = () => {
       dataIndex: 'name',
       key: 'name',
     },
+    {
+      title: 'Открывается',
+      dataIndex: 'start_at',
+      key: 'start_at',
+    },
+    {
+      title: 'Закрывается',
+      dataIndex: 'end_at',
+      key: 'end_at',
+    },
+    {
+      title: 'Отключен',
+      dataIndex: 'is_disabled',
+      key: 'is_disabled',
+      render: (bool) => (bool ? <p style={{ color: 'red' }}>Отключен</p> : null),
+    },
   ];
 
   useEffect(() => {
