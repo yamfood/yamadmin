@@ -103,9 +103,7 @@ const KitchenEdit = (props) => {
             )}
           </Form.Item>
           <Form.Item label="Блокирован">
-            {getFieldDecorator('is_disabled', {
-              // initialValue: details ? details.is_disabled : null,
-            })(
+            {getFieldDecorator('is_disabled')(
               <Switch
                 disabled={kitchen.detailStatus === 'request'}
                 defaultChecked={details.is_disabled === true}
