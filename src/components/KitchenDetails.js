@@ -30,7 +30,7 @@ const KitchenDetail = () => {
         }}
       >
         <h1 style={{ textAlign: 'center', fontSize: 24 }}>Детали Кухни</h1>
-        <Descriptions title="Кухня" bordered="trute">
+        <Descriptions title="Кухня" bordered>
           <Descriptions.Item label="Название">{details ? details.name : null}</Descriptions.Item>
           <Descriptions.Item label="Долгота(longitude)">{details ? details.location.longitude : null}</Descriptions.Item>
           <Descriptions.Item label="Широта(latitude)">{details ? details.location.latitude : null}</Descriptions.Item>
