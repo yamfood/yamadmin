@@ -617,3 +617,35 @@ export const getFinishedOrders = (params) => async (dispatch) => {
     dispatch(getFinishedOrdersFailure());
   }
 };
+
+export const editKitchenRequest = createAction('EDIT_KITCHEN_REQUEST');
+export const editKitchenFailure = createAction('EDIT_KITCHEN_FAILURE');
+export const editKitchenSuccess = createAction('EDIT_KITCHEN_SUCCESS');
+
+export const editKitchen = (params) => async (dispatch) => {
+  dispatch(editKitchenRequest());
+  try {
+    await httpClient.patch(api.kitchenDetails(params.id), {
+      name: params.name,
+      location: {
+        longitude: parseFloat(params.longitude),
+        latitude: parseFloat(params.latitude),
+      },
+      start_at: moment(params.start_at).format('HH:mm'),
+      end_at: moment(params.end_at).format('HH:mm'),
+      payload: JSON.parse(params.payload),
+      is_disabled: params.is_disabled,
+    });
+    dispatch(editKitchenSuccess());
+    message.success('Кухня успешно изменена', 3);
+    history.push('/kitchens/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(editKitchenFailure());
+    message.error('Ошибка при изменении кухни', 3);
+  }
+};
