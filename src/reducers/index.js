@@ -479,9 +479,33 @@ const kitchens = handleActions({
       createStatus: 'success',
     };
   },
+  [actions.editKitchenRequest](state) {
+    return {
+      ...state,
+      editStatus: 'request',
+    };
+  },
+  [actions.editKitchenFailure](state) {
+    return {
+      ...state,
+      editStatus: 'failure',
+    };
+  },
+  [actions.editKitchenSuccess](state) {
+    return {
+      ...state,
+      editStatus: 'success',
+    };
+  },
 }, {
   list: [],
   status: null,
+  details: {
+    location: {
+      longitude: null,
+      latitude: null,
+    },
+  },
 });
 
 

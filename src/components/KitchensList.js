@@ -5,6 +5,9 @@ import {
   Layout,
   Table,
 } from 'antd';
+import {
+  EditOutlined,
+} from '@ant-design/icons';
 
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
@@ -43,6 +46,24 @@ const KitchensList = () => {
       dataIndex: 'is_disabled',
       key: 'is_disabled',
       render: (bool) => (bool ? <p style={{ color: 'red' }}>Отключен</p> : null),
+    },
+    {
+      title: 'Изменить',
+      dataIndex: 'edit',
+      key: 'edit',
+      render: (id, record) => (
+        <span>
+          <Button
+            type="link"
+            onClick={(e) => {
+              e.stopPropagation();
+              history.push(`/kitchens/${record.id}/edit/`);
+            }}
+          >
+            <EditOutlined />
+          </Button>
+        </span>
+      ),
     },
   ];
 

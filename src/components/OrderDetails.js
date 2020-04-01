@@ -1,81 +1,151 @@
 /* eslint-disable */
-import React, { useEffect } from 'react';
-import { Layout } from 'antd';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import React, {useEffect} from 'react';
+import {Layout, Descriptions, Tag, Table} from 'antd';
+import {withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
 import * as actions from '../actions'
 
 
 const mapStateToProps = (state, ownProps) => ({
-  order: (state.orderDetails[ownProps.match.params.id] || null)
+    order: (state.orderDetails[ownProps.match.params.id] || null)
 });
 
 
 const actionsCreator = {
-  getOrderDetails: actions.getOrderDetails
+    getOrderDetails: actions.getOrderDetails
+};
+
+
+const OrderDetailsView = (props) => {
+    const {order} = props;
+
+    const columns = [
+        {
+            title: 'Название',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Количество',
+            dataIndex: 'count',
+            key: 'count',
+        },
+        {
+            title: 'Цена',
+            dataIndex: 'price',
+            key: 'price',
+        },
+        {
+            title: 'Сумма',
+            dataIndex: 'price',
+            key: 'price',
+        },
+    ];
+
+    const statusTag = (order) => {
+        switch (order.status) {
+            case 'new':
+                return <Tag color="#108ee9">Новый</Tag>;
+            case "onWay":
+                return <Tag color="#F6F200">В пути</Tag>;
+            case "onKitchen":
+                return <Tag color="#F6F200">На кухне</Tag>;
+            case "finished":
+                return <Tag color="#00C01D">Завершен</Tag>;
+            case "canceled":
+                return <Tag color="#FF2D00">Отменен</Tag>;
+            default:
+                return <Tag color="red">{order.status}</Tag>;
+        }
+    };
+
+    return (
+        <div>
+            <Descriptions title={"Заказ #" + order.id}
+                          size={"small"}
+                          column={4}
+                          layout="vertical"
+                          bordered>
+                <Descriptions.Item label="Локация" span={2}>
+                    <div id="map" style={{width: '100%', height: 250}}></div>
+                </Descriptions.Item>
+                <Descriptions.Item label="Адрес" span={2}>{order.address}</Descriptions.Item>
+                <Descriptions.Item label="Комментарий" span={4}>
+                    {order.comment ? order.comment : "Пусто..."}
+                </Descriptions.Item>
+                <Descriptions.Item label="Клиент" span={1}>{order.name}</Descriptions.Item>
+                <Descriptions.Item label="Телефон" span={1}>{order.phone}</Descriptions.Item>
+                <Descriptions.Item label="Курьер" span={1}>
+                    {order.rider_name ? order.rider_name : "Нет курьера"}
+                </Descriptions.Item>
+                <Descriptions.Item label="Телефон" span={1}>
+                    {order.rider_phone ? order.rider_phone : "Нет курьера"}
+                </Descriptions.Item>
+                <Descriptions.Item label="Сумма" span={1}>
+                    {order.total_sum.toLocaleString('ru')} сум
+                </Descriptions.Item>
+                <Descriptions.Item label="Статус" span={1}>
+                    {statusTag(order)}
+                </Descriptions.Item>
+                <Descriptions.Item label="Кухня" span={1}>{order.kitchen}</Descriptions.Item>
+                <Descriptions.Item label="Создан в">{order.created_at}</Descriptions.Item>
+            </Descriptions>
+
+            <br/>
+            <h3><strong>Продукты</strong></h3>
+            <Table dataSource={order.products}
+                   columns={columns}
+                   size={"small"}
+                   pagination={false}
+                   bordered/>
+        </div>
+    )
 };
 
 
 const OrderDetails = (props) => {
-  const { order = null, getOrderDetails, match } = props;
-  var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
+    const {order = null, getOrderDetails, match} = props;
+    var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
-  useEffect(() => {
-    const orderID = match.params.id;
+    useEffect(() => {
+        const orderID = match.params.id;
 
-    if (order === null) {
-      getOrderDetails(orderID);
-      return
-    }
+        if (order === null) {
+            getOrderDetails(orderID);
+            return
+        }
 
-    mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g';
-    var map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/kensay/ck52ch6ji00o41ctc1n49mnc8',
-      center: [69.2401, 41.2995],
-      zoom: 11
+        mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/kensay/ck52ch6ji00o41ctc1n49mnc8',
+            center: [69.2401, 41.2995],
+            zoom: 10
+        });
+
+        new mapboxgl.Marker()
+            .setLngLat([order.location.longitude, order.location.latitude])
+            .addTo(map);
     });
 
-    new mapboxgl.Marker()
-      .setLngLat([order.location.longitude, order.location.latitude])
-      .addTo(map);
-  });
-
-  return (
-    <Layout.Content
-      style={{
-        margin: '24px 16px',
-        padding: 24,
-        background: '#fff',
-        minHeight: 'auto',
-      }}
-    >
-      {order !== null
-        ? <div className="detail">
-          <h1 style={{ fontSize: 40, textAlign: "center" }}>Заказ #{order.id}</h1>
-          <div className="order-detail">
-            <div style={{ width: '35%' }}>
-              <h3>Информация</h3>
-              <p>Клиент: {order.name}</p>
-              <p>Телефон: +{order.phone}</p>
-              <p>Комментарий: {order.comment}</p>
-              <p>Статус: {order.status}</p>
-              <p>Сумма: {order.total_sum.toLocaleString('ru')} сум</p>
-              <p>Создан: {order.created_at}</p>
-              <br />
-              <h3>Продукты</h3>
-              {order.products.map((p, i) => <p key={i}>{p.name} | {p.price} | {p.count}</p>)}
-            </div>
-            <div id='map' style={{ width: '65%', height: 500 }} />
-          </div>
-        </div>
-        : <h1>Loading...</h1>}
-    </Layout.Content>
-  )
+    return (
+        <Layout.Content
+            style={{
+                margin: '24px 16px',
+                padding: 24,
+                background: '#fff',
+                minHeight: 'auto',
+            }}
+        >
+            {order !== null
+                ? <OrderDetailsView order={order}/>
+                : <h1>Loading...</h1>}
+        </Layout.Content>
+    )
 };
 
 
 export default withRouter(connect(
-  mapStateToProps,
-  actionsCreator
+    mapStateToProps,
+    actionsCreator
 )(OrderDetails));
