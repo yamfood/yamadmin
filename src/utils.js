@@ -18,3 +18,4 @@ export default (initialState, window) => {
 
 
 export const mapBoxToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNmdrMGkxcjExYWMzZW52NDM1Ymhmc3AifQ.QNNipRYHGdZZ59WxtggPdA';
+export const title = process.env.REACT_APP_APP_NAME;
