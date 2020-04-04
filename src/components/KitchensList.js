@@ -21,26 +21,10 @@ const KitchensList = () => {
   const history = useHistory();
 
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: 'Название',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Открывается',
-      dataIndex: 'start_at',
-      key: 'start_at',
-    },
-    {
-      title: 'Закрывается',
-      dataIndex: 'end_at',
-      key: 'end_at',
-    },
+    { title: 'ID', dataIndex: 'id', key: 'id' },
+    { title: 'Название', dataIndex: 'name', key: 'name' },
+    { title: 'Открывается', dataIndex: 'start_at', key: 'start_at' },
+    { title: 'Закрывается', dataIndex: 'end_at', key: 'end_at' },
     {
       title: 'Отключен',
       dataIndex: 'is_disabled',
@@ -99,11 +83,6 @@ const KitchensList = () => {
           columns={columns}
           loading={loading}
           dataSource={kitchens.list.map((kitchen) => ({ ...kitchen, key: kitchen.id }))}
-          onRow={(record) => ({
-            onClick: () => {
-              history.push(`${record.id}/details/`);
-            },
-          })}
         />
       </Content>
     </Layout>
