@@ -50,13 +50,11 @@ const DisabledProducts = ({ id }) => {
   ];
 
   return (
-    <>
-      <Table
-        columns={columns}
-        loading={[productsDeleteStatus, detailStatus].includes('request')}
-        dataSource={disabledProducts.map((food) => ({ ...food, key: `${food.name}` }))}
-      />
-    </>
+    <Table
+      columns={columns}
+      loading={[productsDeleteStatus, detailStatus].includes('request')}
+      dataSource={disabledProducts.map((food) => ({ ...food, key: `${food.name}` }))}
+    />
   );
 };
 

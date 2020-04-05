@@ -7,18 +7,18 @@ import {
   List,
   Input,
 } from 'antd';
+import textInModal from '../assets/style';
 import * as actions from '../actions';
 
 const DisabledProductList = ({ id }) => {
   const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
   const [stopListProducts, addToStopList] = useState([]);
+  const [loadingButtonId, setLoadingButton] = useState([]);
   const products = useSelector((state) => state.kitchens);
-  const { productsModal } = products;
-  const [productsList, setProducts] = useState(productsModal);
+  const { productsForModal } = products;
 
   const showModal = () => {
-    setProducts(productsModal);
     setVisible(true);
   };
 
@@ -26,20 +26,17 @@ const DisabledProductList = ({ id }) => {
     dispatch(actions.getKitchenProducts(id));
   }, []);
 
-  const search = ({ target }) => {
-    const { value } = target;
-    if (!value) {
-      setProducts(productsModal);
-      return;
+  const search = (e) => {
+    if (e) {
+      const { value } = e.target;
+      return productsForModal.filter(
+        (product) => product.name.toLowerCase().includes(value.toLowerCase()),
+      );
     }
-    const newProducts = productsModal.filter(
-      (product) => product.name.toLowerCase().includes(value.toLowerCase()),
-    );
-    setProducts(newProducts);
-  }
+    return productsForModal;
+  };
 
-
-  const handleCanel = () => {
+  const handleCancel = () => {
     setVisible(false);
   };
 
@@ -58,7 +55,7 @@ const DisabledProductList = ({ id }) => {
       <Modal
         title="Добавление продукта в стоп лист"
         visible={visible}
-        onCancel={handleCanel}
+        onCancel={handleCancel}
         cancelText="Ок"
         style={{ width: 720 }}
         okButtonProps={{ style: { display: 'none' } }}
@@ -68,7 +65,7 @@ const DisabledProductList = ({ id }) => {
           <Input type="text" onChange={search} placeholder="Название продукта" />
           <List
             itemLayout="horizontal"
-            dataSource={productsList}
+            dataSource={search()}
             renderItem={(item) => (
               <List.Item key={item.name}>
                 <div style={{ display: 'flex' }}>
@@ -79,14 +76,7 @@ const DisabledProductList = ({ id }) => {
                     }}
                     alt="food"
                   />
-                  <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    marginRight: 15,
-                    marginLeft: 15,
-                  }}
-                  >
+                  <div style={textInModal}>
                     {item.name}
                   </div>
                 </div>
@@ -94,11 +84,16 @@ const DisabledProductList = ({ id }) => {
                   type="primary"
                   onClick={() => {
                     dispatch(actions.addDisabledProduct(id, item.id));
+                    setLoadingButton(item.id);
                     addToStopList([...stopListProducts, item]);
                   }}
                   disabled={
                     stopListProducts.find((product) => product.id === item.id)
                     && products.productsAddStatus === 'success'
+                  }
+                  loading={
+                    products.productsAddStatus === 'request'
+                    && item.id === loadingButtonId
                   }
                   style={{ marginRight: 30 }}
                 >

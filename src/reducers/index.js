@@ -514,7 +514,7 @@ const kitchens = handleActions({
     return {
       ...state,
       productsStatus: 'success',
-      productsModal: data,
+      productsForModal: data,
     }
   },
   [actions.addDisabledProductRequest](state) {
@@ -564,7 +564,7 @@ const kitchens = handleActions({
       latitude: null,
     },
   },
-  productsModal: [],
+  productsForModal: [],
   disabledProducts: [],
 });
 
