@@ -12,15 +12,11 @@ import * as actions from '../actions';
 
 const DisabledProductList = ({ id }) => {
   const dispatch = useDispatch();
-  const [visible, setVisible] = useState(false);
+  const [isModalVisible, setVisible] = useState(false);
   const [stopListProducts, addToStopList] = useState([]);
   const [loadingButtonId, setLoadingButton] = useState([]);
-  const products = useSelector((state) => state.kitchens);
-  const { productsForModal } = products;
-
-  const showModal = () => {
-    setVisible(true);
-  };
+  const kitchens = useSelector((state) => state.kitchens);
+  const { productsForModal } = kitchens;
 
   useEffect(() => {
     dispatch(actions.getKitchenProducts(id));
@@ -44,7 +40,7 @@ const DisabledProductList = ({ id }) => {
     <div>
       <Button
         type="link"
-        onClick={showModal}
+        onClick={() => setVisible(true)}
       >
         <Icon
           type="plus-square"
@@ -54,7 +50,7 @@ const DisabledProductList = ({ id }) => {
       </Button>
       <Modal
         title="Добавление продукта в стоп лист"
-        visible={visible}
+        visible={isModalVisible}
         onCancel={handleCancel}
         cancelText="Ок"
         style={{ width: 720 }}
@@ -89,10 +85,10 @@ const DisabledProductList = ({ id }) => {
                   }}
                   disabled={
                     stopListProducts.find((product) => product.id === item.id)
-                    && products.productsAddStatus === 'success'
+                    && kitchens.productsAddStatus === 'success'
                   }
                   loading={
-                    products.productsAddStatus === 'request'
+                    kitchens.productsAddStatus === 'request'
                     && item.id === loadingButtonId
                   }
                   style={{ marginRight: 30 }}
