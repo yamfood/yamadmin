@@ -649,3 +649,66 @@ export const editKitchen = (params) => async (dispatch) => {
     message.error('Ошибка при изменении кухни', 3);
   }
 };
+
+
+export const getKitchenProductsRequest = createAction('GET_KITCHEN_PRODUCTS_REQUEST');
+export const getKitchenProductsFailure = createAction('GET_KITCHEN_PRODUCTS_FAILURE');
+export const getKitchenProductsSuccess = createAction('GET_KITCHEN_PRODUCTS_SUCCESS');
+
+export const getKitchenProducts = (kitchenId) => async (dispatch) => {
+  dispatch(getKitchenProductsRequest());
+  try {
+    const response = await httpClient.get(api.kitchenProducts(kitchenId));
+    dispatch(getKitchenProductsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getKitchenProductsFailure());
+  }
+};
+
+
+export const addDisabledProductRequest = createAction('ADD_DISABLED_PRODUCT_REQUEST');
+export const addDisabledProductFailure = createAction('ADD_DISABLED_PRODUCT_FAILURE');
+export const addDisabledProductSuccess = createAction('ADD_DISABLED_PRODUCT_SUCCESS');
+
+export const addDisabledProduct = (kitchenId, productId) => async (dispatch) => {
+  dispatch(addDisabledProductRequest());
+  try {
+    const response = await httpClient.post(api.kitchenDisabledAction(kitchenId, productId));
+    dispatch(addDisabledProductSuccess({ data: response.data }));
+    message.success('Успешно добавлено', 3);
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(addDisabledProductFailure());
+    message.error('Ошибка при добавлении', 3);
+  }
+};
+
+export const deleteDisabledProductRequest = createAction('DELETE_DISABLED_PRODUCT_REQUEST');
+export const deleteDisabledProductFailure = createAction('DELETE_DISABLED_PRODUCT_FAILURE');
+export const deleteDisabledProductSuccess = createAction('DELETE_DISABLED_PRODUCT_SUCCESS');
+
+export const deleteDisabledProduct = (kitchenId, productId) => async (dispatch) => {
+  dispatch(deleteDisabledProductRequest());
+  try {
+    const response = await httpClient.delete(api.kitchenDisabledAction(kitchenId, productId));
+    dispatch(deleteDisabledProductSuccess({ data: response.data }));
+    message.success('Успешно удалено', 3);
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(deleteDisabledProductFailure());
+    message.error('Ошибка при удалении', 3);
+  }
+};

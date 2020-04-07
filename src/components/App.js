@@ -21,7 +21,6 @@ import AdminEdit from './AdminEdit';
 import AdminCreate from './AdminCreate';
 import ProductEdit from './ProductEdit';
 import ProductCreate from './ProductCreate';
-import KitchenDetails from './KitchenDetails';
 import KitchenCreate from './KitchenCreate';
 import OrdersFinished from './OrdersFinished';
 import KitchenEdit from './KitchenEdit';
@@ -39,7 +38,6 @@ const App = () => (
         <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
         <PrivateRoute exact path="/kitchens/create/" component={KitchenCreate} />
         <PrivateRoute exact path="/kitchens" component={KitchensList} />
-        <PrivateRoute exact path="/kitchens/:id/details/" component={KitchenDetails} />
         <PrivateRoute exact path="/kitchens/:id/edit/" component={KitchenEdit} />
         <PrivateRoute path="/clients/" component={Clients} />
         <PrivateRoute exact path="/admins/" component={AdminsList} />

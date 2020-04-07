@@ -459,6 +459,7 @@ const kitchens = handleActions({
       ...state,
       detailStatus: 'success',
       details: data,
+      disabledProducts: data.disabled_products,
     };
   },
   [actions.createKitchenRequest](state) {
@@ -497,6 +498,63 @@ const kitchens = handleActions({
       editStatus: 'success',
     };
   },
+  [actions.getKitchenProductsRequest](state) {
+    return {
+      ...state,
+      productsStatus: 'request',
+    };
+  },
+  [actions.getKitchenProductsFailure](state) {
+    return {
+      ...state,
+      productsStatus: 'failure',
+    };
+  },
+  [actions.getKitchenProductsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      productsStatus: 'success',
+      productsForModal: data,
+    }
+  },
+  [actions.addDisabledProductRequest](state) {
+    return {
+      ...state,
+      productsAddStatus: 'request',
+    };
+  },
+  [actions.addDisabledProductFailure](state) {
+    return {
+      ...state,
+      productsAddStatus: 'failure',
+    };
+  },
+  [actions.addDisabledProductSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      productsAddStatus: 'success',
+      disabledProducts: data.disabled_products,
+    }
+  },
+  [actions.deleteDisabledProductRequest](state) {
+    return {
+      ...state,
+      productsDeleteStatus: 'request',
+    };
+  },
+  [actions.deleteDisabledProductFailure](state) {
+    return {
+      ...state,
+      productsDeleteStatus: 'failure',
+    };
+  },
+  [actions.deleteDisabledProductSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      productsDeleteStatus: 'success',
+      disabledProducts: data.disabled_products,
+    }
+  },
 }, {
   list: [],
   status: null,
@@ -506,6 +564,8 @@ const kitchens = handleActions({
       latitude: null,
     },
   },
+  productsForModal: [],
+  disabledProducts: [],
 });
 
 
