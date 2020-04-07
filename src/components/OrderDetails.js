@@ -34,12 +34,8 @@ const OrderDetailsView = (props) => {
             title: 'Цена',
             dataIndex: 'price',
             key: 'price',
-        },
-        {
-            title: 'Сумма',
-            dataIndex: 'price',
-            key: 'price',
-        },
+            render: (price) => price.toLocaleString('ru'),
+        }
     ];
 
     const statusTag = (order) => {
@@ -70,9 +66,10 @@ const OrderDetailsView = (props) => {
                     <div id="map" style={{width: '100%', height: 250}}></div>
                 </Descriptions.Item>
                 <Descriptions.Item label="Адрес" span={2}>{order.address}</Descriptions.Item>
-                <Descriptions.Item label="Комментарий" span={4}>
+                <Descriptions.Item label="Комментарий" span={2}>
                     {order.comment ? order.comment : "Пусто..."}
                 </Descriptions.Item>
+                <Descriptions.Item label="Кухня" span={2}>{order.kitchen}</Descriptions.Item>
                 <Descriptions.Item label="Клиент" span={1}>{order.name}</Descriptions.Item>
                 <Descriptions.Item label="Телефон" span={1}>{order.phone}</Descriptions.Item>
                 <Descriptions.Item label="Курьер" span={1}>
@@ -87,7 +84,9 @@ const OrderDetailsView = (props) => {
                 <Descriptions.Item label="Статус" span={1}>
                     {statusTag(order)}
                 </Descriptions.Item>
-                <Descriptions.Item label="Кухня" span={1}>{order.kitchen}</Descriptions.Item>
+                <Descriptions.Item label="Тип оплаты" span={1}>
+                    {order.payment == "cash" ? "Наличными" : "Картой"}
+                </Descriptions.Item>
                 <Descriptions.Item label="Создан в">{order.created_at}</Descriptions.Item>
             </Descriptions>
 
