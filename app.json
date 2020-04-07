@@ -4,6 +4,9 @@
   "repository": "https://github.com/yamfood/yamadmin",
   "keywords": [],
   "env": {
+    "REACT_APP_APP_NAME": {
+      "description": "App name"
+    },
     "REACT_APP_API_HOST": {
       "description": "Host to API"
     }
