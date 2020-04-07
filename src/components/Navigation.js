@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
-
+import { title } from '../utils'
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -9,7 +9,7 @@ const { SubMenu } = Menu;
 const Navigation = () => (
   <Sider trigger={null} collapsible collapsed={false}>
     <div className="logo">
-      <h1>Yam</h1>
+      <h1>{title || 'YAM'}</h1>
     </div>
     <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
       <Menu.Item key="1">
