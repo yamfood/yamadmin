@@ -5,6 +5,7 @@ import {
   Layout,
   Table,
 } from 'antd';
+import moment from 'moment';
 import {
   EditOutlined,
 } from '@ant-design/icons';
@@ -23,8 +24,18 @@ const KitchensList = () => {
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
     { title: 'Название', dataIndex: 'name', key: 'name' },
-    { title: 'Открывается', dataIndex: 'start_at', key: 'start_at' },
-    { title: 'Закрывается', dataIndex: 'end_at', key: 'end_at' },
+    {
+      title: 'Открывается',
+      dataIndex: 'start_at',
+      key: 'start_at',
+      render: (time) => moment(time).format('HH:mm'),
+    },
+    {
+      title: 'Закрывается',
+      dataIndex: 'end_at',
+      key: 'end_at',
+      render: (time) => moment(time).format('HH:mm'),
+    },
     {
       title: 'Отключен',
       dataIndex: 'is_disabled',

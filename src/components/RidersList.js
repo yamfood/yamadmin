@@ -26,21 +26,9 @@ const RidersList = () => {
   const riders = useSelector((state) => state.riders);
 
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: 'TID',
-      dataIndex: 'tid',
-      key: 'tid',
-    },
-    {
-      title: 'Имя',
-      dataIndex: 'name',
-      key: 'name',
-    },
+    { title: 'ID', dataIndex: 'id', key: 'id' },
+    { title: 'TID', dataIndex: 'tid', key: 'tid' },
+    { title: 'Имя', dataIndex: 'name', key: 'name' },
     {
       title: 'Телефон',
       dataIndex: 'phone',
