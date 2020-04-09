@@ -33,12 +33,7 @@ const ProductCreate = (props) => {
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
-        dispatch(actions.editProduct({
-          ...values,
-          price: parseInt(values.price, 10),
-          energy: values.energy ? parseInt(values.energy, 10) : undefined,
-          category_id: values.category_id === undefined ? null : values.category_id,
-        }, productDetails.id));
+        dispatch(actions.editProduct(values, productDetails.id));
       }
     });
   };
@@ -105,6 +100,13 @@ const ProductCreate = (props) => {
               initialValue: productDetails.energy ? productDetails.energy : null,
             })(
               <Input type="number" disabled={products.productDetailsStatus === 'request'} />,
+            )}
+          </Form.Item>
+          <Form.Item label="Позиция: ">
+            {getFieldDecorator('position', {
+              initialValue: productDetails.position ? productDetails.position : 0,
+            })(
+              <Input type="number" />,
             )}
           </Form.Item>
           <Form.Item label="Категория: ">

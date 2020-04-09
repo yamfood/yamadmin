@@ -29,16 +29,8 @@ const Products = () => {
       key: 'thumbnail',
       render: (thumbnail) => <img alt={thumbnail} style={{ width: 100 }} src={thumbnail} />,
     },
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: 'Название',
-      dataIndex: 'name',
-      key: 'name',
-    },
+    { title: 'ID', dataIndex: 'id', key: 'id' },
+    { title: 'Название', dataIndex: 'name', key: 'name' },
     {
       title: 'Цена',
       dataIndex: 'price',
@@ -55,7 +47,12 @@ const Products = () => {
       title: 'Категория',
       dataIndex: 'category',
       key: 'category',
-      render: (category, product) => `${product.emoji} ${category}`,
+      render: (category, product) => {
+        if (category) {
+          return `${product.emoji} ${category}`;
+        }
+        return null;
+      },
     },
     {
       title: 'Изменить',

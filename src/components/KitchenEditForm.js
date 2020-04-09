@@ -70,7 +70,7 @@ const KitchenEditForm = ({ form, id, history }) => {
       </Form.Item>
       <Form.Item label="Открывается">
         {getFieldDecorator('start_at', {
-          initialValue: details ? moment(details.start_at, 'HH:mm') : null,
+          initialValue: details ? moment(details.start_at) : null,
         })(
           <TimePicker
             format={format}
@@ -80,7 +80,7 @@ const KitchenEditForm = ({ form, id, history }) => {
       </Form.Item>
       <Form.Item label="Закрывается">
         {getFieldDecorator('end_at', {
-          initialValue: details ? moment(details.end_at, 'HH:mm') : null,
+          initialValue: details ? moment(details.end_at) : null,
         })(
           <TimePicker
             format={format}

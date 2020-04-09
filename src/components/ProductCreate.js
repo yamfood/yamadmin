@@ -29,12 +29,7 @@ const ProductCreate = (props) => {
     e.preventDefault();
     form.validateFields((err, values) => {
       if (!err) {
-        dispatch(actions.createProduct({
-          ...values,
-          price: parseInt(values.price, 10),
-          energy: values.energy ? parseInt(values.energy, 10) : undefined,
-          category_id: values.category_id ? parseInt(values.category_id, 10) : undefined,
-        }));
+        dispatch(actions.createProduct(values));
       }
     });
   };
@@ -81,6 +76,11 @@ const ProductCreate = (props) => {
           </Form.Item>
           <Form.Item label="Калорийность: ">
             {getFieldDecorator('energy')(
+              <Input type="number" />,
+            )}
+          </Form.Item>
+          <Form.Item label="Позиция: ">
+            {getFieldDecorator('position')(
               <Input type="number" />,
             )}
           </Form.Item>
