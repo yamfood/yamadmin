@@ -23,21 +23,9 @@ const AdminsList = () => {
   const history = useHistory();
 
   const columns = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: 'Логин',
-      dataIndex: 'login',
-      key: 'login',
-    },
-    {
-      title: 'Токен',
-      dataIndex: 'token',
-      key: 'token',
-    },
+    { title: 'ID', dataIndex: 'id', key: 'id' },
+    { title: 'Логин', dataIndex: 'login', key: 'login' },
+    { title: 'Токен', dataIndex: 'token', key: 'token' },
     {
       title: 'Изменить',
       dataIndex: 'edit',

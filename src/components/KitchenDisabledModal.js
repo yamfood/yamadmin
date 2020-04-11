@@ -32,10 +32,6 @@ const DisabledProductList = ({ id }) => {
     return productsForModal;
   };
 
-  const handleCancel = () => {
-    setVisible(false);
-  };
-
   return (
     <div>
       <Button
@@ -51,7 +47,7 @@ const DisabledProductList = ({ id }) => {
       <Modal
         title="Добавление продукта в стоп лист"
         visible={isModalVisible}
-        onCancel={handleCancel}
+        onCancel={() => setVisible(false)}
         cancelText="Ок"
         style={{ width: 720 }}
         okButtonProps={{ style: { display: 'none' } }}

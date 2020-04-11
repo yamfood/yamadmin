@@ -1,6 +1,5 @@
 import { message } from 'antd';
 import { createAction } from 'redux-actions';
-import moment from 'moment';
 import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
@@ -481,7 +480,13 @@ export const createProductSuccess = createAction('CREATE_PRODUCT_SUCCESS');
 export const createProduct = (params) => async (dispatch) => {
   dispatch(createProductRequest());
   try {
-    await httpClient.post(api.products(), params);
+    await httpClient.post(api.products(), {
+      ...params,
+      position: parseInt(params.position, 10),
+      price: parseInt(params.price, 10),
+      energy: params.energy ? parseInt(params.energy, 10) : undefined,
+      category_id: params.category_id ? parseInt(params.category_id, 10) : undefined,
+    });
     dispatch(createProductSuccess());
     message.success('Продукт успешно создан', 3);
     history.push('/products/');
@@ -526,7 +531,13 @@ export const editProductSuccess = createAction('EDIT_PRODUCT_SUCCESS');
 export const editProduct = (params, productId) => async (dispatch) => {
   dispatch(editProductRequest());
   try {
-    await httpClient.patch(api.product(productId), params);
+    await httpClient.patch(api.product(productId), {
+      ...params,
+      position: parseInt(params.position, 10),
+      price: parseInt(params.price, 10),
+      energy: params.energy ? parseInt(params.energy, 10) : undefined,
+      category_id: params.category_id === undefined ? null : params.category_id,
+    });
     dispatch(editProductSuccess());
     message.success('Продукт успешно изменен', 3);
     history.push('/products');
@@ -574,8 +585,8 @@ export const createKitchen = (params) => async (dispatch) => {
         longitude: parseFloat(params.longitude),
         latitude: parseFloat(params.latitude),
       },
-      start_at: moment(params.startAt).format('HH:mm'),
-      end_at: moment(params.endAt).format('HH:mm'),
+      start_at: params.startAt,
+      end_at: params.endAt,
       payload: JSON.parse(params.payload),
     });
     dispatch(createKitchenSuccess());
@@ -631,8 +642,8 @@ export const editKitchen = (params) => async (dispatch) => {
         longitude: parseFloat(params.longitude),
         latitude: parseFloat(params.latitude),
       },
-      start_at: moment(params.start_at).format('HH:mm'),
-      end_at: moment(params.end_at).format('HH:mm'),
+      start_at: params.start_at,
+      end_at: params.end_at,
       payload: JSON.parse(params.payload),
       is_disabled: params.is_disabled,
     });
