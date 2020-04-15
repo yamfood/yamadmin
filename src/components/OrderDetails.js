@@ -12,7 +12,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 
 const actionsCreator = {
-    getOrderDetails: actions.getOrderDetails
+    getOrderDetails: actions.getOrderDetails,
+    openViewSocket: actions.openViewSocket,
 };
 
 
@@ -103,8 +104,13 @@ const OrderDetailsView = (props) => {
 
 
 const OrderDetails = (props) => {
-    const {order = null, getOrderDetails, match} = props;
-    var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
+    const {
+        order = null,
+        getOrderDetails,
+        openViewSocket,
+        match
+    } = props;
+    const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
     useEffect(() => {
         const orderID = match.params.id;
@@ -113,6 +119,8 @@ const OrderDetails = (props) => {
             getOrderDetails(orderID);
             return
         }
+
+        openViewSocket(orderID);
 
         mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g';
         var map = new mapboxgl.Map({

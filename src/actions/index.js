@@ -723,3 +723,21 @@ export const deleteDisabledProduct = (kitchenId, productId) => async (dispatch) 
     message.error('Ошибка при удалении', 3);
   }
 };
+
+
+export const openViewSocket = (orderID) => async () => {
+  try {
+    const url = api.viewOrderSocket().replace('https://', 'ws://');
+    const socket = new WebSocket(url);
+    socket.onopen = () => {
+      const data = JSON.stringify({
+        token: localStorage.getItem('token'),
+        order: orderID,
+      });
+      socket.send(data)
+    };
+  } catch (error) {
+    console.error(error);
+    message.error('Ошибка при подключении к сокету', 3);
+  }
+};
