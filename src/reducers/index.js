@@ -306,11 +306,54 @@ const products = handleActions({
       deleteStatus: 'success',
     };
   },
+
+  /**
+   * Upload Image Request States
+   */
+  [actions.getSignedURLRequest](state) {
+    return {
+      ...state,
+      getSignedURLStatus: 'request',
+    };
+  },
+  [actions.getSignedURLSuccess](state) {
+    return {
+      ...state,
+      getSignedURLStatus: 'success',
+    };
+  },
+  [actions.getSignedURLFailure](state) {
+    return {
+      ...state,
+      getSignedURLStatus: 'failure',
+    };
+  },
+
+  [actions.uploadFileRequest](state) {
+    return {
+      ...state,
+      uploadStatus: 'request',
+    };
+  },
+  [actions.uploadFileSuccess](state) {
+    return {
+      ...state,
+      uploadStatus: 'success',
+    };
+  },
+  [actions.uploadFileFailure](state) {
+    return {
+      ...state,
+      uploadStatus: 'failure',
+    };
+  },
 }, {
   list: [],
   status: null,
   categories: [],
   productDetails: [],
+  getSignedURLStatus: null,
+  uploadStatus: null,
 });
 
 

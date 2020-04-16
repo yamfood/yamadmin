@@ -8,6 +8,9 @@ import {
   Select,
   Button,
 } from 'antd';
+
+import FileUploader from './shared/FileUploader'
+
 import * as actions from '../actions';
 
 const { Content } = Layout;
@@ -16,6 +19,9 @@ const ProductCreate = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const products = useSelector((state) => state.products);
+  const [getSignedURLStatus, uploadStatus] = useSelector(
+    (state) => [state.products.getSignedURLStatus, state.products.uploadStatus],
+  );
 
   const { form, match } = props;
 
@@ -38,6 +44,10 @@ const ProductCreate = (props) => {
     });
   };
 
+  const onUpload = async (folder, file) => dispatch(actions.getSignedURL(folder, file));
+
+  const isUploadLoading = [getSignedURLStatus, uploadStatus, products.productDetailsStatus].includes('request');
+
   return (
     <Layout>
       <Content
@@ -55,11 +65,13 @@ const ProductCreate = (props) => {
               initialValue: productDetails.photo ? productDetails.photo : null,
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
-              <Input disabled={products.productDetailsStatus === 'request'} />,
+              <FileUploader
+                onUpload={onUpload}
+                folder="products"
+                accept=".png,.jpg"
+                loading={isUploadLoading}
+              />,
             )}
-          </Form.Item>
-          <Form.Item>
-            <img alt={productDetails.name} style={{ width: 100 }} src={productDetails.photo} />
           </Form.Item>
           <hr />
           <Form.Item label="Уменьшенное изображение">
@@ -68,15 +80,13 @@ const ProductCreate = (props) => {
                 ? productDetails.thumbnail : null,
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
-              <Input disabled={products.productDetailsStatus === 'request'} />,
+              <FileUploader
+                onUpload={onUpload}
+                folder="products"
+                accept=".png,.jpg"
+                loading={isUploadLoading}
+              />,
             )}
-          </Form.Item>
-          <Form.Item>
-            <img
-              alt={productDetails.thumbnail}
-              style={{ width: 100 }}
-              src={productDetails.thumbnail}
-            />
           </Form.Item>
           <hr />
           <Form.Item label="Название">

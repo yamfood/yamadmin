@@ -8,6 +8,9 @@ import {
   Select,
   Button,
 } from 'antd';
+
+import FileUploader from './shared/FileUploader';
+
 import * as actions from '../actions';
 
 const { Content } = Layout;
@@ -16,6 +19,9 @@ const ProductCreate = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const products = useSelector((state) => state.products);
+  const [getSignedURLStatus, uploadStatus] = useSelector(
+    (state) => [state.products.getSignedURLStatus, state.products.uploadStatus],
+  );
 
   const { form } = props;
 
@@ -34,6 +40,8 @@ const ProductCreate = (props) => {
     });
   };
 
+  const onUpload = async (folder, file) => dispatch(actions.getSignedURL(folder, file));
+
   return (
     <Layout>
       <Content
@@ -50,14 +58,24 @@ const ProductCreate = (props) => {
             {getFieldDecorator('photo', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
-              <Input />,
+              <FileUploader
+                onUpload={onUpload}
+                folder="products"
+                accept=".png,.jpg"
+                loading={getSignedURLStatus === 'request' || uploadStatus === 'request'}
+              />,
             )}
           </Form.Item>
           <Form.Item label="Уменьшенное изображение">
             {getFieldDecorator('thumbnail', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
-              <Input />,
+              <FileUploader
+                onUpload={onUpload}
+                folder="products"
+                accept=".png,.jpg"
+                loading={getSignedURLStatus === 'request' || uploadStatus === 'request'}
+              />,
             )}
           </Form.Item>
           <Form.Item label="Название">
