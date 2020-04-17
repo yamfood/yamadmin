@@ -14,7 +14,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const openViewSocket = async (orderID) => {
     try {
-        const url = api.viewOrderSocket().replace('https://', 'ws://');
+        const url = api.viewOrderSocket().replace('http', 'ws');
         const socket = new WebSocket(url);
         socket.onopen = () => {
             const data = JSON.stringify({
