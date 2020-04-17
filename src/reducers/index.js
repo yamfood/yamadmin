@@ -788,6 +788,60 @@ const announcements = handleActions({
       count: data.count,
     };
   },
+  [actions.getSignedURLRequest](state) {
+    return {
+      ...state,
+      signedRequestStatus: 'request',
+    };
+  },
+  [actions.getSignedURLFailure](state) {
+    return {
+      ...state,
+      signedRequestStatus: 'failure',
+    };
+  },
+  [actions.getSignedURLSuccess](state) {
+    return {
+      ...state,
+      signedRequestStatus: 'success',
+    };
+  },
+  [actions.uploadFileRequest](state) {
+    return {
+      ...state,
+      uploadFileStatus: 'request',
+    };
+  },
+  [actions.uploadFileFailure](state) {
+    return {
+      ...state,
+      uploadFileStatus: 'failure',
+    };
+  },
+  [actions.uploadFileSuccess](state) {
+    return {
+      ...state,
+      uploadFileStatus: 'success',
+    };
+  },
+  [actions.createProductRequest](state) {
+    return {
+      ...state,
+      createStatus: 'request',
+    }
+  },
+  [actions.createProductFailure](state) {
+    return {
+      ...state,
+      createStatus: 'failure',
+    }
+  },
+  [actions.createProductSuccess](state) {
+    return {
+      ...state,
+      createStatus: 'success',
+    }
+  },
 }, {
   page: 1,
   advertisements: [],

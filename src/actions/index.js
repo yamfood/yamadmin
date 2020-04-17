@@ -5,7 +5,6 @@ import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
 
-
 export const loginRequest = createAction('LOGIN_REQUEST');
 export const loginFailure = createAction('LOGIN_FAILURE');
 export const loginSuccess = createAction('LOGIN_SUCCESS');
@@ -794,5 +793,28 @@ export const getSignedURL = (folder, file) => async (dispatch) => {
     }
     message.error('Ошибка во время подготовки запроса на загрузку', 3);
     return error;
+  }
+};
+
+export const createAnnouncementRequest = createAction('CREATE_ANNOUNCEMENT_REQUEST');
+export const createAnnouncementFailure = createAction('CREATE_ANNOUNCEMENT_FAILURE');
+export const createAnnouncementSuccess = createAction('CREATE_ANNOUNCEMENT_SUCCESS');
+
+
+export const createAnnouncement = (params) => async (dispatch) => {
+  dispatch(createAnnouncementRequest());
+  try {
+    await httpClient.post(api.announcements(), params);
+    dispatch(createAnnouncementSuccess());
+    message.success('Объявление успешно создано', 3);
+    history.push('/announcements/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(createAnnouncementFailure());
+    message.error('Ошибка при создании объявления', 3);
   }
 };
