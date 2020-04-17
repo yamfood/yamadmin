@@ -804,12 +804,9 @@ export const createAnnouncementSuccess = createAction('CREATE_ANNOUNCEMENT_SUCCE
 export const createAnnouncement = (params) => async (dispatch) => {
   dispatch(createAnnouncementRequest());
   try {
-    await httpClient.post(api.announcements(), {
-      ...params,
-      send_at: params.send_at,
-    });
+    await httpClient.post(api.announcements(), params);
     dispatch(createAnnouncementSuccess());
-    message.success('Объявление успешно создана', 3);
+    message.success('Объявления успешно создано', 3);
     history.push('/announcements/');
   } catch (error) {
     console.error(error);
@@ -818,6 +815,6 @@ export const createAnnouncement = (params) => async (dispatch) => {
       dispatch(loginFailure());
     }
     dispatch(createAnnouncementFailure());
-    message.error('Ошибка при создании объявлении', 3);
+    message.error('Ошибка при создании объявления', 3);
   }
 };
