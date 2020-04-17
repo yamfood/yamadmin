@@ -806,7 +806,7 @@ export const createAnnouncement = (params) => async (dispatch) => {
   try {
     await httpClient.post(api.announcements(), params);
     dispatch(createAnnouncementSuccess());
-    message.success('Объявления успешно создано', 3);
+    message.success('Объявление успешно создано', 3);
     history.push('/announcements/');
   } catch (error) {
     console.error(error);
