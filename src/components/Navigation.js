@@ -37,6 +37,11 @@ const Navigation = () => (
         <span>Курьеры</span>
         <Link to="/riders/" />
       </Menu.Item>
+      <Menu.Item key="6">
+        <Icon type="sound" />
+        <span>Объявления</span>
+        <Link to="/announcements/" />
+      </Menu.Item>
       <SubMenu
         key="sub1"
         title={(
@@ -46,24 +51,19 @@ const Navigation = () => (
           </span>
         )}
       >
-        <Menu.Item key="6">
+        <Menu.Item key="7">
           Активные
           <Link to="/orders/active/" />
         </Menu.Item>
-        <Menu.Item key="7">
+        <Menu.Item key="8">
           Завершенные
           <Link to="/orders/finished/" />
         </Menu.Item>
       </SubMenu>
-      <Menu.Item key="8">
+      <Menu.Item key="9">
         <Icon type="user" />
         <span>Администраторы</span>
         <Link to="/admins/" />
-      </Menu.Item>
-      <Menu.Item key="9">
-        <Icon type="sound" />
-        <span>Объявления</span>
-        <Link to="/announcements/" />
       </Menu.Item>
     </Menu>
   </Sider>
