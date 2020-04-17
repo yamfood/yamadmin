@@ -4,6 +4,7 @@ import {Layout, Descriptions, Tag, Table} from 'antd';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import * as actions from '../actions'
+import api from "../apiRoutes";
 
 
 const mapStateToProps = (state, ownProps) => ({
@@ -11,9 +12,25 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 
+const openViewSocket = async (orderID) => {
+    try {
+        const url = api.viewOrderSocket().replace('https://', 'ws://');
+        const socket = new WebSocket(url);
+        socket.onopen = () => {
+            const data = JSON.stringify({
+                token: localStorage.getItem('token'),
+                order: orderID,
+            });
+            socket.send(data)
+        };
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+
 const actionsCreator = {
-    getOrderDetails: actions.getOrderDetails,
-    openViewSocket: actions.openViewSocket,
+    getOrderDetails: actions.getOrderDetails
 };
 
 
@@ -107,7 +124,6 @@ const OrderDetails = (props) => {
     const {
         order = null,
         getOrderDetails,
-        openViewSocket,
         match
     } = props;
     const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');

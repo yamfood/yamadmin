@@ -725,24 +725,6 @@ export const deleteDisabledProduct = (kitchenId, productId) => async (dispatch) 
   }
 };
 
-
-export const openViewSocket = (orderID) => async () => {
-  try {
-    const url = api.viewOrderSocket().replace('https://', 'ws://');
-    const socket = new WebSocket(url);
-    socket.onopen = () => {
-      const data = JSON.stringify({
-        token: localStorage.getItem('token'),
-        order: orderID,
-      });
-      socket.send(data)
-    };
-  } catch (error) {
-    console.error(error);
-    message.error('Ошибка при подключении к сокету', 3);
-  }
-};
-
 export const uploadFileRequest = createAction('UPLOAD_FILE_REQUEST');
 export const uploadFileFailure = createAction('UPLOAD_FILE_FAILURE');
 export const uploadFileSuccess = createAction('UPLOAD_FILE_SUCCESS');
