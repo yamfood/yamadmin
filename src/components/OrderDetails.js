@@ -4,11 +4,29 @@ import {Layout, Descriptions, Tag, Table} from 'antd';
 import {withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import * as actions from '../actions'
+import api from "../apiRoutes";
 
 
 const mapStateToProps = (state, ownProps) => ({
     order: (state.orderDetails[ownProps.match.params.id] || null)
 });
+
+
+const openViewSocket = async (orderID) => {
+    try {
+        const url = api.viewOrderSocket().replace('https://', 'ws://');
+        const socket = new WebSocket(url);
+        socket.onopen = () => {
+            const data = JSON.stringify({
+                token: localStorage.getItem('token'),
+                order: orderID,
+            });
+            socket.send(data)
+        };
+    } catch (error) {
+        console.error(error);
+    }
+};
 
 
 const actionsCreator = {
@@ -103,8 +121,12 @@ const OrderDetailsView = (props) => {
 
 
 const OrderDetails = (props) => {
-    const {order = null, getOrderDetails, match} = props;
-    var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
+    const {
+        order = null,
+        getOrderDetails,
+        match
+    } = props;
+    const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
     useEffect(() => {
         const orderID = match.params.id;
@@ -113,6 +135,8 @@ const OrderDetails = (props) => {
             getOrderDetails(orderID);
             return
         }
+
+        openViewSocket(orderID);
 
         mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g';
         var map = new mapboxgl.Map({
