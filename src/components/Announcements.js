@@ -1,0 +1,106 @@
+import React, { useEffect } from 'react';
+import {
+  Layout,
+  Table,
+  Button,
+  Icon,
+} from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
+import {
+  DeleteOutlined,
+  EditOutlined,
+} from '@ant-design/icons';
+import pagination from './pagination';
+import * as actions from '../actions';
+
+const { Content } = Layout;
+
+const Announcements = () => {
+  const dispatch = useDispatch();
+  const announcements = useSelector((state) => state.announcements);
+  const { advertisements } = announcements;
+
+  useEffect(() => {
+    dispatch(actions.getAnnouncements());
+  }, []);
+
+  const columns = [
+    { title: 'ID', dataIndex: 'id', key: 'id' },
+    {
+      title: 'Фото',
+      dataIndex: 'image_url',
+      key: 'image_url',
+      render: (image) => <img alt="" style={{ width: 100 }} src={image} />,
+    },
+    { title: 'Текст', dataIndex: 'text', key: 'text' },
+    { title: 'Статус', dataIndex: 'status', key: 'status' },
+    {
+      title: 'Отправить',
+      dataIndex: 'send_at',
+      key: 'send_at',
+      render: (time) => moment(time).format('YYYY-MM-DD HH:mm:ss'),
+    },
+    {
+      title: 'Изменить',
+      dataIndex: 'edit',
+      key: 'edit',
+      render: () => (
+        <span>
+          <Button
+            type="link"
+          >
+            <EditOutlined />
+          </Button>
+        </span>
+      ),
+    },
+    {
+      title: 'Удалить',
+      dataIndex: 'delete',
+      key: 'delete',
+      render: () => <Button type="link"><DeleteOutlined /></Button>,
+    },
+  ]
+
+  return (
+    <Layout>
+      <Content
+        style={{
+          margin: '24px 16px',
+          padding: 24,
+          background: '#fff',
+          minHeight: 'auto',
+        }}
+      >
+        <h1 style={{ fontSize: 30, textAlign: 'center' }}>Объявления</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Button
+            style={{ marginBottom: 20 }}
+            onClick={() => dispatch(actions.getAnnouncements({ page: 1 }))}
+          >
+            <Icon type="reload" />
+          </Button>
+          <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
+            <b>Кол-во:  </b>
+            {announcements.count}
+          </p>
+        </div>
+        <Table
+          columns={columns}
+          loading={announcements.listStatus === 'request'}
+          dataSource={advertisements.map((adv) => ({ ...adv, key: `${adv.id}` }))}
+          pagination={pagination(
+            announcements.count,
+            15,
+            actions.getAnnouncements,
+            announcements.page,
+            dispatch,
+          )}
+        />
+      </Content>
+    </Layout>
+  )
+};
+
+export default Announcements;

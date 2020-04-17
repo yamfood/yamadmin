@@ -98,7 +98,9 @@ const ProductCreate = (props) => {
             )}
           </Form.Item>
           <Form.Item label="Позиция: ">
-            {getFieldDecorator('position')(
+            {getFieldDecorator('position', {
+              initialValue: 0,
+            })(
               <Input type="number" />,
             )}
           </Form.Item>

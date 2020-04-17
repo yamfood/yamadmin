@@ -765,6 +765,33 @@ const finishedOrders = handleActions({
   page: 1,
 });
 
+const announcements = handleActions({
+  [actions.getAnnouncementsRequest](state) {
+    return {
+      ...state,
+      listStatus: 'request',
+    };
+  },
+  [actions.getAnnouncementsFailure](state) {
+    return {
+      ...state,
+      listStatus: 'failure',
+    };
+  },
+  [actions.getAnnouncementsSuccess](state, { payload: { data } }) {
+    console.log(data);
+    return {
+      ...state,
+      listStatus: 'success',
+      advertisements: data.data,
+      page: data.page,
+      count: data.count,
+    };
+  },
+}, {
+  page: 1,
+  advertisements: [],
+});
 
 export default combineReducers({
   clients,
@@ -776,4 +803,5 @@ export default combineReducers({
   activeOrders,
   orderDetails,
   finishedOrders,
+  announcements,
 });
