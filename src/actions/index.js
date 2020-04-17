@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import { createAction } from 'redux-actions';
+import axios from 'axios';
 import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
@@ -721,5 +722,48 @@ export const deleteDisabledProduct = (kitchenId, productId) => async (dispatch) 
     }
     dispatch(deleteDisabledProductFailure());
     message.error('Ошибка при удалении', 3);
+  }
+};
+
+export const uploadFileRequest = createAction('UPLOAD_FILE_REQUEST');
+export const uploadFileFailure = createAction('UPLOAD_FILE_FAILURE');
+export const uploadFileSuccess = createAction('UPLOAD_FILE_SUCCESS');
+
+export const uploadFile = (file, signedURL) => async (dispatch) => {
+  dispatch(uploadFileRequest());
+  try {
+    await axios.put(signedURL, file);
+    dispatch(uploadFileSuccess());
+  } catch (error) {
+    console.error(error);
+    dispatch(uploadFileFailure());
+    message.error('Ошибка при загрузке', 3);
+  }
+};
+
+export const getSignedURLRequest = createAction('GET_SIGNED_URL_REQUEST');
+export const getSignedURLSuccess = createAction('GET_SIGNED_URL_SUCCESS');
+export const getSignedURLFailure = createAction('GET_SIGNED_URL_FAILURE');
+
+export const getSignedURL = (folder, file) => async (dispatch) => {
+  dispatch(getSignedURLRequest());
+  try {
+    const response = await httpClient.get(api.getSignedURL(), {
+      params: {
+        folder,
+        'file-name': file.name,
+      },
+    });
+    dispatch(getSignedURLSuccess());
+    await dispatch(uploadFile(file, response.data.signedRequest));
+    return response.data.url;
+  } catch (error) {
+    dispatch(getSignedURLFailure());
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    message.error('Ошибка при загрузке', 3);
+    return error;
   }
 };
