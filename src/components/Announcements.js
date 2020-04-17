@@ -6,6 +6,7 @@ import {
   Icon,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import {
   DeleteOutlined,
@@ -18,6 +19,7 @@ const { Content } = Layout;
 
 const Announcements = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const announcements = useSelector((state) => state.announcements);
   const { advertisements } = announcements;
 
@@ -75,12 +77,23 @@ const Announcements = () => {
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Объявления</h1>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Button
-            style={{ marginBottom: 20 }}
-            onClick={() => dispatch(actions.getAnnouncements({ page: 1 }))}
-          >
-            <Icon type="reload" />
-          </Button>
+          <div style={{ display: 'flex' }}>
+            <Button
+              style={{ marginBottom: 20 }}
+              onClick={() => dispatch(actions.getAnnouncements({ page: 1 }))}
+            >
+              <Icon type="reload" />
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                history.push('/announcements/create/');
+              }}
+              style={{ marginLeft: 10 }}
+            >
+              Создать Объявления
+            </Button>
+          </div>
           <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
             <b>Кол-во:  </b>
             {announcements.count}
