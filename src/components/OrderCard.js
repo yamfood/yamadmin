@@ -137,6 +137,12 @@ const OrderCard = ({ order }) => {
       <p>
         <span style={{ marginBottom: 0 }} role="img" aria-label="">⏲</span>
         {dispalyTime(order.created_at)}
+        {order.viewer === null ? null : (
+          <p>
+            <span role="img" aria-label="">👁</span>
+            <strong>{order.viewer}</strong>
+          </p>
+        )}
       </p>
     </Card>
   )
