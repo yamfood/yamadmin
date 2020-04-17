@@ -5,7 +5,6 @@ import { Layout } from 'antd';
 import Navigation from './Navigation';
 import Products from './Products';
 import Home from './Home';
-import 'antd/dist/antd.css';
 import OrdersActive from './OrdersActive';
 import Clients from './Clients';
 import Login from './Login';
