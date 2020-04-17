@@ -23,6 +23,8 @@ import ProductCreate from './ProductCreate';
 import KitchenCreate from './KitchenCreate';
 import OrdersFinished from './OrdersFinished';
 import KitchenEdit from './KitchenEdit';
+import Announcements from './Announcements';
+import AnnouncementCreate from './AnnouncementCreate';
 
 
 const App = () => (
@@ -48,6 +50,8 @@ const App = () => (
         <PrivateRoute exact path="/riders/create/" component={RiderCreate} />
         <PrivateRoute exact path="/orders/finished/" component={OrdersFinished} />
         <PrivateRoute exact path="/orders/:id/" component={OrderDetails} />
+        <PrivateRoute exact path="/announcements/" component={Announcements} />
+        <PrivateRoute exact path="/announcements/create/" component={AnnouncementCreate} />
         <PrivateRoute path="/" component={Home} />
       </Switch>
     </Router>

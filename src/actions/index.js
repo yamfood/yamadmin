@@ -5,7 +5,6 @@ import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
 
-
 export const loginRequest = createAction('LOGIN_REQUEST');
 export const loginFailure = createAction('LOGIN_FAILURE');
 export const loginSuccess = createAction('LOGIN_SUCCESS');
@@ -725,6 +724,31 @@ export const deleteDisabledProduct = (kitchenId, productId) => async (dispatch) 
   }
 };
 
+
+export const getAnnouncementsRequest = createAction('GET_ANNOUNCEMENTS_REQUEST');
+export const getAnnouncementsFailure = createAction('GET_ANNOUNCEMENTS_FAILURE');
+export const getAnnouncementsSuccess = createAction('GET_ANNOUNCEMENTS_SUCCESS');
+
+export const getAnnouncements = (params) => async (dispatch) => {
+  dispatch(getAnnouncementsRequest());
+  try {
+    const response = await httpClient.get(api.announcements(), {
+      params: {
+        ...params,
+        per_page: 15,
+      },
+    });
+    dispatch(getAnnouncementsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getAnnouncementsFailure());
+  }
+};
+
 export const uploadFileRequest = createAction('UPLOAD_FILE_REQUEST');
 export const uploadFileFailure = createAction('UPLOAD_FILE_FAILURE');
 export const uploadFileSuccess = createAction('UPLOAD_FILE_SUCCESS');
@@ -736,8 +760,12 @@ export const uploadFile = (file, signedURL) => async (dispatch) => {
     dispatch(uploadFileSuccess());
   } catch (error) {
     console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
     dispatch(uploadFileFailure());
-    message.error('Ошибка при загрузке', 3);
+    message.error('Ошибка при загрузке файла', 3);
   }
 };
 
@@ -763,7 +791,30 @@ export const getSignedURL = (folder, file) => async (dispatch) => {
       localStorage.removeItem('token');
       dispatch(loginFailure());
     }
-    message.error('Ошибка при загрузке', 3);
+    message.error('Ошибка во время подготовки запроса на загрузку', 3);
     return error;
+  }
+};
+
+export const createAnnouncementRequest = createAction('CREATE_ANNOUNCEMENT_REQUEST');
+export const createAnnouncementFailure = createAction('CREATE_ANNOUNCEMENT_FAILURE');
+export const createAnnouncementSuccess = createAction('CREATE_ANNOUNCEMENT_SUCCESS');
+
+
+export const createAnnouncement = (params) => async (dispatch) => {
+  dispatch(createAnnouncementRequest());
+  try {
+    await httpClient.post(api.announcements(), params);
+    dispatch(createAnnouncementSuccess());
+    message.success('Объявление успешно создано', 3);
+    history.push('/announcements/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(createAnnouncementFailure());
+    message.error('Ошибка при создании объявления', 3);
   }
 };
