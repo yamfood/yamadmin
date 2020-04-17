@@ -723,3 +723,28 @@ export const deleteDisabledProduct = (kitchenId, productId) => async (dispatch) 
     message.error('Ошибка при удалении', 3);
   }
 };
+
+
+export const getAnnouncementsRequest = createAction('GET_ANNOUNCEMENTS_REQUEST');
+export const getAnnouncementsFailure = createAction('GET_ANNOUNCEMENTS_FAILURE');
+export const getAnnouncementsSuccess = createAction('GET_ANNOUNCEMENTS_SUCCESS');
+
+export const getAnnouncements = (params) => async (dispatch) => {
+  dispatch(getAnnouncementsRequest());
+  try {
+    const response = await httpClient.get(api.announcements(), {
+      params: {
+        ...params,
+        per_page: 15,
+      },
+    });
+    dispatch(getAnnouncementsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getAnnouncementsFailure());
+  }
+};
