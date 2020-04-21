@@ -37,14 +37,14 @@ const OrdersActive = () => {
           dispatch(actions.activeOrderTab(activeKey));
         }}
       >
-        <TabPane tab={`Новые (${orders.new.length})`} key="1">
-          <OrdersTable orders={orders.new} loading={orders.loading} />
+        <TabPane tab={`Новые (${orders.new.list.length})`} key="1">
+          <OrdersTable orders={orders.new.list} loading={orders.loading} />
         </TabPane>
-        <TabPane tab={`На кухне (${orders.onKitchen.length})`} key="2">
-          <OrdersTable orders={orders.onKitchen} loading={orders.loading} />
+        <TabPane tab={`На кухне (${orders.onKitchen.list.length})`} key="2">
+          <OrdersTable orders={orders.onKitchen.list} loading={orders.loading} />
         </TabPane>
-        <TabPane tab={`В пути (${orders.onWay.length})`} key="3">
-          <OrdersTable orders={orders.onWay} loading={orders.loading} />
+        <TabPane tab={`В пути (${orders.onWay.list.length})`} key="3">
+          <OrdersTable orders={orders.onWay.list} loading={orders.loading} />
         </TabPane>
       </Tabs>
     </Content>
