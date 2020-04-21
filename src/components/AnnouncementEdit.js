@@ -15,7 +15,7 @@ import { contentStyle } from '../assets/style';
 
 const { Content } = Layout;
 
-const AnnouncementsEditFrom = ({
+const AnnouncementsEditForm = ({
   form,
 }) => {
   const { getFieldDecorator } = form;
@@ -102,5 +102,5 @@ const AnnouncementsEditFrom = ({
   );
 };
 
-const WrappedForm = Form.create()(AnnouncementsEditFrom);
+const WrappedForm = Form.create()(AnnouncementsEditForm);
 export default WrappedForm;
