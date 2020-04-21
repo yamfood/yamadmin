@@ -12,6 +12,7 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from '@ant-design/icons';
+import { contentStyle } from '../assets/style';
 import pagination from './pagination';
 import * as actions from '../actions';
 
@@ -47,10 +48,11 @@ const Announcements = () => {
       title: 'Изменить',
       dataIndex: 'edit',
       key: 'edit',
-      render: () => (
+      render: (arg, announcement) => (
         <span>
           <Button
             type="link"
+            onClick={() => history.push(`/announcements/${announcement.id}/edit/`)}
           >
             <EditOutlined />
           </Button>
@@ -68,12 +70,7 @@ const Announcements = () => {
   return (
     <Layout>
       <Content
-        style={{
-          margin: '24px 16px',
-          padding: 24,
-          background: '#fff',
-          minHeight: 'auto',
-        }}
+        style={contentStyle}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Объявления</h1>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>

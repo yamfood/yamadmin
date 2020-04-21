@@ -2,6 +2,7 @@
 import React from "react";
 import {Layout} from "antd";
 import HeatMap from "./HeatMap";
+import { contentStyle } from '../assets/style';
 
 
 const Home = () => {
@@ -10,12 +11,7 @@ const Home = () => {
 
     return (
         <Layout.Content
-            style={{
-                margin: '24px 16px',
-                padding: 24,
-                background: '#fff',
-                minHeight: 'auto'
-            }}
+            style={contentStyle}
         >
             <h1>Главная</h1>
             <HeatMap data={data}/>

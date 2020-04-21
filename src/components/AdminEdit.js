@@ -8,6 +8,7 @@ import {
 } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 
 const { Content } = Layout;
@@ -48,12 +49,7 @@ const AdminEdit = (props) => {
   return (
     <Layout>
       <Content
-        style={{
-          margin: '24px 16px',
-          padding: 24,
-          background: '#fff',
-          minHeight: 'auto',
-        }}
+        style={contentStyle}
       >
         <Form onSubmit={handleSubmit}>
           <Form.Item label="Login">

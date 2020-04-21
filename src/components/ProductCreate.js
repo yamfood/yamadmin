@@ -10,7 +10,7 @@ import {
 } from 'antd';
 
 import FileUploader from './shared/FileUploader';
-
+import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 
 const { Content } = Layout;
@@ -45,12 +45,7 @@ const ProductCreate = (props) => {
   return (
     <Layout>
       <Content
-        style={{
-          margin: '24px 16px',
-          padding: 24,
-          background: '#fff',
-          minHeight: 'auto',
-        }}
+        style={contentStyle}
       >
         <h1 style={{ textAlign: 'center', fontSize: 24 }}>Создание продукта</h1>
         <Form onSubmit={handleSubmit}>

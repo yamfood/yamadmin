@@ -13,6 +13,7 @@ import {
 
 import { useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
+import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 
 const { Content } = Layout;
@@ -100,12 +101,7 @@ const Products = () => {
   return (
     <Layout>
       <Content
-        style={{
-          margin: '24px 16px',
-          padding: 24,
-          background: '#fff',
-          minHeight: 'auto',
-        }}
+        style={contentStyle}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Продукты</h1>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
