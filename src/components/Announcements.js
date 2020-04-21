@@ -4,6 +4,7 @@ import {
   Table,
   Button,
   Icon,
+  Popconfirm,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -63,7 +64,20 @@ const Announcements = () => {
       title: 'Удалить',
       dataIndex: 'delete',
       key: 'delete',
-      render: () => <Button type="link"><DeleteOutlined /></Button>,
+      render: (arg, announcement) => (
+        <Popconfirm
+          title="Вы уверены в удалении?"
+          onConfirm={() => dispatch(actions.deleteAnnouncement(announcement.id))}
+          okText="Да"
+          cancelText="Нет"
+        >
+          <Button
+            type="link"
+          >
+            <DeleteOutlined />
+          </Button>
+        </Popconfirm>
+      ),
     },
   ]
 
@@ -98,7 +112,7 @@ const Announcements = () => {
         </div>
         <Table
           columns={columns}
-          loading={announcements.listStatus === 'request'}
+          loading={announcements.listStatus === 'request' || announcements.deleteStatus === 'request'}
           dataSource={advertisements.map((adv) => ({ ...adv, key: `${adv.id}` }))}
           pagination={pagination(
             announcements.count,

@@ -333,7 +333,7 @@ export const deleteAdmin = (id) => async (dispatch) => {
   dispatch(deleteAdminRequest());
   try {
     await httpClient.delete(api.deleteAdmin(id));
-    await dispatch(deleteAdminSuccess());
+    dispatch(deleteAdminSuccess());
     message.success('Админ успешно удален', 3);
     dispatch(getAdmins());
   } catch (error) {
@@ -861,5 +861,28 @@ export const editAnnouncement = (params, announcementsId) => async (dispatch) =>
     }
     dispatch(editAnnouncementFailure());
     message.error('Ошибка при изменении объявление', 3);
+  }
+};
+
+
+export const deleteAnnouncementRequest = createAction('DELETE_ANNOUNCEMENT_REQUEST');
+export const deleteAnnouncementFailure = createAction('DELETE_ANNOUNCEMENT_FAILURE');
+export const deleteAnnouncementSuccess = createAction('DELETE_ANNOUNCEMENT_SUCCESS');
+
+export const deleteAnnouncement = (announcementsId) => async (dispatch) => {
+  dispatch(deleteAnnouncementRequest());
+  try {
+    await httpClient.delete(api.announcementDetails(announcementsId));
+    dispatch(deleteAnnouncementSuccess());
+    message.success('Объявление успешно удалено', 3);
+    dispatch(getAnnouncements());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(deleteAnnouncementFailure());
+    message.error('Ошибка при удалении объявления', 3);
   }
 };
