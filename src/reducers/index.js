@@ -772,6 +772,124 @@ const finishedOrders = handleActions({
   page: 1,
 });
 
+const announcements = handleActions({
+  [actions.getAnnouncementsRequest](state) {
+    return {
+      ...state,
+      listStatus: 'request',
+    };
+  },
+  [actions.getAnnouncementsFailure](state) {
+    return {
+      ...state,
+      listStatus: 'failure',
+    };
+  },
+  [actions.getAnnouncementsSuccess](state, { payload: { data } }) {
+    console.log(data);
+    return {
+      ...state,
+      listStatus: 'success',
+      advertisements: data.data,
+      page: data.page,
+      count: data.count,
+    };
+  },
+  [actions.getSignedURLRequest](state) {
+    return {
+      ...state,
+      signedRequestStatus: 'request',
+    };
+  },
+  [actions.getSignedURLFailure](state) {
+    return {
+      ...state,
+      signedRequestStatus: 'failure',
+    };
+  },
+  [actions.getSignedURLSuccess](state) {
+    return {
+      ...state,
+      signedRequestStatus: 'success',
+    };
+  },
+  [actions.uploadFileRequest](state) {
+    return {
+      ...state,
+      uploadFileStatus: 'request',
+    };
+  },
+  [actions.uploadFileFailure](state) {
+    return {
+      ...state,
+      uploadFileStatus: 'failure',
+    };
+  },
+  [actions.uploadFileSuccess](state) {
+    return {
+      ...state,
+      uploadFileStatus: 'success',
+    };
+  },
+  [actions.createAnnouncementRequest](state) {
+    return {
+      ...state,
+      createStatus: 'request',
+    }
+  },
+  [actions.createAnnouncementFailure](state) {
+    return {
+      ...state,
+      createStatus: 'failure',
+    }
+  },
+  [actions.createAnnouncementSuccess](state) {
+    return {
+      ...state,
+      createStatus: 'success',
+    }
+  },
+  [actions.editAnnouncementRequest](state) {
+    return {
+      ...state,
+      editStatus: 'request',
+    }
+  },
+  [actions.editAnnouncementFailure](state) {
+    return {
+      ...state,
+      editStatus: 'failure',
+    }
+  },
+  [actions.editAnnouncementSuccess](state) {
+    return {
+      ...state,
+      editStatus: 'success',
+    }
+  },
+  [actions.getAnnouncementDetailsRequest](state) {
+    return {
+      ...state,
+      detailStatus: 'request',
+    }
+  },
+  [actions.getAnnouncementDetailsFailure](state) {
+    return {
+      ...state,
+      detailStatus: 'failure',
+    }
+  },
+  [actions.getAnnouncementDetailsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      createStatus: 'success',
+      details: data,
+    }
+  },
+}, {
+  page: 1,
+  advertisements: [],
+});
 
 export default combineReducers({
   clients,
@@ -783,4 +901,5 @@ export default combineReducers({
   activeOrders,
   orderDetails,
   finishedOrders,
+  announcements,
 });

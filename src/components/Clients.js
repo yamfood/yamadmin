@@ -11,6 +11,7 @@ import * as actions from '../actions';
 import PhoneSearchForm from './PhoneSearchForm';
 import pagination from './pagination';
 import ClientDetails from './DisplayDetails';
+import { contentStyle } from '../assets/style';
 
 const { Content } = Layout;
 
@@ -69,12 +70,7 @@ const Clients = () => {
   return (
     <Layout>
       <Content
-        style={{
-          margin: '24px 16px',
-          padding: 24,
-          background: '#fff',
-          minHeight: 'auto',
-        }}
+        style={contentStyle}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Клиенты</h1>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>

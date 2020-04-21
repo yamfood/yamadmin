@@ -23,6 +23,8 @@ export default {
   riderDetails: (id) => [host, `riders/${id}/`].join('/'),
   riderDeposit: (id) => [host, `riders/${id}/deposit/`].join('/'),
   getFinishedOrder: () => [host, 'orders/finished/'].join('/'),
+  announcements: () => [host, 'announcements/'].join('/'),
+  announcementDetails: (id) => [host, `announcements/${id}/`].join('/'),
   viewOrderSocket: () => [host, 'ws/order/'].join('/'),
   getSignedURL: () => [host, 'sign-s3'].join('/'),
 };

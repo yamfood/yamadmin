@@ -7,6 +7,7 @@ import {
 } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 
 const { Content } = Layout;
@@ -32,12 +33,7 @@ const CreateRider = (props) => {
   return (
     <Layout>
       <Content
-        style={{
-          margin: '24px 16px',
-          padding: 24,
-          background: '#fff',
-          minHeight: 'auto',
-        }}
+        style={contentStyle}
       >
         <h1 style={{ textAlign: 'center', fontSize: 30 }}>Создания Курьера</h1>
         <Form onSubmit={handleSubmit}>
