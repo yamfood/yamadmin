@@ -54,6 +54,13 @@ const OrderDetailsView = (props) => {
             key: 'price',
             render: (price) => price.toLocaleString('ru'),
         }
+        ,
+        {
+            title: 'Итого',
+            dataIndex: 'total',
+            key: 'total',
+            render: (price) => price.toLocaleString('ru'),
+        }
     ];
 
     const statusTag = (order) => {
@@ -114,6 +121,9 @@ const OrderDetailsView = (props) => {
                    columns={columns}
                    size={"small"}
                    pagination={false}
+                   footer={() => <div style={{textAlign: "right", paddingRight: 10}}>
+                       Итого: {order.total_sum.toLocaleString('ru')} сум
+                   </div>}
                    bordered/>
         </div>
     )
