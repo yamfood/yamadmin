@@ -879,6 +879,24 @@ const announcements = handleActions({
       details: data,
     }
   },
+  [actions.deleteAnnouncementRequest](state) {
+    return {
+      ...state,
+      deleteStatus: 'request',
+    }
+  },
+  [actions.deleteAnnouncementFailure](state) {
+    return {
+      ...state,
+      deleteStatus: 'failure',
+    }
+  },
+  [actions.deleteAnnouncementSuccess](state) {
+    return {
+      ...state,
+      deleteStatus: 'success',
+    }
+  },
 }, {
   page: 1,
   advertisements: [],
