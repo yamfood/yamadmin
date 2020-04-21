@@ -706,11 +706,18 @@ const activeOrders = handleActions({
 }, {
   status: null,
   loading: null,
-  new: [],
-  onKitchen: [],
-  ready: [],
-  onWay: [],
-  late: [],
+  new: {
+    list: [],
+  },
+  onKitchen: {
+    list: [],
+  },
+  ready: {
+    list: [],
+  },
+  onWay: {
+    list: [],
+  },
   activeTabKey: 1,
 });
 
