@@ -42,7 +42,7 @@ const AnnouncementsEditForm = ({
   return (
     <Layout>
       <Content style={contentStyle}>
-        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Изменить Объявления</h1>
+        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Изменить объявление</h1>
         <Form onSubmit={handleSubmit}>
           <Form.Item label="Текст">
             {getFieldDecorator('text', {
