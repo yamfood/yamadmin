@@ -25,6 +25,7 @@ import OrdersFinished from './OrdersFinished';
 import KitchenEdit from './KitchenEdit';
 import Announcements from './Announcements';
 import AnnouncementCreate from './AnnouncementCreate';
+import AnnouncementEdit from './AnnouncementEdit';
 
 
 const App = () => (
@@ -52,6 +53,7 @@ const App = () => (
         <PrivateRoute exact path="/orders/:id/" component={OrderDetails} />
         <PrivateRoute exact path="/announcements/" component={Announcements} />
         <PrivateRoute exact path="/announcements/create/" component={AnnouncementCreate} />
+        <PrivateRoute exact path="/announcements/:id/edit/" component={AnnouncementEdit} />
         <PrivateRoute path="/" component={Home} />
       </Switch>
     </Router>

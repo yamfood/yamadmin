@@ -818,3 +818,48 @@ export const createAnnouncement = (params) => async (dispatch) => {
     message.error('Ошибка при создании объявления', 3);
   }
 };
+
+
+export const getAnnouncementDetailsRequest = createAction('GET_ANNOUNCEMENT_DETAILS_REQUEST');
+export const getAnnouncementDetailsFailure = createAction('GET_ANNOUNCEMENT_DETAILS_FAILURE');
+export const getAnnouncementDetailsSuccess = createAction('GET_ANNOUNCEMENT_DETAILS_SUCCESS');
+
+
+export const getAnnouncementDetails = (id) => async (dispatch) => {
+  dispatch(getAnnouncementDetailsRequest());
+  try {
+    const response = await httpClient.get(api.announcementDetails(id));
+    dispatch(getAnnouncementDetailsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getAnnouncementDetailsFailure());
+  }
+};
+
+
+export const editAnnouncementRequest = createAction('EDIT_ANNOUNCEMENT_REQUEST');
+export const editAnnouncementFailure = createAction('EDIT_ANNOUNCEMENT_FAILURE');
+export const editAnnouncementSuccess = createAction('EDIT_ANNOUNCEMENT_SUCCESS');
+
+
+export const editAnnouncement = (params, announcementsId) => async (dispatch) => {
+  dispatch(editAnnouncementRequest());
+  try {
+    await httpClient.patch(api.announcementDetails(announcementsId), params);
+    dispatch(editAnnouncementSuccess());
+    message.success('Объявление успешно изменено', 3);
+    history.push('/announcements/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(editAnnouncementFailure());
+    message.error('Ошибка при изменении объявление', 3);
+  }
+};

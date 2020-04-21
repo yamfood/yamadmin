@@ -824,22 +824,59 @@ const announcements = handleActions({
       uploadFileStatus: 'success',
     };
   },
-  [actions.createProductRequest](state) {
+  [actions.createAnnouncementRequest](state) {
     return {
       ...state,
       createStatus: 'request',
     }
   },
-  [actions.createProductFailure](state) {
+  [actions.createAnnouncementFailure](state) {
     return {
       ...state,
       createStatus: 'failure',
     }
   },
-  [actions.createProductSuccess](state) {
+  [actions.createAnnouncementSuccess](state) {
     return {
       ...state,
       createStatus: 'success',
+    }
+  },
+  [actions.editAnnouncementRequest](state) {
+    return {
+      ...state,
+      editStatus: 'request',
+    }
+  },
+  [actions.editAnnouncementFailure](state) {
+    return {
+      ...state,
+      editStatus: 'failure',
+    }
+  },
+  [actions.editAnnouncementSuccess](state) {
+    return {
+      ...state,
+      editStatus: 'success',
+    }
+  },
+  [actions.getAnnouncementDetailsRequest](state) {
+    return {
+      ...state,
+      detailStatus: 'request',
+    }
+  },
+  [actions.getAnnouncementDetailsFailure](state) {
+    return {
+      ...state,
+      detailStatus: 'failure',
+    }
+  },
+  [actions.getAnnouncementDetailsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      createStatus: 'success',
+      details: data,
     }
   },
 }, {
