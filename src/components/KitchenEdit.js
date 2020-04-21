@@ -5,6 +5,7 @@ import {
 } from 'antd';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 import DisabledProducts from './KitchenDisabledProducts';
 import KitchenEditForm from './KitchenEditForm';
@@ -26,12 +27,7 @@ const KitchenEdit = ({ history }) => {
   return (
     <Layout>
       <Content
-        style={{
-          margin: '24px 16px',
-          padding: 24,
-          background: '#fff',
-          minHeight: 'auto',
-        }}
+        style={contentStyle}
       >
         <h1 style={{ textAlign: 'center', fontSize: 24 }}>Изменения Кухни</h1>
         <Tabs type="card" defaultActiveKey="1" animated>

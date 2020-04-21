@@ -12,6 +12,7 @@ import {
 
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
+import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 
 const { Content } = Layout;
@@ -71,12 +72,7 @@ const KitchensList = () => {
   return (
     <Layout>
       <Content
-        style={{
-          margin: '24px 16px',
-          padding: 24,
-          background: '#fff',
-          minHeight: 'auto',
-        }}
+        style={contentStyle}
       >
         <h1 style={{ fontSize: 30, textAlign: 'center' }}>Кухни</h1>
         <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getKitchens())}><Icon type="reload" /></Button>
