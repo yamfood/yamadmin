@@ -48,11 +48,11 @@ const Announcements = () => {
       title: 'Изменить',
       dataIndex: 'edit',
       key: 'edit',
-      render: (arg, advertisement) => (
+      render: (arg, announcement) => (
         <span>
           <Button
             type="link"
-            onClick={() => history.push(`/announcements/${advertisement.id}/edit/`)}
+            onClick={() => history.push(`/announcements/${announcement.id}/edit/`)}
           >
             <EditOutlined />
           </Button>
