@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Table,
@@ -14,6 +14,11 @@ import * as actions from '../actions';
 const DisabledProducts = ({ id }) => {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.kitchens);
+
+  useEffect(() => {
+    dispatch(actions.setMenuActive(2));
+  }, [])
+
   const {
     disabledProducts,
     productsDeleteStatus,

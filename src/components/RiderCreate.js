@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Form,
   Button,
@@ -16,6 +16,10 @@ const CreateRider = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const createStatus = useSelector((state) => state.riders.createRiderStatus);
+
+  useEffect(() => {
+    dispatch(actions.setMenuActive(5));
+  }, [])
 
   const { form } = props;
   const { getFieldDecorator } = form;

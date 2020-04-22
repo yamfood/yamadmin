@@ -22,6 +22,7 @@ const KitchenEditForm = ({ form, id, history }) => {
 
   useEffect(() => {
     dispatch(actions.getKitchenDetails(id));
+    dispatch(actions.setMenuActive(2));
   }, []);
 
   const handleSubmit = (e) => {
