@@ -9,6 +9,8 @@ import {
 import * as actions from '../actions';
 import OrdersFinishedForm from './OrdersFinishedForm';
 import pagination from './pagination';
+import setTitle from './shared/setTitle';
+import { contentStyle } from '../assets/style';
 
 const { Content } = Layout;
 
@@ -77,51 +79,50 @@ const OrdersFinished = () => {
 
   useEffect(() => {
     dispatch(actions.getFinishedOrders());
+    dispatch(actions.setMenuActive(8));
   }, []);
 
   const loading = orders.status === 'request';
 
   return (
-    <Layout>
-      <Content
-        style={{
-          margin: '24px 16px',
-          padding: 24,
-          background: '#fff',
-          minHeight: 'auto',
-        }}
-      >
-        <h1 style={{ fontSize: 30, textAlign: 'center' }}>Завершенные Заказы</h1>
-        <div style={{ display: 'flex', marginBottom: 10, flexWrap: 'wrap' }}>
-          <Button
-            onClick={() => dispatch(actions.getFinishedOrders())}
-          >
-            <Icon type="reload" />
-          </Button>
-          <OrdersFinishedForm />
-        </div>
-        <Table
-          bordered
-          size="small"
-          columns={columns}
-          loading={loading}
-          dataSource={orders.list.map((order) => ({
-            ...order,
-            key: order.id,
-            longitude: order.location.longitude,
-            latitude: order.location.latitude,
-          }))}
-          scroll={{ x: 1600 }}
-          pagination={pagination(
-            orders.total,
-            15,
-            actions.getFinishedOrders,
-            orders.page,
-            dispatch,
-          )}
-        />
-      </Content>
-    </Layout>
+    <>
+      {setTitle('Заказы: Завершенные')}
+      <Layout>
+        <Content
+          style={contentStyle}
+        >
+          <h1 style={{ fontSize: 30, textAlign: 'center' }}>Завершенные Заказы</h1>
+          <div style={{ display: 'flex', marginBottom: 10, flexWrap: 'wrap' }}>
+            <Button
+              onClick={() => dispatch(actions.getFinishedOrders())}
+            >
+              <Icon type="reload" />
+            </Button>
+            <OrdersFinishedForm />
+          </div>
+          <Table
+            bordered
+            size="small"
+            columns={columns}
+            loading={loading}
+            dataSource={orders.list.map((order) => ({
+              ...order,
+              key: order.id,
+              longitude: order.location.longitude,
+              latitude: order.location.latitude,
+            }))}
+            scroll={{ x: 1600 }}
+            pagination={pagination(
+              orders.total,
+              15,
+              actions.getFinishedOrders,
+              orders.page,
+              dispatch,
+            )}
+          />
+        </Content>
+      </Layout>
+    </>
   );
 };
 

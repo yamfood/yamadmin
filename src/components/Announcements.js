@@ -13,6 +13,7 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from '@ant-design/icons';
+import setTitle from './shared/setTitle';
 import { contentStyle } from '../assets/style';
 import pagination from './pagination';
 import * as actions from '../actions';
@@ -27,6 +28,7 @@ const Announcements = () => {
 
   useEffect(() => {
     dispatch(actions.getAnnouncements());
+    dispatch(actions.setMenuActive(6));
   }, []);
 
   const columns = [
@@ -82,48 +84,51 @@ const Announcements = () => {
   ]
 
   return (
-    <Layout>
-      <Content
-        style={contentStyle}
-      >
-        <h1 style={{ fontSize: 30, textAlign: 'center' }}>Объявления</h1>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex' }}>
-            <Button
-              style={{ marginBottom: 20 }}
-              onClick={() => dispatch(actions.getAnnouncements({ page: 1 }))}
-            >
-              <Icon type="reload" />
-            </Button>
-            <Button
-              type="primary"
-              onClick={() => {
-                history.push('/announcements/create/');
-              }}
-              style={{ marginLeft: 10 }}
-            >
-              Создать Объявления
-            </Button>
+    <>
+      {setTitle('Объявления')}
+      <Layout>
+        <Content
+          style={contentStyle}
+        >
+          <h1 style={{ fontSize: 30, textAlign: 'center' }}>Объявления</h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex' }}>
+              <Button
+                style={{ marginBottom: 20 }}
+                onClick={() => dispatch(actions.getAnnouncements({ page: 1 }))}
+              >
+                <Icon type="reload" />
+              </Button>
+              <Button
+                type="primary"
+                onClick={() => {
+                  history.push('/announcements/create/');
+                }}
+                style={{ marginLeft: 10 }}
+              >
+                Создать Объявления
+              </Button>
+            </div>
+            <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
+              <b>Кол-во:  </b>
+              {announcements.count}
+            </p>
           </div>
-          <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
-            <b>Кол-во:  </b>
-            {announcements.count}
-          </p>
-        </div>
-        <Table
-          columns={columns}
-          loading={announcements.listStatus === 'request' || announcements.deleteStatus === 'request'}
-          dataSource={advertisements.map((adv) => ({ ...adv, key: `${adv.id}` }))}
-          pagination={pagination(
-            announcements.count,
-            15,
-            actions.getAnnouncements,
-            announcements.page,
-            dispatch,
-          )}
-        />
-      </Content>
-    </Layout>
+          <Table
+            columns={columns}
+            loading={announcements.listStatus === 'request' || announcements.deleteStatus === 'request'}
+            dataSource={advertisements.map((adv) => ({ ...adv, key: `${adv.id}` }))}
+            pagination={pagination(
+              announcements.count,
+              15,
+              actions.getAnnouncements,
+              announcements.page,
+              dispatch,
+            )}
+          />
+        </Content>
+      </Layout>
+    </>
   )
 };
 

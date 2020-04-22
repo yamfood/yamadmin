@@ -23,6 +23,7 @@ const AdminCreate = (props) => {
 
   useEffect(() => {
     dispatch(actions.getAdminPermissions());
+    dispatch(actions.setMenuActive(9));
   }, []);
 
   const { getFieldDecorator } = form;
@@ -47,6 +48,13 @@ const AdminCreate = (props) => {
         style={contentStyle}
       >
         <Form onSubmit={handleSubmit}>
+          <Form.Item label="Имя" disabled={admin.permissionStatus}>
+            {getFieldDecorator('name', {
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+            })(
+              <Input />,
+            )}
+          </Form.Item>
           <Form.Item label="Login" disabled={admin.permissionStatus}>
             {getFieldDecorator('login', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
@@ -65,7 +73,7 @@ const AdminCreate = (props) => {
             {getFieldDecorator('payload')(
               <Checkbox.Group>
                 {admin.permissions.map((permission) => (
-                  <Checkbox value={permission}>{permission}</Checkbox>
+                  <Checkbox key={permission} value={permission}>{permission}</Checkbox>
                 ))}
               </Checkbox.Group>,
             )}

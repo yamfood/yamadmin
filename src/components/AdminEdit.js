@@ -26,6 +26,7 @@ const AdminEdit = (props) => {
 
   useEffect(() => {
     dispatch(actions.getAdminPermissions());
+    dispatch(actions.setMenuActive(9));
   }, []);
 
   const { getFieldDecorator } = form;
@@ -52,6 +53,14 @@ const AdminEdit = (props) => {
         style={contentStyle}
       >
         <Form onSubmit={handleSubmit}>
+          <Form.Item label="Имя">
+            {getFieldDecorator('name', {
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+              initialValue: editingAdminDetails ? editingAdminDetails.name : null,
+            })(
+              <Input />,
+            )}
+          </Form.Item>
           <Form.Item label="Login">
             {getFieldDecorator('login', {
               rules: [{ required: true, message: 'Это обязательное поле' }],

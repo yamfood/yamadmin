@@ -20,6 +20,7 @@ const DisabledProductList = ({ id }) => {
 
   useEffect(() => {
     dispatch(actions.getKitchenProducts(id));
+    dispatch(actions.setMenuActive(2));
   }, []);
 
   const search = (e) => {

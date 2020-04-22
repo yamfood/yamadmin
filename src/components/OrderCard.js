@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   Icon,
@@ -15,6 +15,10 @@ const OrderCard = ({ order }) => {
   const activeOrders = useSelector((state) => state.activeOrders);
 
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    dispatch(actions.setMenuActive(7));
+  }, []);
 
   const handleAccept = async () => {
     await dispatch(actions.acceptOrder(order.id));

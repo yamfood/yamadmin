@@ -14,6 +14,7 @@ import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
+import setTitle from './shared/setTitle';
 
 const { Content } = Layout;
 
@@ -65,34 +66,38 @@ const KitchensList = () => {
 
   useEffect(() => {
     dispatch(actions.getKitchens());
+    dispatch(actions.setMenuActive(2));
   }, []);
 
   const loading = kitchens.status === 'request';
 
   return (
-    <Layout>
-      <Content
-        style={contentStyle}
-      >
-        <h1 style={{ fontSize: 30, textAlign: 'center' }}>Кухни</h1>
-        <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getKitchens())}><Icon type="reload" /></Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            history.push('/kitchens/create/');
-          }}
-          style={{ marginLeft: 10 }}
+    <>
+      {setTitle('Кухни')}
+      <Layout>
+        <Content
+          style={contentStyle}
         >
-          Создать Кухню
-        </Button>
-        <Table
-          size="small"
-          columns={columns}
-          loading={loading}
-          dataSource={kitchens.list.map((kitchen) => ({ ...kitchen, key: kitchen.id }))}
-        />
-      </Content>
-    </Layout>
+          <h1 style={{ fontSize: 30, textAlign: 'center' }}>Кухни</h1>
+          <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getKitchens())}><Icon type="reload" /></Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              history.push('/kitchens/create/');
+            }}
+            style={{ marginLeft: 10 }}
+          >
+            Создать Кухню
+          </Button>
+          <Table
+            size="small"
+            columns={columns}
+            loading={loading}
+            dataSource={kitchens.list.map((kitchen) => ({ ...kitchen, key: kitchen.id }))}
+          />
+        </Content>
+      </Layout>
+    </>
   )
 };
 

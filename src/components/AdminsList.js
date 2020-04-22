@@ -10,9 +10,9 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from '@ant-design/icons';
-
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
+import setTitle from './shared/setTitle';
 import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 
@@ -22,9 +22,9 @@ const AdminsList = () => {
   const dispatch = useDispatch();
   const admins = useSelector((state) => state.admins);
   const history = useHistory();
-
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
+    { title: 'Имя', dataIndex: 'name', key: 'name' },
     { title: 'Логин', dataIndex: 'login', key: 'login' },
     { title: 'Токен', dataIndex: 'token', key: 'token' },
     {
@@ -64,55 +64,59 @@ const AdminsList = () => {
 
   useEffect(() => {
     dispatch(actions.getAdmins());
+    dispatch(actions.setMenuActive(9));
   }, []);
 
   const loading = admins.status === 'request' || admins.deleteAdminStatus === 'request';
 
   return (
-    <Layout>
-      <Content
-        style={contentStyle}
-      >
-        <h1 style={{ fontSize: 30, textAlign: 'center' }}>Администраторы</h1>
-        <Button
-          style={{ marginBottom: 20 }}
-          onClick={() => dispatch(actions.getAdmins())}
+    <>
+      {setTitle('Администраторы')}
+      <Layout>
+        <Content
+          style={contentStyle}
         >
-          <Icon type="reload" />
-        </Button>
-        <Button
-          type="primary"
-          onClick={() => {
-            history.push('/admins/create/');
-          }}
-          style={{ marginLeft: 10 }}
-        >
-          Создать Админа
-        </Button>
-        <Table
-          size="small"
-          columns={columns}
-          loading={loading}
-          dataSource={admins.list.map((user) => ({
-            ...user,
-            key: `${user.id}`,
-          }))}
-          pagination={false}
-          expandedRowRender={(admin) => {
-            const { payload } = admin;
-            const { permissions } = payload;
-            return (
-              <div style={{ display: 'flex' }}>
-                <p><b>Роли:</b></p>
-                <ul>
-                  {permissions ? permissions.map((permission) => <li>{permission}</li>) : null}
-                </ul>
-              </div>
-            );
-          }}
-        />
-      </Content>
-    </Layout>
+          <h1 style={{ fontSize: 30, textAlign: 'center' }}>Администраторы</h1>
+          <Button
+            style={{ marginBottom: 20 }}
+            onClick={() => dispatch(actions.getAdmins())}
+          >
+            <Icon type="reload" />
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => {
+              history.push('/admins/create/');
+            }}
+            style={{ marginLeft: 10 }}
+          >
+            Создать Админа
+          </Button>
+          <Table
+            size="small"
+            columns={columns}
+            loading={loading}
+            dataSource={admins.list.map((user) => ({
+              ...user,
+              key: `${user.id}`,
+            }))}
+            pagination={false}
+            expandedRowRender={(admin) => {
+              const { payload } = admin;
+              const { permissions } = payload;
+              return (
+                <div style={{ display: 'flex' }}>
+                  <p><b>Роли:</b></p>
+                  <ul>
+                    {permissions ? permissions.map((permission) => <li>{permission}</li>) : null}
+                  </ul>
+                </div>
+              );
+            }}
+          />
+        </Content>
+      </Layout>
+    </>
   )
 };
 

@@ -13,6 +13,7 @@ import {
 
 import { useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
+import setTitle from './shared/setTitle';
 import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 
@@ -22,7 +23,6 @@ const Products = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const products = useSelector((state) => state.products);
-
   const columns = [
     {
       title: 'Фото',
@@ -94,40 +94,44 @@ const Products = () => {
 
   useEffect(() => {
     dispatch(actions.getProducts());
+    dispatch(actions.setMenuActive(3));
   }, []);
 
   const loading = products.status === 'request';
 
   return (
-    <Layout>
-      <Content
-        style={contentStyle}
-      >
-        <h1 style={{ fontSize: 30, textAlign: 'center' }}>Продукты</h1>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <div>
-            <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getProducts())}><Icon type="reload" /></Button>
-            <Button
-              type="primary"
-              style={{ marginLeft: 10 }}
-              onClick={() => history.push('/products/create/')}
-            >
-              Создать продукт
-            </Button>
+    <>
+      {setTitle('Продукты')}
+      <Layout>
+        <Content
+          style={contentStyle}
+        >
+          <h1 style={{ fontSize: 30, textAlign: 'center' }}>Продукты</h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div>
+              <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getProducts())}><Icon type="reload" /></Button>
+              <Button
+                type="primary"
+                style={{ marginLeft: 10 }}
+                onClick={() => history.push('/products/create/')}
+              >
+                Создать продукт
+              </Button>
+            </div>
+            <p style={{ marginTop: 3 }}>
+              <b>Кол-во: </b>
+              {products.list.length}
+            </p>
           </div>
-          <p style={{ marginTop: 3 }}>
-            <b>Кол-во: </b>
-            {products.list.length}
-          </p>
-        </div>
-        <Table
-          size="small"
-          columns={columns}
-          loading={loading}
-          dataSource={products.list.map((product) => ({ ...product, key: `${product.id}` }))}
-        />
-      </Content>
-    </Layout>
+          <Table
+            size="small"
+            columns={columns}
+            loading={loading}
+            dataSource={products.list.map((product) => ({ ...product, key: `${product.id}` }))}
+          />
+        </Content>
+      </Layout>
+    </>
   )
 };
 
