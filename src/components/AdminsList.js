@@ -12,7 +12,7 @@ import {
 } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import setTitle from './shared/setTitle';
+import Title from './shared/Title';
 import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 
@@ -71,7 +71,7 @@ const AdminsList = () => {
 
   return (
     <>
-      {setTitle('Администраторы')}
+      <Title headTitle="Администраторы" />
       <Layout>
         <Content
           style={contentStyle}

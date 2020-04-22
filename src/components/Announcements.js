@@ -13,7 +13,7 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from '@ant-design/icons';
-import setTitle from './shared/setTitle';
+import Title from './shared/Title';
 import { contentStyle } from '../assets/style';
 import pagination from './pagination';
 import * as actions from '../actions';
@@ -85,7 +85,7 @@ const Announcements = () => {
 
   return (
     <>
-      {setTitle('Объявления')}
+      <Title headTitle="Объявления" />
       <Layout>
         <Content
           style={contentStyle}

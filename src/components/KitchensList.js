@@ -14,7 +14,7 @@ import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
-import setTitle from './shared/setTitle';
+import Title from './shared/Title';
 
 const { Content } = Layout;
 
@@ -73,7 +73,7 @@ const KitchensList = () => {
 
   return (
     <>
-      {setTitle('Кухни')}
+      <Title headTitle="Кухни" />
       <Layout>
         <Content
           style={contentStyle}

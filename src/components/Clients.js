@@ -7,7 +7,7 @@ import {
   Icon,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import setTitle from './shared/setTitle';
+import Title from './shared/Title';
 import * as actions from '../actions';
 import PhoneSearchForm from './PhoneSearchForm';
 import pagination from './pagination';
@@ -54,7 +54,7 @@ const Clients = () => {
 
   return (
     <>
-      {setTitle('Клиенты')}
+      <Title headTitle="Клиенты" />
       <Layout>
         <Content
           style={contentStyle}

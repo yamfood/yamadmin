@@ -5,7 +5,7 @@ import {
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import OrdersTable from './OrdersTable';
-import setTitle from './shared/setTitle';
+import Title from './shared/Title';
 import * as actions from '../actions';
 import { contentStyle } from '../assets/style';
 
@@ -24,7 +24,7 @@ const OrdersActive = () => {
 
   return (
     <>
-      {setTitle('Заказы: Активные')}
+      <Title headTitle="Заказы: Активные" />
       <Content
         style={contentStyle}
       >

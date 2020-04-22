@@ -18,7 +18,7 @@ import pagination from './pagination';
 import PhoneSearchForm from './PhoneSearchForm';
 import RiderDetails from './DisplayDetails';
 import DepositForm from './RiderDeposit';
-import setTitle from './shared/setTitle';
+import Title from './shared/Title';
 
 const { Content } = Layout;
 
@@ -82,7 +82,7 @@ const RidersList = () => {
 
   return (
     <>
-      {setTitle('Курьеры')}
+      <Title headTitle="Курьеры" />
       <Layout>
         <Content
           style={contentStyle}

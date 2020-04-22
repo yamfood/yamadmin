@@ -9,7 +9,7 @@ import {
 import * as actions from '../actions';
 import OrdersFinishedForm from './OrdersFinishedForm';
 import pagination from './pagination';
-import setTitle from './shared/setTitle';
+import Title from './shared/Title';
 import { contentStyle } from '../assets/style';
 
 const { Content } = Layout;
@@ -86,7 +86,7 @@ const OrdersFinished = () => {
 
   return (
     <>
-      {setTitle('Заказы: Завершенные')}
+      <Title headTitle="Заказы: Завершенные" />
       <Layout>
         <Content
           style={contentStyle}

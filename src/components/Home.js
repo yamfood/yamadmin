@@ -5,7 +5,7 @@ import HeatMap from "./HeatMap";
 import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 import { useDispatch } from 'react-redux';
-import setTitle from './shared/setTitle';
+import Title from './shared/Title';
 
 
 const Home = () => {
@@ -17,7 +17,7 @@ const Home = () => {
 
   return (
     <>
-      {setTitle('Главная')}
+      <Title headTitle="Главная" />
         <Layout.Content
             style={contentStyle}
         >

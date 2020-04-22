@@ -4,7 +4,7 @@ import { Layout, Descriptions, Tag, Table } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions'
-import setTitle from './shared/setTitle';
+import Title from './shared/Title';
 import api from "../apiRoutes";
 
 
@@ -69,7 +69,7 @@ const OrderDetailsView = (props) => {
 
   return (
     <div>
-      {setTitle('Заказы: Завершенные')}
+      <Title headTitle="Заказы: Завершенные" />
       <Descriptions title={"Заказ #" + order.id}
         size={"small"}
         column={4}

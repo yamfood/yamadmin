@@ -5,7 +5,7 @@ import {
   Button,
   Input,
 } from 'antd';
-import setTitle from './shared/setTitle';
+import Title from './shared/Title';
 import { getFinishedOrders, setMenuActive } from '../actions';
 
 const OrdersFinishedForm = (props) => {
@@ -29,7 +29,7 @@ const OrdersFinishedForm = (props) => {
 
   return (
     <>
-      {setTitle('Заказы: Завершенные')}
+      <Title headTitle="Заказы: Завершенные" />
       <Form style={{ marginLeft: 15 }} layout="inline" onSubmit={handleSubmit}>
         <Form.Item label="ID Заказа">
           {getFieldDecorator('order_id')(
