@@ -85,9 +85,25 @@ const ProductCreate = (props) => {
             )}
           </Form.Item>
           <hr />
-          <Form.Item label="Название">
-            {getFieldDecorator('name', {
-              initialValue: productDetails.name ? productDetails.name : null,
+          <Form.Item label="Название [RU]">
+            {getFieldDecorator('name_ru', {
+              initialValue: productDetails.name ? productDetails.name.ru : null,
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+            })(
+              <Input disabled={products.productDetailsStatus === 'request'} />,
+            )}
+          </Form.Item>
+          <Form.Item label="Название [UZ]">
+            {getFieldDecorator('name_uz', {
+              initialValue: productDetails.name ? productDetails.name.uz : null,
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+            })(
+              <Input disabled={products.productDetailsStatus === 'request'} />,
+            )}
+          </Form.Item>
+          <Form.Item label="Название [EN]">
+            {getFieldDecorator('name_en', {
+              initialValue: productDetails.name ? productDetails.name.en : null,
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Input disabled={products.productDetailsStatus === 'request'} />,

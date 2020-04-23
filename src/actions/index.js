@@ -481,7 +481,13 @@ export const createProduct = (params) => async (dispatch) => {
   dispatch(createProductRequest());
   try {
     await httpClient.post(api.products(), {
-      ...params,
+      photo: params.photo,
+      thumbnail: params.thumbnail,
+      name: {
+        ru: params.name_ru,
+        uz: params.name_uz,
+        en: params.name_en,
+      },
       position: parseInt(params.position, 10),
       price: parseInt(params.price, 10),
       energy: params.energy ? parseInt(params.energy, 10) : undefined,
@@ -532,7 +538,13 @@ export const editProduct = (params, productId) => async (dispatch) => {
   dispatch(editProductRequest());
   try {
     await httpClient.patch(api.product(productId), {
-      ...params,
+      photo: params.photo,
+      thumbnail: params.thumbnail,
+      name: {
+        ru: params.name_ru,
+        uz: params.name_uz,
+        en: params.name_en,
+      },
       position: parseInt(params.position, 10),
       price: parseInt(params.price, 10),
       energy: params.energy ? parseInt(params.energy, 10) : undefined,
