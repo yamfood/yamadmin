@@ -28,17 +28,19 @@ const OrdersActive = () => {
       <Content
         style={contentStyle}
       >
-        <TabPane tab={`Новые (${orders.new.list.length})`} key="1">
-          <OrdersTable orders={orders.new.list} loading={orders.loading} />
-        </TabPane>
-        <TabPane tab={`На кухне (${orders.onKitchen.list.length})`} key="2">
-          <OrdersTable orders={orders.onKitchen.list} loading={orders.loading} />
-        </TabPane>
-        <TabPane tab={`В пути (${orders.onWay.list.length})`} key="3">
-          <OrdersTable orders={orders.onWay.list} loading={orders.loading} />
-        </TabPane>
-      </Tabs>
-    </Content>
+        <Tabs>
+          <TabPane tab={`Новые (${orders.new.list.length})`} key="1">
+            <OrdersTable orders={orders.new.list} loading={orders.loading} />
+          </TabPane>
+          <TabPane tab={`На кухне (${orders.onKitchen.list.length})`} key="2">
+            <OrdersTable orders={orders.onKitchen.list} loading={orders.loading} />
+          </TabPane>
+          <TabPane tab={`В пути (${orders.onWay.list.length})`} key="3">
+            <OrdersTable orders={orders.onWay.list} loading={orders.loading} />
+          </TabPane>
+        </Tabs>
+      </Content>
+    </>
   )
 };
 
