@@ -307,10 +307,10 @@ export const cancelOrderRequest = createAction('CANCEL_ORDER_REQUEST');
 export const cancelOrderFailure = createAction('CANCEL_ORDER_FAILURE');
 export const cancelOrderSuccess = createAction('CANCEL_ORDER_SUCCESS');
 
-export const cancelOrder = (orderId) => async (dispatch) => {
+export const cancelOrder = (orderId, body) => async (dispatch) => {
   dispatch(cancelOrderRequest());
   try {
-    await httpClient.post(api.cancelOrder(orderId));
+    await httpClient.post(api.cancelOrder(orderId), body);
     dispatch(cancelOrderSuccess());
     message.success('Заказ успешно отменен', 3);
     dispatch(getActiveOrders());
