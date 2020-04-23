@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
 import { useSelector } from 'react-redux';
 import { title } from '../utils'
+
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 
@@ -70,6 +71,6 @@ const Navigation = () => {
       </Menu>
     </Sider>
   )
-}
+};
 
 export default Navigation;
