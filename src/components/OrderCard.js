@@ -6,6 +6,7 @@ import {
   Button,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import * as actions from '../actions';
 
 const { Meta } = Card;
@@ -63,21 +64,7 @@ const OrderCard = ({ order }) => {
           </div>
         );
     }
-  }
-
-  const formattingTime = (time) => {
-    if (time < 10) {
-      return `0${time}`;
-    }
-    return time;
-  }
-
-  const dispalyTime = (date) => {
-    const time = new Date(date);
-    return `
-      ${time.toLocaleDateString()} ${formattingTime(time.getHours())}:${formattingTime(time.getMinutes())}:${formattingTime(time.getSeconds())}
-    `
-  }
+  };
 
   return (
     <Card
@@ -140,14 +127,24 @@ const OrderCard = ({ order }) => {
       )}
       <p>
         <span style={{ marginBottom: 0 }} role="img" aria-label="">⏲</span>
-        {dispalyTime(order.created_at)}
-        {order.viewer === null ? null : (
-          <p>
-            <span role="img" aria-label="">👁</span>
-            <strong>{order.viewer}</strong>
-          </p>
-        )}
+        {moment(order.created_at).format('DD.MM.YYYY HH:mm')}
       </p>
+      {order.latency === null ? null : (
+        <p>
+          <span role="img" aria-label="">🏃</span>
+          <span style={{ color: 'red' }}>
+            Опаздывает на
+            {` ${order.latency} `}
+            минут!!!
+          </span>
+        </p>
+      )}
+      {order.viewer === null ? null : (
+        <p>
+          <span role="img" aria-label="">👁</span>
+          <strong>{order.viewer}</strong>
+        </p>
+      )}
     </Card>
   )
 };
