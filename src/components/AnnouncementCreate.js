@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Form,
   Layout,
@@ -21,6 +21,10 @@ const AnnouncementsCreateFrom = ({
   const dispatch = useDispatch();
   const announcement = useSelector((state) => state.announcements);
   const history = useHistory();
+
+  useEffect(() => {
+    dispatch(actions.setMenuActive(6));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();

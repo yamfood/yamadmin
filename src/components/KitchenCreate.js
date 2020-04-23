@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Form,
   Button,
@@ -20,6 +20,10 @@ const KitchenCreate = (props) => {
   const kitchens = useSelector((state) => state.kitchens);
   const { form } = props;
   const { getFieldDecorator } = form;
+
+  useEffect(() => {
+    dispatch(actions.setMenuActive(2));
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();

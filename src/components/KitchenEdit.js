@@ -22,6 +22,7 @@ const KitchenEdit = ({ history }) => {
 
   useEffect(() => {
     dispatch(actions.getKitchenDetails(id));
+    dispatch(actions.setMenuActive(2));
   }, []);
 
   return (

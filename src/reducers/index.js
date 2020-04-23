@@ -909,6 +909,16 @@ const announcements = handleActions({
   advertisements: [],
 });
 
+const menu = handleActions({
+  [actions.setMenuActive](state, { payload }) {
+    return {
+      activeMenu: payload,
+    }
+  },
+}, {
+  activeMenu: 1,
+})
+
 export default combineReducers({
   clients,
   riders,
@@ -920,4 +930,5 @@ export default combineReducers({
   orderDetails,
   finishedOrders,
   announcements,
+  menu,
 });

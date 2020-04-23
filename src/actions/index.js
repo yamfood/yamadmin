@@ -886,3 +886,6 @@ export const deleteAnnouncement = (announcementsId) => async (dispatch) => {
     message.error('Ошибка при удалении объявления', 3);
   }
 };
+
+
+export const setMenuActive = createAction('SET_MENU_ACTIVE');
