@@ -901,3 +901,5 @@ export const deleteAnnouncement = (announcementsId) => async (dispatch) => {
 
 
 export const setMenuActive = createAction('SET_MENU_ACTIVE');
+export const setOrderStateChanged = createAction('ORDER_STATE_CHANGED_SET');
+export const setOrderStateUnchanged = createAction('ORDER_STATE_UNCHANGED_SET');

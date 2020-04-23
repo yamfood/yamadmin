@@ -1,10 +1,13 @@
 import React from 'react';
 import { Form } from 'antd';
-import * as actions from '../actions';
+import { useDispatch } from 'react-redux';
+
+import { setOrderStateChanged } from '../../actions';
 
 const formWrap = (Component) => {
   const FormWrapper = (props) => {
     const { form } = props;
+    const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -17,8 +20,14 @@ const formWrap = (Component) => {
     };
 
     return (
-      <Form onSubmit={handleSubmit}>
-        <Component props={props} />
+      <Form
+        onSubmit={handleSubmit}
+        style={{ width: '100%' }}
+        onChange={(e) => {
+          dispatch(setOrderStateChanged());
+        }}
+      >
+        <Component {...props} />
       </Form>
     )
   };
