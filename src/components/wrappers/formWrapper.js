@@ -2,7 +2,7 @@ import React from 'react';
 import { Form } from 'antd';
 import { useDispatch } from 'react-redux';
 
-import { setOrderStateChanged } from '../../actions';
+import { setOrderStateChanged, patchOrderDetails } from '../../actions';
 
 const formWrap = (Component) => {
   const FormWrapper = (props) => {
@@ -14,7 +14,16 @@ const formWrap = (Component) => {
 
       form.validateFields((err, values) => {
         if (!err) {
-          console.log(values);
+          const preparedValues = {
+            ...values,
+            delivery_cost: Number(values.delivery_cost),
+            products: values.products.map((product) => ({
+              ...product,
+              product_id: Number(product.product_id),
+              count: Number(product.count),
+            })),
+          };
+          dispatch(patchOrderDetails(values.orderId, preparedValues));
         }
       });
     };

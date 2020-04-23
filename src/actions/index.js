@@ -154,6 +154,25 @@ export const getOrderDetails = (id) => async (dispatch) => {
   }
 };
 
+export const patchOrderDetailsRequest = createAction('PATCH_ORDER_DETAILS_REQUEST');
+export const patchOrderDetailsFailure = createAction('PATCH_ORDER_DETAILS_FAILURE');
+export const patchOrderDetailsSuccess = createAction('PATCH_ORDER_DETAILS_SUCCESS');
+
+export const patchOrderDetails = (id, body) => async (dispatch) => {
+  dispatch(patchOrderDetailsRequest());
+  try {
+    const response = await httpClient.patch(api.orderDetails(id), body);
+    console.log(response.data);
+    dispatch(patchOrderDetailsSuccess({ data: response.data }));
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(patchOrderDetailsFailure());
+  }
+};
 
 export const getActiveOrdersRequest = createAction('GET_ACTIVE_ORDERS_REQUEST');
 export const getActiveOrdersFailure = createAction('GET_ACTIVE_ORDERS_FAILURE');
