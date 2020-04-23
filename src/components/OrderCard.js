@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import * as actions from '../actions';
 
+import CancelOrderButton from './CancelOrderButton';
+
 const { Meta } = Card;
 
 const OrderCard = ({ order }) => {
@@ -25,9 +27,8 @@ const OrderCard = ({ order }) => {
     await dispatch(actions.acceptOrder(order.id));
     setVisible(false);
   }
-  const handleСancel = async () => {
-    await dispatch(actions.cancelOrder(order.id));
-    setVisible(false);
+  const handleCancel = async (values) => {
+    await dispatch(actions.cancelOrder(order.id, values));
   };
 
 
@@ -35,13 +36,12 @@ const OrderCard = ({ order }) => {
     switch (activeOrders.activeTabKey) {
       case 2:
         return (
-          <Button
-            type="danger"
-            onClick={handleСancel}
+          <CancelOrderButton
+            btnType="danger"
             loading={activeOrders.cancelStatus === 'request'}
-          >
-            Отменить
-          </Button>
+            setVisible={setVisible}
+            onSubmit={handleCancel}
+          />
         );
       default:
         return (
@@ -54,13 +54,12 @@ const OrderCard = ({ order }) => {
             >
               Принять
             </Button>
-            <Button
-              type="danger"
-              onClick={handleСancel}
+            <CancelOrderButton
+              btnType="danger"
               loading={activeOrders.cancelStatus === 'request'}
-            >
-              Отменить
-            </Button>
+              setVisible={setVisible}
+              onSubmit={handleCancel}
+            />
           </div>
         );
     }
