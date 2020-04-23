@@ -46,6 +46,11 @@ const OrderDetailsView = (props) => {
             key: 'name',
         },
         {
+            title: 'Комментарий',
+            dataIndex: 'comment',
+            key: 'comment',
+        },
+        {
             title: 'Количество',
             dataIndex: 'count',
             key: 'count',
