@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import * as actions from '../actions';
 
-import CancelOrder from './CancelOrder';
+import CancelOrderButton from './CancelOrderButton';
 
 const { Meta } = Card;
 
@@ -36,7 +36,7 @@ const OrderCard = ({ order }) => {
     switch (activeOrders.activeTabKey) {
       case 2:
         return (
-          <CancelOrder
+          <CancelOrderButton
             btnType="danger"
             loading={activeOrders.cancelStatus === 'request'}
             setVisible={setVisible}
@@ -54,7 +54,7 @@ const OrderCard = ({ order }) => {
             >
               Принять
             </Button>
-            <CancelOrder
+            <CancelOrderButton
               btnType="danger"
               loading={activeOrders.cancelStatus === 'request'}
               setVisible={setVisible}

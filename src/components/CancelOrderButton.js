@@ -36,7 +36,7 @@ const WrappedModalCancelOrderForm = Form.create({
   name: 'modalForm',
 })(ModalCancelOrderForm);
 
-const CancelOrder = ({
+const CancelOrderButton = ({
   btnType, loading, setVisible, onSubmit,
 }) => {
   const [isModalVisible, setModalVisibility] = useState(false);
@@ -77,4 +77,4 @@ const CancelOrder = ({
   )
 };
 
-export default CancelOrder;
+export default CancelOrderButton;
