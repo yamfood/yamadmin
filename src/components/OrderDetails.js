@@ -1,33 +1,37 @@
 /* eslint-disable */
 import React, { useEffect } from 'react';
-import { Layout, Descriptions, Tag, Table } from 'antd';
-import { withRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
+import {
+  Layout, Descriptions, Tag, Table, Form, Input, Button,
+} from 'antd';
+import { withRouter, useParams } from 'react-router-dom';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions'
 import Title from './shared/Title';
 import api from "../apiRoutes";
 import OrderDetailView from './OrderDetailView';
 
+import OrderDetailsView from './OrderDetailsView';
+import formWrap from './wrappers/formWrapper';
 
 const mapStateToProps = (state, ownProps) => ({
-  order: (state.orderDetails[ownProps.match.params.id] || null)
+  editedState: state.orderDetails.editedState,
 });
 
-
 const openViewSocket = async (orderID) => {
-    try {
-        const url = api.viewOrderSocket().replace('http', 'ws');
-        const socket = new WebSocket(url);
-        socket.onopen = () => {
-            const data = JSON.stringify({
-                token: localStorage.getItem('token'),
-                order: orderID,
-            });
-            socket.send(data)
-        };
-    } catch (error) {
-        console.error(error);
-    }
+  try {
+    const url = api.viewOrderSocket().replace('http', 'ws');
+    const socket = new WebSocket(url);
+    socket.onopen = () => {
+      const data = JSON.stringify({
+        token: localStorage.getItem('token'),
+        order: orderID,
+      });
+      socket.send(data)
+    };
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 
@@ -36,27 +40,27 @@ const actionsCreator = {
   setMenuActive: actions.setMenuActive
 };
 
-
-
 const OrderDetails = (props) => {
-  const {
-    order = null,
-    getOrderDetails,
-    match,
-    setMenuActive,
-  } = props;
-  const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
+  const { id } = useParams();
+  const order = useSelector((state) => (state.orderDetails[id] || null));
+  const editedState = useSelector((state) => state.orderDetails.editedState);
+
+<<<<<<< HEAD
+=======
+  const dispatch = useDispatch();
+>>>>>>> 899dd7b84e4bc086dd2732be66a1aa8ad5ff6a25
+
+  const { form } = props;
 
   useEffect(() => {
-    const orderID = match.params.id;
-    setMenuActive(8);
+    dispatch(actions.setMenuActive(8));
 
     if (order === null) {
-      getOrderDetails(orderID);
+      dispatch(actions.getOrderDetails(id));
       return
     }
 
-    openViewSocket(orderID);
+    openViewSocket(id);
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g';
     var map = new mapboxgl.Map({
@@ -81,14 +85,15 @@ const OrderDetails = (props) => {
       }}
     >
       {order !== null
+<<<<<<< HEAD
         ? <OrderDetailView order={order} />
+=======
+        ? <OrderDetailsView order={order} editedState={editedState} form={form} />
+>>>>>>> 899dd7b84e4bc086dd2732be66a1aa8ad5ff6a25
         : <h1>Loading...</h1>}
     </Layout.Content>
   )
 };
 
 
-export default withRouter(connect(
-  mapStateToProps,
-  actionsCreator
-)(OrderDetails));
+export default withRouter(formWrap(OrderDetails));

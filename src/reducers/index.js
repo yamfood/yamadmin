@@ -741,8 +741,16 @@ const orderDetails = handleActions({
       [data.id]: data,
     }
   },
+
+  [actions.setOrderStateChanged](state) {
+    return { ...state, editedState: 'changed' };
+  },
+  [actions.setOrderStateUnchanged](state) {
+    return { ...state, editedState: 'unchanged' }
+  },
 }, {
   status: null,
+  editedState: 'unchanged',
 });
 
 const finishedOrders = handleActions({
@@ -917,7 +925,7 @@ const menu = handleActions({
   },
 }, {
   activeMenu: 1,
-})
+});
 
 export default combineReducers({
   clients,
