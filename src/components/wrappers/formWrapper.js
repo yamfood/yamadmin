@@ -2,7 +2,10 @@ import React from 'react';
 import { Form } from 'antd';
 import { useDispatch } from 'react-redux';
 
-import { setOrderStateChanged, patchOrderDetails } from '../../actions';
+import {
+  setOrderStateChanged,
+  patchOrderDetails,
+} from '../../actions';
 
 const formWrap = (Component) => {
   const FormWrapper = (props) => {
@@ -13,6 +16,7 @@ const formWrap = (Component) => {
       e.preventDefault();
 
       form.validateFields((err, values) => {
+        console.log('values: ', values);
         if (!err) {
           const preparedValues = {
             ...values,
@@ -31,7 +35,7 @@ const formWrap = (Component) => {
     return (
       <Form
         onSubmit={handleSubmit}
-        style={{ width: '100%' }}
+        style={{ width: '100%', minHeight: '100%' }}
         onChange={(e) => {
           dispatch(setOrderStateChanged());
         }}

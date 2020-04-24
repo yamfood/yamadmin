@@ -64,7 +64,12 @@ const CancelOrderButton = ({
 
   return (
     <>
-      <Button type={btnType} loading={loading} onClick={showModal}>
+      <Button
+        type={btnType}
+        loading={loading}
+        onClick={showModal}
+        style={{ marginRight: 15 }}
+      >
         Отменить
       </Button>
       <WrappedModalCancelOrderForm

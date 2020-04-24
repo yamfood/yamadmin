@@ -2,14 +2,16 @@
 import React, { useEffect } from 'react';
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 import {
-  Layout, Descriptions, Tag, Table, Form, Input, Button,
+  Layout,
 } from 'antd';
 import { withRouter, useParams } from 'react-router-dom';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions'
 import Title from './shared/Title';
 import api from "../apiRoutes";
-import OrderDetailView from './OrderDetailView';
+// import OrderDetailView from './OrderDetailView';
+
+const { Content } = Layout;
 
 import OrderDetailsView from './OrderDetailsView';
 import formWrap from './wrappers/formWrapper';
@@ -43,17 +45,15 @@ const actionsCreator = {
 const OrderDetails = (props) => {
   const { id } = useParams();
   const order = useSelector((state) => (state.orderDetails[id] || null));
+  const editStatus = useSelector((state) => state.orderDetails.editStatus)
   const editedState = useSelector((state) => state.orderDetails.editedState);
 
-<<<<<<< HEAD
-=======
   const dispatch = useDispatch();
->>>>>>> 899dd7b84e4bc086dd2732be66a1aa8ad5ff6a25
 
   const { form } = props;
 
   useEffect(() => {
-    dispatch(actions.setMenuActive(8));
+    dispatch(actions.setMenuActive(7));
 
     if (order === null) {
       dispatch(actions.getOrderDetails(id));
@@ -76,22 +76,21 @@ const OrderDetails = (props) => {
   });
 
   return (
-    <Layout.Content
-      style={{
-        margin: '24px 16px',
-        padding: 24,
-        background: '#fff',
-        minHeight: 'auto',
-      }}
-    >
-      {order !== null
-<<<<<<< HEAD
-        ? <OrderDetailView order={order} />
-=======
-        ? <OrderDetailsView order={order} editedState={editedState} form={form} />
->>>>>>> 899dd7b84e4bc086dd2732be66a1aa8ad5ff6a25
-        : <h1>Loading...</h1>}
-    </Layout.Content>
+    <Layout>
+      <Content
+        style={{
+          margin: '24px 16px',
+          padding: 24,
+          background: '#fff',
+          height: '95vh',
+          overflow: 'auto',
+        }}
+      >
+        {order !== null
+          ? <OrderDetailsView order={order} editStatus={editStatus} editedState={editedState} form={form} />
+          : <h1>Loading...</h1>}
+      </Content>
+    </Layout>
   )
 };
 

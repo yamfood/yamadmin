@@ -1,10 +1,27 @@
 import {
   Button, Descriptions, Input, Table, Tag,
 } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import * as actions from '../actions';
+import CancelOrderButton from './CancelOrderButton';
 
 const OrderDetailsView = (props) => {
-  const { order, form, editedState } = props;
+  const dispatch = useDispatch();
+  const activeOrders = useSelector((state) => state.activeOrders);
+  const {
+    order,
+    form,
+    editedState,
+    editStatus,
+  } = props;
+
+  const [visible, setVisible] = useState(false);
+
+  const handleCancel = (values) => {
+    dispatch(actions.cancelOrder(order.id, values, 'New'));
+  };
+
 
   const columns = [
     {
@@ -17,19 +34,27 @@ const OrderDetailsView = (props) => {
       dataIndex: 'comment',
       key: 'comment',
       render: (value, product, index) => {
-        return (
-          <>
-            {form.getFieldDecorator(`products[${index}].comment`, { initialValue: value })(<Input />)}
-            {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: product.id })(<Input type="hidden" />)}
-          </>
-        )
+        if (order.status === 'new') {
+          return (
+            <>
+              {form.getFieldDecorator(`products[${index}].comment`, { initialValue: value })(<Input />)}
+              {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: product.id })(<Input type="hidden" />)}
+            </>
+          )
+        }
+        return value;
       },
     },
     {
       title: 'Количество',
       dataIndex: 'count',
       key: 'count',
-      render: (value, product, index) => form.getFieldDecorator(`products[${index}].count`, { initialValue: value })(<Input type="number" />),
+      render: (value, product, index) => {
+        if (order.status === 'new') {
+          return form.getFieldDecorator(`products[${index}].count`, { initialValue: value })(<Input type="number" />)
+        }
+        return value;
+      },
     },
     {
       title: 'Цена',
@@ -62,6 +87,33 @@ const OrderDetailsView = (props) => {
     }
   };
 
+
+  const displayButtons = () => {
+    if (order.status === 'new') {
+      if (editedState === 'changed') {
+        return (
+          <Button
+            htmlType="submit"
+            type="primary"
+            loading={editStatus === 'request'}
+          >
+            Сохранить
+          </Button>
+        )
+      }
+      return (
+        <Button
+          type="primary"
+          onClick={() => dispatch(actions.acceptOrder(order.id, 'New'))}
+          loading={activeOrders.acceptStatus === 'request'}
+        >
+          Принять
+        </Button>
+      )
+    }
+    return null;
+  }
+
   return (
     <div>
       {form.getFieldDecorator('orderId', { initialValue: order.id })(<Input type="hidden" />)}
@@ -76,13 +128,14 @@ const OrderDetailsView = (props) => {
           <div id="map" style={{ width: '100%', height: 250 }} />
         </Descriptions.Item>
         <Descriptions.Item label="Адрес" span={2}>
-          {
-            form.getFieldDecorator(('address'), {
-              initialValue: order.address,
-            })(
-              <Input.TextArea style={{ width: '100%', height: 250 }} />,
-            )
-          }
+          {order.status === 'new'
+            ? (
+              form.getFieldDecorator(('address'), {
+                initialValue: order.address,
+              })(
+                <Input.TextArea style={{ width: '100%', height: 250 }} />,
+              )
+            ) : order.address}
         </Descriptions.Item>
         <Descriptions.Item label="Комментарий" span={2}>
           {order.comment ? order.comment : 'Пусто...'}
@@ -109,20 +162,26 @@ const OrderDetailsView = (props) => {
         <Descriptions.Item label="Создан в">{order.created_at}</Descriptions.Item>
         <Descriptions.Item label="Заметки" span={2}>
           {
-            form.getFieldDecorator(('notes'), {
-              initialValue: order.notes,
-            })(
-              <Input.TextArea style={{ width: '100%', height: 50 }} />
-            )
+            order.status === 'new'
+              ? (
+                form.getFieldDecorator(('notes'), {
+                  initialValue: order.notes,
+                })(
+                  <Input.TextArea style={{ width: '100%', height: 50 }} />,
+                )
+              ) : order.notes
           }
         </Descriptions.Item>
         <Descriptions.Item label="Доставка">
           {
-            form.getFieldDecorator(('delivery_cost'), {
-              initialValue: order.delivery_cost,
-            })(
-              <Input style={{ width: '100%' }} type="number" />,
-            )
+            order.status === 'new'
+              ? (
+                form.getFieldDecorator(('delivery_cost'), {
+                  initialValue: order.delivery_cost,
+                })(
+                  <Input style={{ width: '100%' }} type="number" />,
+                )
+              ) : order.delivery_cost
           }
         </Descriptions.Item>
       </Descriptions>
@@ -130,7 +189,10 @@ const OrderDetailsView = (props) => {
       <br />
       <h3><strong>Продукты</strong></h3>
       <Table
-        dataSource={order.products}
+        dataSource={order.products.map((item) => ({
+          ...item,
+          key: item.id,
+        }))}
         columns={columns}
         size="small"
         pagination={false}
@@ -144,12 +206,15 @@ const OrderDetailsView = (props) => {
         bordered
       />
       <div className="order-details-buttons" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 30 }}>
-        <Button htmlType="submit" type="secondary" style={{ marginRight: 15 }}>Назад</Button>
-        {
-          editedState === 'changed'
-            ? <Button htmlType="submit" type="primary">Сохранить</Button>
-            : <Button htmlType="button" type="primary">Принять</Button>
-        }
+        <CancelOrderButton
+          btnType="danger"
+          loading={activeOrders.cancelStatus === 'request'}
+          setVisible={setVisible}
+          onSubmit={handleCancel}
+        >
+          Отменить
+        </CancelOrderButton>
+        {displayButtons()}
       </div>
     </div>
   )

@@ -741,12 +741,30 @@ const orderDetails = handleActions({
       [data.id]: data,
     }
   },
-
   [actions.setOrderStateChanged](state) {
     return { ...state, editedState: 'changed' };
   },
   [actions.setOrderStateUnchanged](state) {
     return { ...state, editedState: 'unchanged' }
+  },
+  [actions.patchOrderDetailsRequest](state) {
+    return {
+      ...state,
+      editStatus: 'request',
+    };
+  },
+  [actions.patchOrderDetailsFailure](state) {
+    return {
+      ...state,
+      editStatus: 'failure',
+    };
+  },
+  [actions.patchOrderDetailsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      editStatus: 'success',
+      [data.id]: data,
+    };
   },
 }, {
   status: null,
