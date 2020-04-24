@@ -488,6 +488,11 @@ export const createProduct = (params) => async (dispatch) => {
         uz: params.name_uz,
         en: params.name_en,
       },
+      description: {
+        ru: params.description_ru,
+        uz: params.description_uz,
+        en: params.description_en,
+      },
       position: parseInt(params.position, 10),
       price: parseInt(params.price, 10),
       energy: params.energy ? parseInt(params.energy, 10) : undefined,
@@ -544,6 +549,11 @@ export const editProduct = (params, productId) => async (dispatch) => {
         ru: params.name_ru,
         uz: params.name_uz,
         en: params.name_en,
+      },
+      description: {
+        ru: params.description_ru,
+        uz: params.description_uz,
+        en: params.description_en,
       },
       position: parseInt(params.position, 10),
       price: parseInt(params.price, 10),
