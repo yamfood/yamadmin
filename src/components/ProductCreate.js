@@ -81,6 +81,14 @@ const ProductCreate = (props) => {
               <Input />,
             )}
           </Form.Item>
+          <Form.Item label="Описание [RU]">
+            {getFieldDecorator('description_ru', {
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+            })(
+              <Input />,
+            )}
+          </Form.Item>
+          <hr />
           <Form.Item label="Название [UZ]">
             {getFieldDecorator('name_uz', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
@@ -88,6 +96,14 @@ const ProductCreate = (props) => {
               <Input />,
             )}
           </Form.Item>
+          <Form.Item label="Описание [uz]">
+            {getFieldDecorator('description_uz', {
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+            })(
+              <Input />,
+            )}
+          </Form.Item>
+          <hr />
           <Form.Item label="Название [EN]">
             {getFieldDecorator('name_en', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
@@ -95,6 +111,14 @@ const ProductCreate = (props) => {
               <Input />,
             )}
           </Form.Item>
+          <Form.Item label="Описание [EN]">
+            {getFieldDecorator('description_en', {
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+            })(
+              <Input />,
+            )}
+          </Form.Item>
+          <hr />
           <Form.Item label="Цена">
             {getFieldDecorator('price', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
