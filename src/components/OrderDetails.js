@@ -73,7 +73,7 @@ const OrderDetails = (props) => {
     new mapboxgl.Marker()
       .setLngLat([order.location.longitude, order.location.latitude])
       .addTo(map);
-  });
+  }, [order, id, dispatch]);
 
   return (
     <Layout>

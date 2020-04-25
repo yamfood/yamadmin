@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   setOrderStateChanged,
@@ -11,12 +11,12 @@ const formWrap = (Component) => {
   const FormWrapper = (props) => {
     const { form } = props;
     const dispatch = useDispatch();
+    const orderDetails = useSelector((state) => state.orderDetails);
 
     const handleSubmit = (e) => {
       e.preventDefault();
 
       form.validateFields((err, values) => {
-        console.log('values: ', values);
         if (!err) {
           const preparedValues = {
             ...values,
@@ -36,7 +36,10 @@ const formWrap = (Component) => {
       <Form
         onSubmit={handleSubmit}
         style={{ width: '100%', minHeight: '100%' }}
-        onChange={(e) => {
+        onChange={() => {
+          if (orderDetails.editedState === 'changed') {
+            return ;
+          }
           dispatch(setOrderStateChanged());
         }}
       >
