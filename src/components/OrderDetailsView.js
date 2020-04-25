@@ -16,10 +16,10 @@ const OrderDetailsView = (props) => {
     editStatus,
   } = props;
 
-  const [visible, setVisible] = useState(false);
+  // const [visible, setVisible] = useState(false);
 
   const handleCancel = (values) => {
-    dispatch(actions.cancelOrder(order.id, values, 'New'));
+    dispatch(actions.cancelOrder(order.id, values, '/orders/active/'));
   };
 
 
@@ -92,26 +92,54 @@ const OrderDetailsView = (props) => {
     if (order.status === 'new') {
       if (editedState === 'changed') {
         return (
-          <Button
-            htmlType="submit"
-            type="primary"
-            loading={editStatus === 'request'}
-          >
-            Сохранить
-          </Button>
+          <>
+            <Button
+              onClick={() => form.resetFields()}
+              style={{ marginRight: 15 }}
+            >
+              Сбросить
+            </Button>
+            <Button
+              htmlType="submit"
+              type="primary"
+              loading={editStatus === 'request'}
+            >
+              Сохранить
+            </Button>
+          </>
         )
       }
       return (
-        <Button
-          type="primary"
-          onClick={() => dispatch(actions.acceptOrder(order.id, 'New'))}
-          loading={activeOrders.acceptStatus === 'request'}
-        >
-          Принять
-        </Button>
+        <>
+          <CancelOrderButton
+            btnType="danger"
+            loading={activeOrders.cancelStatus === 'request'}
+            onSubmit={handleCancel}
+            disabled={activeOrders.acceptStatus === 'request'}
+          >
+            Отменить
+          </CancelOrderButton>
+          <Button
+            type="primary"
+            onClick={() => dispatch(actions.acceptOrder(order.id, '/orders/active/'))}
+            loading={activeOrders.acceptStatus === 'request'}
+            disabled={activeOrders.cancelStatus === 'request'}
+          >
+            Принять
+          </Button>
+        </>
       )
     }
-    return null;
+    return (
+      <CancelOrderButton
+        btnType="danger"
+        loading={activeOrders.cancelStatus === 'request'}
+        onSubmit={handleCancel}
+        disabled={activeOrders.acceptStatus === 'request'}
+      >
+        Отменить
+      </CancelOrderButton>
+    );
   }
 
   return (
@@ -206,14 +234,6 @@ const OrderDetailsView = (props) => {
         bordered
       />
       <div className="order-details-buttons" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 30 }}>
-        <CancelOrderButton
-          btnType="danger"
-          loading={activeOrders.cancelStatus === 'request'}
-          setVisible={setVisible}
-          onSubmit={handleCancel}
-        >
-          Отменить
-        </CancelOrderButton>
         {displayButtons()}
       </div>
     </div>

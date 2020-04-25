@@ -9,7 +9,6 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions'
 import Title from './shared/Title';
 import api from "../apiRoutes";
-// import OrderDetailView from './OrderDetailView';
 
 const { Content } = Layout;
 

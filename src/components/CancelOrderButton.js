@@ -37,12 +37,18 @@ const WrappedModalCancelOrderForm = Form.create({
 })(ModalCancelOrderForm);
 
 const CancelOrderButton = ({
-  btnType, loading, setVisible, onSubmit,
+  btnType,
+  loading,
+  setVisible,
+  onSubmit,
+  disabled,
 }) => {
   const [isModalVisible, setModalVisibility] = useState(false);
 
   const showModal = () => {
-    setVisible(false);
+    if (setVisible) {
+      setVisible(false);
+    }
     setModalVisibility(true);
   };
 
@@ -69,6 +75,7 @@ const CancelOrderButton = ({
         loading={loading}
         onClick={showModal}
         style={{ marginRight: 15 }}
+        disabled={disabled}
       >
         Отменить
       </Button>

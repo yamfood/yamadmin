@@ -24,11 +24,11 @@ const OrderCard = ({ order }) => {
   }, []);
 
   const handleAccept = async () => {
-    await dispatch(actions.acceptOrder(order.id));
+    await dispatch(actions.acceptOrder(order.id, '/orders/active/'));
     setVisible(false);
   }
   const handleCancel = async (values) => {
-    await dispatch(actions.cancelOrder(order.id, values));
+    await dispatch(actions.cancelOrder(order.id, values, '/orders/active/'));
   };
 
 
@@ -41,6 +41,7 @@ const OrderCard = ({ order }) => {
             loading={activeOrders.cancelStatus === 'request'}
             setVisible={setVisible}
             onSubmit={handleCancel}
+            disabled={activeOrders.acceptStatus === 'request'}
           />
         );
       default:
