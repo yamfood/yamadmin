@@ -16,8 +16,6 @@ const OrderDetailsView = (props) => {
     editStatus,
   } = props;
 
-  // const [visible, setVisible] = useState(false);
-
   const handleCancel = (values) => {
     dispatch(actions.cancelOrder(order.id, values, '/orders/active/'));
   };
