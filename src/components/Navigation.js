@@ -10,7 +10,7 @@ const { SubMenu } = Menu;
 const Navigation = () => {
   const menu = useSelector((state) => state.menu);
   return (
-    <Sider trigger={null} collapsible collapsed={false}>
+    <Sider trigger={null} collapsible collapsed={false} style={{ minHeight: 'auto' }}>
       <div className="logo">
         <h1>{title || 'YAM'}</h1>
       </div>
