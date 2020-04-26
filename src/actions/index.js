@@ -330,13 +330,13 @@ export const cancelOrderRequest = createAction('CANCEL_ORDER_REQUEST');
 export const cancelOrderFailure = createAction('CANCEL_ORDER_FAILURE');
 export const cancelOrderSuccess = createAction('CANCEL_ORDER_SUCCESS');
 
-export const cancelOrder = (orderId, body, url) => async (dispatch) => {
+export const cancelOrder = (orderId, body, successURL) => async (dispatch) => {
   dispatch(cancelOrderRequest());
   try {
     await httpClient.post(api.cancelOrder(orderId), body);
     dispatch(cancelOrderSuccess());
     message.success('Заказ успешно отменен', 3);
-    history.push(url);
+    history.push(successURL);
     dispatch(getActiveOrders());
   } catch (error) {
     console.error(error);
@@ -441,13 +441,13 @@ export const acceptOrderRequest = createAction('ACCEPT_ORDER_REQUEST');
 export const acceptOrderFailure = createAction('ACCEPT_ORDER_FAILURE');
 export const acceptOrderSuccess = createAction('ACCEPT_ORDER_SUCCESS');
 
-export const acceptOrder = (orderId, url) => async (dispatch) => {
+export const acceptOrder = (orderId, successURL) => async (dispatch) => {
   dispatch(acceptOrderRequest());
   try {
     await httpClient.post(api.acceptOrder(orderId));
     dispatch(acceptOrderSuccess());
     message.success('Заказ успешно принят', 3);
-    history.push(url);
+    history.push(successURL);
     dispatch(getActiveOrders());
   } catch (error) {
     console.error(error);
