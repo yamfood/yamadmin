@@ -154,6 +154,29 @@ export const getOrderDetails = (id) => async (dispatch) => {
   }
 };
 
+export const setOrderStateUnchanged = createAction('ORDER_STATE_UNCHANGED_SET');
+
+export const patchOrderDetailsRequest = createAction('PATCH_ORDER_DETAILS_REQUEST');
+export const patchOrderDetailsFailure = createAction('PATCH_ORDER_DETAILS_FAILURE');
+export const patchOrderDetailsSuccess = createAction('PATCH_ORDER_DETAILS_SUCCESS');
+
+export const patchOrderDetails = (id, body) => async (dispatch) => {
+  dispatch(patchOrderDetailsRequest());
+  try {
+    const response = await httpClient.patch(api.orderDetails(id), body);
+    dispatch(patchOrderDetailsSuccess({ data: response.data }));
+    message.success('Заказ успешно изменен', 3);
+    dispatch(setOrderStateUnchanged());
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    message.error('Ошибка при изменение заказа', 3);
+    dispatch(patchOrderDetailsFailure());
+  }
+};
 
 export const getActiveOrdersRequest = createAction('GET_ACTIVE_ORDERS_REQUEST');
 export const getActiveOrdersFailure = createAction('GET_ACTIVE_ORDERS_FAILURE');
@@ -307,12 +330,13 @@ export const cancelOrderRequest = createAction('CANCEL_ORDER_REQUEST');
 export const cancelOrderFailure = createAction('CANCEL_ORDER_FAILURE');
 export const cancelOrderSuccess = createAction('CANCEL_ORDER_SUCCESS');
 
-export const cancelOrder = (orderId, body) => async (dispatch) => {
+export const cancelOrder = (orderId, body, successURL) => async (dispatch) => {
   dispatch(cancelOrderRequest());
   try {
     await httpClient.post(api.cancelOrder(orderId), body);
     dispatch(cancelOrderSuccess());
     message.success('Заказ успешно отменен', 3);
+    history.push(successURL);
     dispatch(getActiveOrders());
   } catch (error) {
     console.error(error);
@@ -417,12 +441,13 @@ export const acceptOrderRequest = createAction('ACCEPT_ORDER_REQUEST');
 export const acceptOrderFailure = createAction('ACCEPT_ORDER_FAILURE');
 export const acceptOrderSuccess = createAction('ACCEPT_ORDER_SUCCESS');
 
-export const acceptOrder = (orderId) => async (dispatch) => {
+export const acceptOrder = (orderId, successURL) => async (dispatch) => {
   dispatch(acceptOrderRequest());
   try {
     await httpClient.post(api.acceptOrder(orderId));
     dispatch(acceptOrderSuccess());
     message.success('Заказ успешно принят', 3);
+    history.push(successURL);
     dispatch(getActiveOrders());
   } catch (error) {
     console.error(error);
@@ -911,3 +936,4 @@ export const deleteAnnouncement = (announcementsId) => async (dispatch) => {
 
 
 export const setMenuActive = createAction('SET_MENU_ACTIVE');
+export const setOrderStateChanged = createAction('ORDER_STATE_CHANGED_SET');
