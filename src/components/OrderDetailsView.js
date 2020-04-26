@@ -92,7 +92,10 @@ const OrderDetailsView = (props) => {
         return (
           <>
             <Button
-              onClick={() => form.resetFields()}
+              onClick={() => {
+                form.resetFields();
+                dispatch(actions.setOrderStateUnchanged());
+              }}
               style={{ marginRight: 15 }}
             >
               Сбросить
