@@ -937,3 +937,23 @@ export const deleteAnnouncement = (announcementsId) => async (dispatch) => {
 
 export const setMenuActive = createAction('SET_MENU_ACTIVE');
 export const setOrderStateChanged = createAction('ORDER_STATE_CHANGED_SET');
+
+
+export const getParamsRequest = createAction('GET_PARAMS_REQUEST');
+export const getParamsFailure = createAction('GET_PARAMS_FAILURE');
+export const getParamsSuccess = createAction('GET_PARAMS_SUCCESS');
+
+export const getParams = () => async (dispatch) => {
+  dispatch(getParamsRequest());
+  try {
+    const response = await httpClient.get(api.params());
+    dispatch(getParamsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getParamsFailure());
+  }
+};

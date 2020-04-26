@@ -68,6 +68,11 @@ const Navigation = () => {
           <span>Администраторы</span>
           <Link to="/admins/" />
         </Menu.Item>
+        <Menu.Item key="10">
+          <Icon type="setting" />
+          <span>Настройки</span>
+          <Link to="/params/" />
+        </Menu.Item>
       </Menu>
     </Sider>
   )
