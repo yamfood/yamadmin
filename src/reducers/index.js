@@ -964,6 +964,31 @@ const menu = handleActions({
   activeMenu: 1,
 });
 
+const params = handleActions({
+  [actions.getParamsRequest](state) {
+    return {
+      ...state,
+      listStatus: 'request',
+    };
+  },
+  [actions.getParamsFailure](state) {
+    return {
+      ...state,
+      listStatus: 'failure',
+    };
+  },
+  [actions.getParamsSuccess](state, { payload: { data } }) {
+    console.log(data);
+    return {
+      ...state,
+      listStatus: 'success',
+      list: data,
+    };
+  },
+}, {
+  list: [],
+});
+
 export default combineReducers({
   clients,
   riders,
@@ -976,4 +1001,5 @@ export default combineReducers({
   finishedOrders,
   announcements,
   menu,
+  params,
 });

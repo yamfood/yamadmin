@@ -957,3 +957,22 @@ export const getAvaialbeProducts = (orderId) => async (dispatch) => {
     dispatch(getAvaialbeProductsFailure());
   }
 };
+
+export const getParamsRequest = createAction('GET_PARAMS_REQUEST');
+export const getParamsFailure = createAction('GET_PARAMS_FAILURE');
+export const getParamsSuccess = createAction('GET_PARAMS_SUCCESS');
+
+export const getParams = () => async (dispatch) => {
+  dispatch(getParamsRequest());
+  try {
+    const response = await httpClient.get(api.params());
+    dispatch(getParamsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getParamsFailure());
+  }
+};
