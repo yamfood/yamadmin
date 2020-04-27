@@ -766,6 +766,25 @@ const orderDetails = handleActions({
       [data.id]: data,
     };
   },
+  [actions.getAvaialbeProductsRequest](state) {
+    return {
+      ...state,
+      availableStatus: 'request',
+    };
+  },
+  [actions.getAvaialbeProductsFailure](state) {
+    return {
+      ...state,
+      availableStatus: 'failure',
+    };
+  },
+  [actions.getAvaialbeProductsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      availableStatus: 'success',
+      availableList: data,
+    };
+  },
 }, {
   status: null,
   editedState: 'unchanged',
