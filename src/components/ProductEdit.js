@@ -96,7 +96,6 @@ const ProductCreate = (props) => {
           <Form.Item label="Описание [RU]">
             {getFieldDecorator('description_ru', {
               initialValue: productDetails.description ? productDetails.description.ru : '',
-              rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Input disabled={products.productDetailsStatus === 'request'} />,
             )}
@@ -113,7 +112,6 @@ const ProductCreate = (props) => {
           <Form.Item label="Описание [UZ]">
             {getFieldDecorator('description_uz', {
               initialValue: productDetails.description ? productDetails.description.uz : '',
-              rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Input disabled={products.productDetailsStatus === 'request'} />,
             )}
@@ -130,7 +128,6 @@ const ProductCreate = (props) => {
           <Form.Item label="Описание [EN]">
             {getFieldDecorator('description_en', {
               initialValue: productDetails.description ? productDetails.description.en : '',
-              rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Input disabled={products.productDetailsStatus === 'request'} />,
             )}
