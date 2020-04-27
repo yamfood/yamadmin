@@ -28,4 +28,5 @@ export default {
   announcementDetails: (id) => [host, `announcements/${id}/`].join('/'),
   viewOrderSocket: () => [host, 'ws/order/'].join('/'),
   getSignedURL: () => [host, 'sign-s3'].join('/'),
+  availableProducts: (id) => [host, `orders/${id}/products/`].join('/'),
 };

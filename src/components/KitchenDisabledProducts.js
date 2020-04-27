@@ -14,7 +14,6 @@ import * as actions from '../actions';
 const DisabledProducts = ({ id }) => {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.kitchens);
-
   useEffect(() => {
     dispatch(actions.setMenuActive(2));
   }, [])
@@ -58,7 +57,7 @@ const DisabledProducts = ({ id }) => {
     <Table
       columns={columns}
       loading={[productsDeleteStatus, detailStatus].includes('request')}
-      dataSource={disabledProducts.map((food) => ({ ...food, key: `${food.name}` }))}
+      dataSource={disabledProducts.map((food) => ({ ...food, key: `${food.id}` }))}
     />
   );
 };
