@@ -26,6 +26,7 @@ import KitchenEdit from './KitchenEdit';
 import Announcements from './Announcements';
 import AnnouncementCreate from './AnnouncementCreate';
 import AnnouncementEdit from './AnnouncementEdit';
+import ParamsList from './ParamsList';
 
 
 const App = () => (
@@ -54,6 +55,7 @@ const App = () => (
         <PrivateRoute exact path="/announcements/" component={Announcements} />
         <PrivateRoute exact path="/announcements/create/" component={AnnouncementCreate} />
         <PrivateRoute exact path="/announcements/:id/edit/" component={AnnouncementEdit} />
+        <PrivateRoute exact path="/params/" component={ParamsList} />
         <PrivateRoute path="/" component={Home} />
       </Switch>
     </Router>
