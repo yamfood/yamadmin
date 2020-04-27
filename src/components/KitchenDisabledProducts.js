@@ -14,7 +14,6 @@ import * as actions from '../actions';
 const DisabledProducts = ({ id }) => {
   const dispatch = useDispatch();
   const product = useSelector((state) => state.kitchens);
-  console.log('product: ', product.disabledProducts);
   useEffect(() => {
     dispatch(actions.setMenuActive(2));
   }, [])
