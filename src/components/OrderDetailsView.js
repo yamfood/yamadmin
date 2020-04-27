@@ -1,10 +1,11 @@
 import {
   Button, Descriptions, Input, Table, Tag,
 } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions';
 import CancelOrderButton from './CancelOrderButton';
+import OrderAvailableModal from './OrderAvailableModal';
 
 const OrderDetailsView = (props) => {
   const dispatch = useDispatch();
@@ -16,17 +17,23 @@ const OrderDetailsView = (props) => {
     editStatus,
   } = props;
 
+  const [product, getProduct] = useState([]);
+  const [products, setProducts] = useState([]);
   const handleCancel = (values) => {
     dispatch(actions.cancelOrder(order.id, values, '/orders/active/'));
   };
 
+  useEffect(() => {
+    setProducts([...products, ...product]);
+    dispatch(actions.getAvaialbeProducts(order.id));
+    if (editStatus === 'request') {
+      getProduct([]);
+      setProducts([]);
+    }
+  }, [product, editStatus]);
 
   const columns = [
-    {
-      title: 'Название',
-      dataIndex: 'name',
-      key: 'name',
-    },
+    { title: 'Название', dataIndex: 'name', key: 'name' },
     {
       title: 'Комментарий',
       dataIndex: 'comment',
@@ -47,9 +54,13 @@ const OrderDetailsView = (props) => {
       title: 'Количество',
       dataIndex: 'count',
       key: 'count',
+      width: '100px',
       render: (value, product, index) => {
         if (order.status === 'new') {
-          return form.getFieldDecorator(`products[${index}].count`, { initialValue: value })(<Input type="number" />)
+          return form.getFieldDecorator(
+            `products[${index}].count`,
+            { initialValue: value ? value : 1 },
+          )(<Input type="number" />)
         }
         return value;
       },
@@ -58,13 +69,23 @@ const OrderDetailsView = (props) => {
       title: 'Цена',
       dataIndex: 'price',
       key: 'price',
-      render: (price) => price.toLocaleString('ru'),
+      render: (price) => {
+        if (price) {
+          return price.toLocaleString('ru');
+        }
+        return null;
+      },
     },
     {
       title: 'Итого',
       dataIndex: 'total',
       key: 'total',
-      render: (price) => price.toLocaleString('ru'),
+      render: (price) => {
+        if (price) {
+          return price.toLocaleString('ru');
+        }
+        return null;
+      },
     },
   ];
 
@@ -216,15 +237,19 @@ const OrderDetailsView = (props) => {
       </Descriptions>
 
       <br />
-      <h3><strong>Продукты</strong></h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h3><strong>Продукты</strong></h3>
+        <OrderAvailableModal getProduct={getProduct} />
+      </div>
       <Table
-        dataSource={order.products.map((item) => ({
+        dataSource={[...order.products, ...products].map((item) => ({
           ...item,
           key: item.id,
         }))}
         columns={columns}
         size="small"
         pagination={false}
+        loading={editStatus === 'request'}
         footer={() => (
           <div style={{ textAlign: 'right', paddingRight: 10 }}>
             Итого:&nbsp;

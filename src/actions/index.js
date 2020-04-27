@@ -939,6 +939,25 @@ export const setMenuActive = createAction('SET_MENU_ACTIVE');
 export const setOrderStateChanged = createAction('ORDER_STATE_CHANGED_SET');
 
 
+export const getAvaialbeProductsRequest = createAction('GET_AVAILABLE_PRODUCTS_REQUEST');
+export const getAvaialbeProductsFailure = createAction('GET_AVAILABLE_PRODUCTS_FAILURE');
+export const getAvaialbeProductsSuccess = createAction('GET_AVAILABLE_PRODUCTS_SUCCESS');
+
+export const getAvaialbeProducts = (orderId) => async (dispatch) => {
+  dispatch(getAvaialbeProductsRequest());
+  try {
+    const response = await httpClient.get(api.availableProducts(orderId));
+    dispatch(getAvaialbeProductsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getAvaialbeProductsFailure());
+  }
+};
+
 export const getParamsRequest = createAction('GET_PARAMS_REQUEST');
 export const getParamsFailure = createAction('GET_PARAMS_FAILURE');
 export const getParamsSuccess = createAction('GET_PARAMS_SUCCESS');
