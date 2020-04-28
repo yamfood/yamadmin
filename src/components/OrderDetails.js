@@ -56,6 +56,7 @@ const OrderDetails = (props) => {
 
     if (order === null) {
       dispatch(actions.getOrderDetails(id));
+      dispatch(actions.getAvaialbeProducts(id));
       return
     }
 

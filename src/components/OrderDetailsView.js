@@ -25,7 +25,6 @@ const OrderDetailsView = (props) => {
 
   useEffect(() => {
     setProducts([...products, ...product]);
-    dispatch(actions.getAvaialbeProducts(order.id));
     if (editStatus === 'request') {
       getProduct([]);
       setProducts([]);
@@ -38,12 +37,12 @@ const OrderDetailsView = (props) => {
       title: 'Комментарий',
       dataIndex: 'comment',
       key: 'comment',
-      render: (value, product, index) => {
+      render: (value, p, index) => {
         if (order.status === 'new') {
           return (
             <>
               {form.getFieldDecorator(`products[${index}].comment`, { initialValue: value })(<Input />)}
-              {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: product.id })(<Input type="hidden" />)}
+              {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: p.id })(<Input type="hidden" />)}
             </>
           )
         }
@@ -55,11 +54,11 @@ const OrderDetailsView = (props) => {
       dataIndex: 'count',
       key: 'count',
       width: '100px',
-      render: (value, product, index) => {
+      render: (value, p, index) => {
         if (order.status === 'new') {
           return form.getFieldDecorator(
             `products[${index}].count`,
-            { initialValue: value ? value : 1 },
+            { initialValue: value || 1 },
           )(<Input type="number" />)
         }
         return value;
