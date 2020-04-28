@@ -40,7 +40,7 @@ const AnnouncementsCreateFrom = ({
   return (
     <Layout>
       <Content style={contentStyle}>
-        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Создание Объявления</h1>
+        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Создание объявления</h1>
         <Form onSubmit={handleSubmit}>
           <Form.Item label="Текст">
             {getFieldDecorator('text', {
@@ -61,7 +61,7 @@ const AnnouncementsCreateFrom = ({
               />,
             )}
           </Form.Item>
-          <Form.Item label="Отправить">
+          <Form.Item label="Отправить в">
             {getFieldDecorator('send_at', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
@@ -85,7 +85,7 @@ const AnnouncementsCreateFrom = ({
                 loading={announcement.createStatus === 'request'}
                 disabled={announcement.signedURLStatus === 'request' || announcement.uploadFileStatus === 'request'}
               >
-                Создать
+                Сохранить
               </Button>
             </Form.Item>
           </div>

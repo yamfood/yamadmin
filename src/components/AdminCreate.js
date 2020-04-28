@@ -47,6 +47,7 @@ const AdminCreate = (props) => {
       <Content
         style={contentStyle}
       >
+        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Создание администратора</h1>
         <Form onSubmit={handleSubmit}>
           <Form.Item label="Имя" disabled={admin.permissionStatus}>
             {getFieldDecorator('name', {
@@ -55,21 +56,21 @@ const AdminCreate = (props) => {
               <Input />,
             )}
           </Form.Item>
-          <Form.Item label="Login" disabled={admin.permissionStatus}>
+          <Form.Item label="Логин" disabled={admin.permissionStatus}>
             {getFieldDecorator('login', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Input />,
             )}
           </Form.Item>
-          <Form.Item label="Pasword" disabled={admin.permissionStatus}>
+          <Form.Item label="Пароль" disabled={admin.permissionStatus}>
             {getFieldDecorator('password', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Input />,
             )}
           </Form.Item>
-          <Form.Item label="Permissions" disabled={admin.permissionStatus}>
+          <Form.Item label="Доступ" disabled={admin.permissionStatus}>
             {getFieldDecorator('payload')(
               <Checkbox.Group>
                 {admin.permissions.map((permission) => (
@@ -91,7 +92,7 @@ const AdminCreate = (props) => {
                 htmlType="submit"
                 loading={admin.createAdminStatus === 'request'}
               >
-                Создать
+                Сохранить
               </Button>
             </Form.Item>
           </div>

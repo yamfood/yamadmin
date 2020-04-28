@@ -42,7 +42,7 @@ const KitchenCreate = (props) => {
       <Content
         style={contentStyle}
       >
-        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Создания Кухни</h1>
+        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Создание кухни</h1>
         <Form onSubmit={handleSubmit}>
           <Form.Item label="Название">
             {getFieldDecorator('name', {
