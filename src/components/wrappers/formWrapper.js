@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   setOrderStateChanged,
   patchOrderDetails,
+  getAvaialbeProducts,
 } from '../../actions';
 
 const formWrap = (Component) => {
@@ -28,6 +29,7 @@ const formWrap = (Component) => {
             })),
           };
           dispatch(patchOrderDetails(values.orderId, preparedValues));
+          dispatch(getAvaialbeProducts(values.orderId));
         }
       });
     };
