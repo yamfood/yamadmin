@@ -17,20 +17,23 @@ const DisabledProductList = ({ id }) => {
   const [loadingButtonId, setLoadingButton] = useState([]);
   const kitchens = useSelector((state) => state.kitchens);
   const { productsForModal } = kitchens;
+  const [products, getProducts] = useState(productsForModal);
 
   useEffect(() => {
-    dispatch(actions.getKitchenProducts(id));
-    dispatch(actions.setMenuActive(2));
-  }, []);
+    getProducts(productsForModal);
+  }, [productsForModal]);
 
   const search = (e) => {
     if (e) {
       const { value } = e.target;
-      return productsForModal.filter(
+      const filteredProducts = productsForModal.filter(
         (product) => product.name.toLowerCase().includes(value.toLowerCase()),
       );
+      getProducts(filteredProducts);
+      return null;
     }
-    return productsForModal;
+    getProducts(productsForModal);
+    return null;
   };
 
   return (
@@ -58,7 +61,7 @@ const DisabledProductList = ({ id }) => {
           <Input type="text" onChange={search} placeholder="Название продукта" />
           <List
             itemLayout="horizontal"
-            dataSource={search()}
+            dataSource={products}
             renderItem={(item) => (
               <List.Item key={item.name}>
                 <div style={{ display: 'flex' }}>
