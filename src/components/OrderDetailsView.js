@@ -7,6 +7,7 @@ import * as actions from '../actions';
 import CancelOrderButton from './CancelOrderButton';
 import OrderAvailableModal from './OrderAvailableModal';
 
+
 const OrderDetailsView = (props) => {
   const dispatch = useDispatch();
   const activeOrders = useSelector((state) => state.activeOrders);
@@ -25,9 +26,7 @@ const OrderDetailsView = (props) => {
 
   useEffect(() => {
     setProducts([...products, ...product]);
-    dispatch(actions.getAvaialbeProducts(order.id));
     if (editStatus === 'request') {
-      getProduct([]);
       setProducts([]);
     }
   }, [product, editStatus]);
@@ -38,12 +37,12 @@ const OrderDetailsView = (props) => {
       title: 'Комментарий',
       dataIndex: 'comment',
       key: 'comment',
-      render: (value, product, index) => {
+      render: (value, p, index) => {
         if (order.status === 'new') {
           return (
             <>
               {form.getFieldDecorator(`products[${index}].comment`, { initialValue: value })(<Input />)}
-              {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: product.id })(<Input type="hidden" />)}
+              {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: p.id })(<Input type="hidden" />)}
             </>
           )
         }
@@ -55,11 +54,11 @@ const OrderDetailsView = (props) => {
       dataIndex: 'count',
       key: 'count',
       width: '100px',
-      render: (value, product, index) => {
+      render: (value, p, index) => {
         if (order.status === 'new') {
           return form.getFieldDecorator(
             `products[${index}].count`,
-            { initialValue: value ? value : 1 },
+            { initialValue: value || 1 },
           )(<Input type="number" />)
         }
         return value;
@@ -162,7 +161,7 @@ const OrderDetailsView = (props) => {
         Отменить
       </CancelOrderButton>
     );
-  }
+  };
 
   return (
     <div>
@@ -239,7 +238,11 @@ const OrderDetailsView = (props) => {
       <br />
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <h3><strong>Продукты</strong></h3>
-        <OrderAvailableModal getProduct={getProduct} />
+        {
+          order.status === 'new'
+            ? <OrderAvailableModal getProduct={getProduct} />
+            : ''
+        }
       </div>
       <Table
         dataSource={[...order.products, ...products].map((item) => ({

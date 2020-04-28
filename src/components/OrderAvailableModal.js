@@ -15,23 +15,24 @@ const OrderAvailableModal = ({ getProduct }) => {
   const [isVisible, setModalVisible] = useState(false);
   const [addedProducts, addProduct] = useState([]);
   const dispatch = useDispatch();
-  const availableList = useSelector((state) => state.orderDetails.availableList);
+  const availableProductsList = useSelector((state) => state.orderDetails.availableList);
   const [products, setProducts] = useState([]);
 
 
   useEffect(() => {
-    setProducts(availableList);
-  }, [availableList]);
+    setProducts(availableProductsList);
+  }, [availableProductsList]);
 
   const search = (value) => {
     if (!value) {
-      setProducts(availableList);
+      setProducts(availableProductsList);
       return null;
     }
     const filteredProducts = products.filter(
-      (pro) => pro.name.toLowerCase().includes(value.toLowerCase()),
+      (p) => p.name.toLowerCase().includes(value.toLowerCase()),
     );
     setProducts(filteredProducts);
+    return null;
   };
 
 
