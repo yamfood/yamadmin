@@ -7,17 +7,16 @@ import {
   Input,
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import { setOrderStateChanged } from '../actions';
+import { setOrderStateChanged, addOrderProduct } from '../actions';
 import textInModal from '../assets/style';
 
 
-const OrderAvailableModal = ({ getProduct }) => {
+const OrderAvailableModal = ({ orderId }) => {
   const [isVisible, setModalVisible] = useState(false);
-  const [addedProducts, addProduct] = useState([]);
+  const [addedProductsId, addProductId] = useState([]);
   const dispatch = useDispatch();
   const availableProductsList = useSelector((state) => state.orderDetails.availableList);
   const [products, setProducts] = useState([]);
-
 
   useEffect(() => {
     setProducts(availableProductsList);
@@ -84,10 +83,11 @@ const OrderAvailableModal = ({ getProduct }) => {
                     type="primary"
                     onClick={() => {
                       dispatch(setOrderStateChanged());
-                      addProduct([...addedProducts, item.id])
-                      getProduct([item]);
+                      addProductId([...addedProductsId, item.id])
+                      dispatch(addOrderProduct({ item, orderId }));
                     }}
-                    disabled={addedProducts.includes(item.id)}
+                    disabled={addedProductsId.includes(item.id)}
+                    style={{ marginRight: 20 }}
                   >
                     Добавить
                   </Button>
