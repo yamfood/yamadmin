@@ -16,6 +16,7 @@ const DisabledProducts = ({ id }) => {
   const product = useSelector((state) => state.kitchens);
   useEffect(() => {
     dispatch(actions.setMenuActive(2));
+    dispatch(actions.getKitchenProducts(id));
   }, [])
 
   const {
