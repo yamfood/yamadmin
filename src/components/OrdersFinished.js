@@ -75,6 +75,7 @@ const OrdersFinished = () => {
       render: (time) => dispalyTime(time),
     },
     { title: 'Адрес', dataIndex: 'address', key: 'address' },
+    { title: 'Оценка', dataIndex: 'rate', key: 'rate' },
   ];
 
   useEffect(() => {
