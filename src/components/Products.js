@@ -10,8 +10,7 @@ import {
   DeleteOutlined,
   EditOutlined,
 } from '@ant-design/icons';
-
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import Title from './shared/Title';
 import { contentStyle } from '../assets/style';
@@ -61,15 +60,14 @@ const Products = () => {
       key: 'edit',
       render: (id, record) => (
         <span>
-          <Button
-            type="link"
+          <Link
             onClick={(e) => {
               e.stopPropagation();
-              history.push(`/products/${record.id}/edit`);
             }}
+            to={`/products/${record.id}/edit`}
           >
             <EditOutlined />
-          </Button>
+          </Link>
         </span>
       ),
     },
