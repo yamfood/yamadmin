@@ -9,8 +9,7 @@ import {
 import {
   EditOutlined,
 } from '@ant-design/icons';
-
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
@@ -55,14 +54,11 @@ const RidersList = () => {
       key: 'edit',
       render: (id, record) => (
         <span>
-          <Button
-            type="link"
-            onClick={() => {
-              history.push(`/riders/${record.id}/edit`);
-            }}
+          <Link
+            to={`/riders/${record.id}/edit`}
           >
             <EditOutlined />
-          </Button>
+          </Link>
         </span>
       ),
     },

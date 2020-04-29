@@ -6,6 +6,8 @@ import {
   Button,
   Icon,
 } from 'antd';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
 import * as actions from '../actions';
 import OrdersFinishedForm from './OrdersFinishedForm';
 import pagination from './pagination';
@@ -18,26 +20,12 @@ const OrdersFinished = () => {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.finishedOrders);
 
-  const formattingTime = (time) => {
-    if (time < 10) {
-      return `0${time}`;
-    }
-    return time;
-  }
-
-  const dispalyTime = (date) => {
-    const time = new Date(date);
-    return `
-      ${time.toLocaleDateString()} ${formattingTime(time.getHours())}:${formattingTime(time.getMinutes())}:${formattingTime(time.getSeconds())}
-    `
-  }
-
   const columns = [
     {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      render: (id) => <a href={`/orders/${id}/`} target="blank">{id}</a>,
+      render: (id) => <Link to={`/orders/${id}/`}>{id}</Link>,
       fixed: true,
       width: 60,
     },
@@ -72,7 +60,7 @@ const OrdersFinished = () => {
       title: 'Дата создания',
       dataIndex: 'created_at',
       key: 'created_at',
-      render: (time) => dispalyTime(time),
+      render: (time) => moment(time).format('YYYY-MM-DD HH:mm:ss'),
     },
     { title: 'Адрес', dataIndex: 'address', key: 'address' },
     { title: 'Оценка', dataIndex: 'rate', key: 'rate' },
