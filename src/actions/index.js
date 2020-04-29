@@ -979,3 +979,30 @@ export const getParams = () => async (dispatch) => {
 
 export const addOrderProduct = createAction('ADD_ORDER_PRODUCT');
 export const removeOrderProduct = createAction('REMOVE_ORDER_PRODUCT');
+
+
+export const openSettingModal = createAction('OPEN_SETTING_MODAL');
+export const closeSettingModal = createAction('CLOSE_SETTING_MODAL');
+
+export const editParametersRequest = createAction('EDIT_PARAMETERS_REQUEST');
+export const editParametersFailure = createAction('EDIT_PARAMETERS_FAILURE');
+export const editParametersSuccess = createAction('EDIT_PARAMETERS_SUCCESS');
+
+export const editParameters = (editId, value) => async (dispatch) => {
+  dispatch(editParametersRequest());
+  try {
+    await httpClient.patch(api.editParam(editId), value);
+    dispatch(editParametersSuccess());
+    message.success('Настройка успешно изменено', 3);
+    dispatch(getParams());
+    dispatch(closeSettingModal());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(editParametersFailure());
+    message.error('Ошибка при измении настройки', 3);
+  }
+};
