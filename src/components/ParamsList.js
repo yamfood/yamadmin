@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Icon,
@@ -8,11 +8,14 @@ import {
 import {
   EditOutlined,
 } from '@ant-design/icons';
-
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 import Title from './shared/Title';
+import ParamEditModal from './ParamEditModal';
 
 const { Content } = Layout;
 
@@ -27,13 +30,11 @@ const ParamsList = () => {
       title: 'Изменить',
       dataIndex: 'edit',
       key: 'edit',
-      render: () => (
+      render: (arg, record) => (
         <span>
           <Button
             type="link"
-            onClick={() => {
-              alert('Not implemented!');
-            }}
+            onClick={() => dispatch(actions.openSettingModal(record))}
           >
             <EditOutlined />
           </Button>
@@ -48,7 +49,7 @@ const ParamsList = () => {
   }, []);
 
   const loading = [
-    params.status,
+    params.listStatus,
   ].includes('request');
 
   return (
@@ -61,18 +62,20 @@ const ParamsList = () => {
           <h1 style={{ fontSize: 30, textAlign: 'center' }}>Настройки</h1>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex' }}>
+              <ParamEditModal />
               <Button
                 style={{ marginTop: 4 }}
-                onClick={() => dispatch(actions.getRiders({ page: 1 }))}
+                onClick={() => dispatch(actions.getParams())}
               >
                 <Icon type="reload" />
               </Button>
             </div>
             <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
               <b>Кол-во:  </b>
-              {params.total}
+              {params.list.length}
             </p>
           </div>
+
           <Table
             size="small"
             columns={columns}
