@@ -90,7 +90,7 @@ const AdminsList = () => {
             }}
             style={{ marginLeft: 10 }}
           >
-            Создать Админа
+            Создать администратора
           </Button>
           <Table
             size="small"
@@ -106,7 +106,7 @@ const AdminsList = () => {
               const { permissions } = payload;
               return (
                 <div style={{ display: 'flex' }}>
-                  <p><b>Роли:</b></p>
+                  <p><b>Доступ:</b></p>
                   <ul>
                     {permissions ? permissions.map((permission) => <li>{permission}</li>) : null}
                   </ul>

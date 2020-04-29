@@ -52,6 +52,7 @@ const AdminEdit = (props) => {
       <Content
         style={contentStyle}
       >
+        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Изменение администратора</h1>
         <Form onSubmit={handleSubmit}>
           <Form.Item label="Имя">
             {getFieldDecorator('name', {
@@ -61,7 +62,7 @@ const AdminEdit = (props) => {
               <Input />,
             )}
           </Form.Item>
-          <Form.Item label="Login">
+          <Form.Item label="Логин">
             {getFieldDecorator('login', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
               initialValue: editingAdminDetails ? editingAdminDetails.login : null,
@@ -69,7 +70,7 @@ const AdminEdit = (props) => {
               <Input />,
             )}
           </Form.Item>
-          <Form.Item label="Pasword">
+          <Form.Item label="Пароль">
             {getFieldDecorator('password', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
               initialValue: editingAdminDetails ? editingAdminDetails.password : null,
@@ -77,7 +78,7 @@ const AdminEdit = (props) => {
               <Input />,
             )}
           </Form.Item>
-          <Form.Item label="Permissions">
+          <Form.Item label="Доступ">
             {getFieldDecorator('payload', {
               initialValue: editingAdminDetails.payload.permissions
                 ? editingAdminDetails.payload.permissions : null,
@@ -107,7 +108,7 @@ const AdminEdit = (props) => {
                 htmlType="submit"
                 loading={admins.editAdminStatus === 'request'}
               >
-                Изменить
+                Сохранить
               </Button>
             </Form.Item>
           </div>

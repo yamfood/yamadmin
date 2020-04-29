@@ -42,7 +42,7 @@ const Announcements = () => {
     { title: 'Текст', dataIndex: 'text', key: 'text' },
     { title: 'Статус', dataIndex: 'status', key: 'status' },
     {
-      title: 'Отправить',
+      title: 'Отправить в',
       dataIndex: 'send_at',
       key: 'send_at',
       render: (time) => moment(time).format('YYYY-MM-DD HH:mm:ss'),
@@ -106,7 +106,7 @@ const Announcements = () => {
                 }}
                 style={{ marginLeft: 10 }}
               >
-                Создать Объявления
+                Создать объявление
               </Button>
             </div>
             <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>

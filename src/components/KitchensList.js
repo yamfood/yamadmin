@@ -87,7 +87,7 @@ const KitchensList = () => {
             }}
             style={{ marginLeft: 10 }}
           >
-            Создать Кухню
+            Создать кухню
           </Button>
           <Table
             size="small"

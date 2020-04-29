@@ -52,7 +52,7 @@ const RidersForm = (props) => {
       <Content
         style={contentStyle}
       >
-        <h1 style={{ textAlign: 'center', fontSize: 30 }}>Изменение</h1>
+        <h1 style={{ textAlign: 'center', fontSize: 30 }}>Изменение курьера</h1>
         <Form
           onSubmit={handleSubmit}
         >
