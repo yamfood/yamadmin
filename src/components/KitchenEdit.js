@@ -30,7 +30,7 @@ const KitchenEdit = ({ history }) => {
       <Content
         style={contentStyle}
       >
-        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Изменения Кухни</h1>
+        <h1 style={{ textAlign: 'center', fontSize: 24 }}>Изменение кухни</h1>
         <Tabs type="card" defaultActiveKey="1" animated>
           <TabPane tab="Редактировать" key="1">
             <KitchenEditForm id={id} history={history} />

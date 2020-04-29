@@ -66,7 +66,7 @@ const AnnouncementsEditForm = ({
               />,
             )}
           </Form.Item>
-          <Form.Item label="Отправить">
+          <Form.Item label="Отправить в">
             {getFieldDecorator('send_at', {
               initialValue: announcement.details
                 ? moment(announcement.details.send_at)
@@ -93,7 +93,7 @@ const AnnouncementsEditForm = ({
                 loading={announcement.editStatus === 'request'}
                 disabled={announcement.signedURLStatus === 'request' || announcement.uploadFileStatus === 'request'}
               >
-                Изменить
+                Сохранить
               </Button>
             </Form.Item>
           </div>

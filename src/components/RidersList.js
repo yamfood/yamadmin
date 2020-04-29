@@ -104,7 +104,7 @@ const RidersList = () => {
                 }}
                 style={{ marginTop: '1%' }}
               >
-                Создать Курьера
+                Создать курьера
               </Button>
             </div>
             <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>

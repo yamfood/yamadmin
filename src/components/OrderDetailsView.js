@@ -1,8 +1,11 @@
 import {
   Button, Descriptions, Input, Table, Tag,
 } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  DeleteOutlined,
+} from '@ant-design/icons';
 import * as actions from '../actions';
 import CancelOrderButton from './CancelOrderButton';
 import OrderAvailableModal from './OrderAvailableModal';
@@ -18,18 +21,9 @@ const OrderDetailsView = (props) => {
     editStatus,
   } = props;
 
-  const [product, getProduct] = useState([]);
-  const [products, setProducts] = useState([]);
   const handleCancel = (values) => {
     dispatch(actions.cancelOrder(order.id, values, '/orders/active/'));
   };
-
-  useEffect(() => {
-    setProducts([...products, ...product]);
-    if (editStatus === 'request') {
-      setProducts([]);
-    }
-  }, [product, editStatus]);
 
   const columns = [
     { title: 'Название', dataIndex: 'name', key: 'name' },
@@ -88,6 +82,24 @@ const OrderDetailsView = (props) => {
     },
   ];
 
+  const deleteColumn = {
+    title: 'Удалить',
+    dataIndex: 'delete',
+    key: 'delete',
+    width: '80px',
+    render: (arg, record) => (
+      <Button
+        type="link"
+        onClick={() => {
+          dispatch(actions.setOrderStateChanged());
+          dispatch(actions.removeOrderProduct({ orderId: order.id, productId: record.id }))
+        }}
+      >
+        <DeleteOutlined />
+      </Button>
+    ),
+  };
+
   const statusTag = ({ status }) => {
     switch (status) {
       case 'new':
@@ -107,60 +119,52 @@ const OrderDetailsView = (props) => {
 
 
   const displayButtons = () => {
-    if (order.status === 'new') {
-      if (editedState === 'changed') {
-        return (
-          <>
-            <Button
-              onClick={() => {
-                form.resetFields();
-                dispatch(actions.setOrderStateUnchanged());
-              }}
-              style={{ marginRight: 15 }}
-            >
-              Сбросить
-            </Button>
-            <Button
-              htmlType="submit"
-              type="primary"
-              loading={editStatus === 'request'}
-            >
-              Сохранить
-            </Button>
-          </>
-        )
-      }
+    if (editedState === 'changed') {
       return (
         <>
-          <CancelOrderButton
-            btnType="danger"
-            loading={activeOrders.cancelStatus === 'request'}
-            onSubmit={handleCancel}
-            disabled={activeOrders.acceptStatus === 'request'}
-          >
-            Отменить
-          </CancelOrderButton>
           <Button
-            type="primary"
-            onClick={() => dispatch(actions.acceptOrder(order.id, '/orders/active/'))}
-            loading={activeOrders.acceptStatus === 'request'}
-            disabled={activeOrders.cancelStatus === 'request'}
+            onClick={() => {
+              form.resetFields();
+              dispatch(actions.setOrderStateUnchanged());
+            }}
+            style={{ marginRight: 15 }}
           >
-            Принять
+            Сбросить
+          </Button>
+          <Button
+            htmlType="submit"
+            type="primary"
+            loading={editStatus === 'request'}
+          >
+            Сохранить
           </Button>
         </>
       )
     }
     return (
-      <CancelOrderButton
-        btnType="danger"
-        loading={activeOrders.cancelStatus === 'request'}
-        onSubmit={handleCancel}
-        disabled={activeOrders.acceptStatus === 'request'}
-      >
-        Отменить
-      </CancelOrderButton>
-    );
+      <>
+        <CancelOrderButton
+          btnType="danger"
+          loading={activeOrders.cancelStatus === 'request'}
+          onSubmit={handleCancel}
+          disabled={activeOrders.acceptStatus === 'request'}
+        >
+          Отменить
+        </CancelOrderButton>
+        {
+          order.status === 'new' ? (
+            <Button
+              type="primary"
+              onClick={() => dispatch(actions.acceptOrder(order.id, '/orders/active/'))}
+              loading={activeOrders.acceptStatus === 'request'}
+              disabled={activeOrders.cancelStatus === 'request'}
+            >
+              Принять
+            </Button>
+          ) : null
+        }
+      </>
+    )
   };
 
   return (
@@ -240,16 +244,16 @@ const OrderDetailsView = (props) => {
         <h3><strong>Продукты</strong></h3>
         {
           order.status === 'new'
-            ? <OrderAvailableModal getProduct={getProduct} />
+            ? <OrderAvailableModal orderId={order.id} />
             : ''
         }
       </div>
       <Table
-        dataSource={[...order.products, ...products].map((item) => ({
+        dataSource={order.products.map((item) => ({
           ...item,
           key: item.id,
         }))}
-        columns={columns}
+        columns={order.status === 'new' ? [...columns, deleteColumn] : columns}
         size="small"
         pagination={false}
         loading={editStatus === 'request'}

@@ -39,7 +39,7 @@ const CreateRider = (props) => {
       <Content
         style={contentStyle}
       >
-        <h1 style={{ textAlign: 'center', fontSize: 30 }}>Создания Курьера</h1>
+        <h1 style={{ textAlign: 'center', fontSize: 30 }}>Создание курьера</h1>
         <Form onSubmit={handleSubmit}>
           <Form.Item label="Имя">
             {getFieldDecorator('name', {
