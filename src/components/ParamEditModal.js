@@ -16,15 +16,17 @@ const ParamsEditModal = ({ form }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    form.validateFields((err, values) => {
+    form.validateFields(async (err, values) => {
       if (!err) {
-        dispatch(editParameters(editParam.id, values));
+        await dispatch(editParameters(editParam.id, values));
+        form.resetFields();
       }
     });
   };
 
   useEffect(() => {
     setVisible(param.isEditVisible);
+    // console.log('editParam.value: ', editParam.value);
   }, [param.isEditVisible])
 
   const handleCancel = () => {
