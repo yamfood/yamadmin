@@ -6,7 +6,6 @@ import {
   setOrderStateChanged,
   patchOrderDetails,
   getAvaialbeProducts,
-  reasonInputUnClicked,
 } from '../../actions';
 
 const formWrap = (Component) => {
@@ -39,14 +38,11 @@ const formWrap = (Component) => {
       <Form
         onSubmit={handleSubmit}
         style={{ width: '100%', minHeight: '100%' }}
-        onChange={() => {
-          if (orderDetails.editedState === 'changed') {
-            return ;
+        onChange={(e) => {
+          if (orderDetails.editedState === 'changed' || e.target.id === 'modalForm_reason') {
+            return
           }
-          if (!orderDetails.isReasonClicked) {
-            dispatch(setOrderStateChanged());
-            dispatch(reasonInputUnClicked());
-          }
+          dispatch(setOrderStateChanged());
         }}
       >
         <Component {...props} />

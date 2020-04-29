@@ -979,5 +979,3 @@ export const getParams = () => async (dispatch) => {
 
 export const addOrderProduct = createAction('ADD_ORDER_PRODUCT');
 export const removeOrderProduct = createAction('REMOVE_ORDER_PRODUCT');
-export const reasonInputClicked = createAction('REASON_INPUT_CLICKED');
-export const reasonInputUnClicked = createAction('REASON_INPUT_UNCLICKED');

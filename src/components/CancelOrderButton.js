@@ -2,8 +2,6 @@ import React, { useState, useImperativeHandle } from 'react';
 import {
   Modal, Form, Input, Button,
 } from 'antd';
-import { useDispatch } from 'react-redux';
-import * as actions from '../actions';
 
 
 const ModalCancelOrderForm = React.forwardRef(({
@@ -47,10 +45,8 @@ const CancelOrderButton = ({
   disabled,
 }) => {
   const [isModalVisible, setModalVisibility] = useState(false);
-  const dispatch = useDispatch();
 
   const showModal = () => {
-    dispatch(actions.reasonInputClicked());
     if (setVisible) {
       setVisible(false);
     }
