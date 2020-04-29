@@ -7,7 +7,7 @@ import {
   Popconfirm,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import moment from 'moment';
 import {
   DeleteOutlined,
@@ -53,12 +53,11 @@ const Announcements = () => {
       key: 'edit',
       render: (arg, announcement) => (
         <span>
-          <Button
-            type="link"
-            onClick={() => history.push(`/announcements/${announcement.id}/edit/`)}
+          <Link
+            to={`/announcements/${announcement.id}/edit/`}
           >
             <EditOutlined />
-          </Button>
+          </Link>
         </span>
       ),
     },

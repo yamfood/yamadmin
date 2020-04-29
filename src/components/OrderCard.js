@@ -7,6 +7,7 @@ import {
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import * as actions from '../actions';
 
 import CancelOrderButton from './CancelOrderButton';
@@ -73,7 +74,11 @@ const OrderCard = ({ order }) => {
         margin: 10,
       }}
       actions={[
-        <Icon type="eye" onClick={() => window.open(`/orders/${order.id}/`, '_blank')} />,
+        <>
+          <Link to={`/orders/${order.id}/`}>
+            <Icon type="eye" />
+          </Link>
+        </>,
         <Popover
           style={{ bottom: 0 }}
           title="Действия"
