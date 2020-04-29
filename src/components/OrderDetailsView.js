@@ -124,7 +124,8 @@ const OrderDetailsView = (props) => {
         <>
           <Button
             onClick={() => {
-              form.resetFields();
+              // eslint-disable-next-line no-restricted-globals
+              location.reload();
               dispatch(actions.setOrderStateUnchanged());
             }}
             style={{ marginRight: 15 }}

@@ -810,18 +810,6 @@ const orderDetails = handleActions({
       availableList: data,
     };
   },
-  [actions.reasonInputClicked](state) {
-    return {
-      ...state,
-      isReasonClicked: true,
-    }
-  },
-  [actions.reasonInputUnClicked](state) {
-    return {
-      ...state,
-      isReasonClicked: false,
-    }
-  },
 }, {
   status: null,
   editedState: 'unchanged',
