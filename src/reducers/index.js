@@ -766,6 +766,31 @@ const orderDetails = handleActions({
       [data.id]: data,
     };
   },
+  [actions.addOrderProduct](state, { payload }) {
+    const { item, orderId } = payload;
+    return {
+      ...state,
+      [orderId]: {
+        ...state[orderId],
+        products: [
+          ...state[orderId].products,
+          item,
+        ],
+      },
+    }
+  },
+  [actions.removeOrderProduct](state, { payload }) {
+    const { orderId, productId } = payload;
+    return {
+      ...state,
+      [orderId]: {
+        ...state[orderId],
+        products: [
+          ...state[orderId].products.filter((product) => productId !== product.id),
+        ],
+      },
+    }
+  },
   [actions.getAvaialbeProductsRequest](state) {
     return {
       ...state,
@@ -784,6 +809,18 @@ const orderDetails = handleActions({
       availableStatus: 'success',
       availableList: data,
     };
+  },
+  [actions.reasonInputClicked](state) {
+    return {
+      ...state,
+      isReasonClicked: true,
+    }
+  },
+  [actions.reasonInputUnClicked](state) {
+    return {
+      ...state,
+      isReasonClicked: false,
+    }
   },
 }, {
   status: null,

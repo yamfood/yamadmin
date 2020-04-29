@@ -6,6 +6,7 @@ import {
   setOrderStateChanged,
   patchOrderDetails,
   getAvaialbeProducts,
+  reasonInputUnClicked,
 } from '../../actions';
 
 const formWrap = (Component) => {
@@ -42,7 +43,10 @@ const formWrap = (Component) => {
           if (orderDetails.editedState === 'changed') {
             return ;
           }
-          dispatch(setOrderStateChanged());
+          if (!orderDetails.isReasonClicked) {
+            dispatch(setOrderStateChanged());
+            dispatch(reasonInputUnClicked());
+          }
         }}
       >
         <Component {...props} />
