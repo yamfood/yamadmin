@@ -1021,6 +1021,7 @@ const params = handleActions({
     return {
       ...state,
       isEditVisible: false,
+      editParam: '',
     }
   },
   [actions.editParametersRequest](state) {
