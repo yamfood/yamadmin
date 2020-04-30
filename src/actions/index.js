@@ -1027,3 +1027,25 @@ export const getBotsId = () => async (dispatch) => {
     dispatch(getBotsIdFailure());
   }
 };
+
+export const editClientDetailsRequest = createAction('EDIT_CLIENT_DETAILS_REQUEST');
+export const editClientDetailsFailure = createAction('EDIT_CLIENT_DETAILS_FAILURE');
+export const editClientDetailsSuccess = createAction('EDIT_CLIENT_DETAILS_SUCCESS');
+
+export const editClientDetails = (clientId, body) => async (dispatch) => {
+  dispatch(editClientDetailsRequest());
+  try {
+    await httpClient.patch(api.clientDetails(clientId), body);
+    dispatch(editClientDetailsSuccess());
+    message.success('Клиент успешно изменен', 3);
+    history.push('/clients/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(editClientDetailsFailure());
+    message.error('Ошибка при измении клиента', 3);
+  }
+};

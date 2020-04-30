@@ -67,6 +67,24 @@ const clients = handleActions({
       blockedStatus: 'success',
     }
   },
+  [actions.editClientDetailsRequest](state) {
+    return {
+      ...state,
+      editStatus: 'request',
+    }
+  },
+  [actions.editClientDetailsFailure](state) {
+    return {
+      ...state,
+      editStatus: 'failure',
+    }
+  },
+  [actions.editClientDetailsSuccess](state) {
+    return {
+      ...state,
+      editStatus: 'success',
+    }
+  },
 }, {
   list: [],
   status: null,

@@ -27,6 +27,7 @@ import Announcements from './Announcements';
 import AnnouncementCreate from './AnnouncementCreate';
 import AnnouncementEdit from './AnnouncementEdit';
 import ParamsList from './ParamsList';
+import TestDetails from './ClientEdit';
 
 
 const App = () => (
@@ -42,7 +43,8 @@ const App = () => (
         <PrivateRoute exact path="/kitchens/create/" component={KitchenCreate} />
         <PrivateRoute exact path="/kitchens" component={KitchensList} />
         <PrivateRoute exact path="/kitchens/:id/edit/" component={KitchenEdit} />
-        <PrivateRoute path="/clients/" component={Clients} />
+        <PrivateRoute exact path="/clients/" component={Clients} />
+        <PrivateRoute exact path="/clients/:id/" component={TestDetails} />
         <PrivateRoute exact path="/admins/" component={AdminsList} />
         <PrivateRoute exact path="/admins/:id/edit/" component={AdminEdit} />
         <PrivateRoute exact path="/admins/create/" component={AdminCreate} />

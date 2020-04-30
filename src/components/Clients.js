@@ -6,12 +6,15 @@ import {
   Button,
   Icon,
 } from 'antd';
+import {
+  EditOutlined,
+} from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Title from './shared/Title';
 import * as actions from '../actions';
 import PhoneSearchForm from './PhoneSearchForm';
 import pagination from './pagination';
-import ClientDetails from './DisplayDetails';
 import { contentStyle } from '../assets/style';
 
 const { Content } = Layout;
@@ -19,18 +22,14 @@ const { Content } = Layout;
 const Clients = () => {
   const {
     getClients,
-    getClientDetails,
-    setIsBlockedClient,
   } = actions;
   const dispatch = useDispatch();
   const clients = useSelector((state) => state.clients);
 
   useEffect(() => {
-    if (clients.status === null) {
-      dispatch(getClients({ page: clients.page }));
-    }
+    dispatch(getClients({ page: clients.page }));
     dispatch(actions.setMenuActive(4));
-  });
+  }, []);
 
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
@@ -41,11 +40,25 @@ const Clients = () => {
       title: 'Блокирован',
       dataIndex: 'is_blocked',
       key: 'is_blocked',
-      render: (blocked, client) => (
-        <Switch
-          defaultChecked={blocked === true}
-          onChange={(checked) => dispatch(setIsBlockedClient(client.id, { is_blocked: checked }))}
-        />
+      render: (blocked) => {
+        if (blocked) {
+          return <span style={{ color: 'red' }}>Блокирован</span>
+        }
+        return null;
+      },
+    },
+    {
+      title: 'Изменить',
+      dataIndex: 'edit',
+      key: 'edit',
+      render: (arg, client) => (
+        <span>
+          <Link
+            to={`/clients/${client.id}/`}
+          >
+            <EditOutlined />
+          </Link>
+        </span>
       ),
     },
   ];
@@ -87,16 +100,6 @@ const Clients = () => {
               clients.page,
               dispatch,
             )}
-            expandedRowRender={(record) => (
-              <ul>
-                <ClientDetails dataToDisplay={clients.detailsData} id={record.id} />
-              </ul>
-            )}
-            onExpand={(expanded, record) => {
-              if (expanded) {
-                dispatch(getClientDetails(record.id));
-              }
-            }}
           />
         </Content>
       </Layout>
