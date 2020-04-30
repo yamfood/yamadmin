@@ -24,7 +24,7 @@ const KitchenCreate = (props) => {
 
   useEffect(() => {
     dispatch(actions.setMenuActive(2));
-    dispatch(actions.getBotId());
+    dispatch(actions.getBotsId());
   }, []);
 
   const handleSubmit = (e) => {
@@ -72,15 +72,15 @@ const KitchenCreate = (props) => {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Select
-                disabled={kitchens.botStatus === 'request'}
+                disabled={kitchens.botsRequestStatus === 'request'}
                 allowClear
               >
-                {kitchens.botList.map((category) => (
+                {kitchens.botsList.map((bot) => (
                   <Select.Option
-                    value={category.id}
-                    key={category.id}
+                    value={bot.id}
+                    key={bot.id}
                   >
-                    {category.name}
+                    {bot.name}
                   </Select.Option>
                 ))}
               </Select>,

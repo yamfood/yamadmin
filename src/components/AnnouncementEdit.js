@@ -28,7 +28,7 @@ const AnnouncementsEditForm = ({
   useEffect(() => {
     dispatch(actions.getAnnouncementDetails(id));
     dispatch(actions.setMenuActive(6));
-    dispatch(actions.getBotId());
+    dispatch(actions.getBotsId());
   }, [])
 
   const handleSubmit = (e) => {
@@ -75,15 +75,15 @@ const AnnouncementsEditForm = ({
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Select
-                disabled={announcement.detailsStatus === 'request'}
+                disabled={announcement.botsRequestStatus === 'request'}
                 allowClear
               >
-                {announcement.botList.map((category) => (
+                {announcement.botsList.map((bot) => (
                   <Select.Option
-                    value={category.id}
-                    key={category.id}
+                    value={bot.id}
+                    key={bot.id}
                   >
-                    {category.name}
+                    {bot.name}
                   </Select.Option>
                 ))}
               </Select>,

@@ -24,7 +24,7 @@ const KitchenEditForm = ({ form, id, history }) => {
   useEffect(() => {
     dispatch(actions.getKitchenDetails(id));
     dispatch(actions.setMenuActive(2));
-    dispatch(actions.getBotId());
+    dispatch(actions.getBotsId());
   }, []);
 
   const handleSubmit = (e) => {
@@ -69,15 +69,15 @@ const KitchenEditForm = ({ form, id, history }) => {
           rules: [{ required: true, message: 'Это обязательное поле' }],
         })(
           <Select
-            disabled={kitchen.botStatus === 'request'}
+            disabled={kitchen.botsRequestStatus === 'request'}
             allowClear
           >
-            {kitchen.botList.map((category) => (
+            {kitchen.botsList.map((bot) => (
               <Select.Option
-                value={category.id}
-                key={category.id}
+                value={bot.id}
+                key={bot.id}
               >
-                {category.name}
+                {bot.name}
               </Select.Option>
             ))}
           </Select>,

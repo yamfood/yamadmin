@@ -598,23 +598,23 @@ const kitchens = handleActions({
       disabledProducts: data.disabled_products,
     }
   },
-  [actions.getBotIdRequest](state) {
+  [actions.getBotsIdRequest](state) {
     return {
       ...state,
-      botStatus: 'request',
+      botsRequestStatus: 'request',
     }
   },
-  [actions.getBotIdFailure](state) {
+  [actions.getBotsIdFailure](state) {
     return {
       ...state,
-      botStatus: 'failure',
+      botsRequestStatus: 'failure',
     }
   },
-  [actions.getBotIdSuccess](state, { payload: { data } }) {
+  [actions.getBotsIdSuccess](state, { payload: { data } }) {
     return {
       ...state,
-      botStatus: 'success',
-      botList: data,
+      botsRequestStatus: 'success',
+      botsList: data,
     }
   },
 }, {
@@ -628,7 +628,7 @@ const kitchens = handleActions({
   },
   productsForModal: [],
   disabledProducts: [],
-  botList: [],
+  botsList: [],
 });
 
 
@@ -994,29 +994,29 @@ const announcements = handleActions({
       deleteStatus: 'success',
     }
   },
-  [actions.getBotIdRequest](state) {
+  [actions.getBotsIdRequest](state) {
     return {
       ...state,
-      botStatus: 'request',
+      botsRequestStatus: 'request',
     }
   },
-  [actions.getBotIdFailure](state) {
+  [actions.getBotsIdFailure](state) {
     return {
       ...state,
-      botStatus: 'failure',
+      botsRequestStatus: 'failure',
     }
   },
-  [actions.getBotIdSuccess](state, { payload: { data } }) {
+  [actions.getBotsIdSuccess](state, { payload: { data } }) {
     return {
       ...state,
-      botStatus: 'success',
-      botList: data,
+      botsRequestStatus: 'success',
+      botsList: data,
     }
   },
 }, {
   page: 1,
   advertisements: [],
-  botList: [],
+  botsList: [],
 });
 
 const menu = handleActions({

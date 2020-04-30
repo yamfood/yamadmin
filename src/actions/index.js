@@ -1009,21 +1009,21 @@ export const editParameters = (editId, value) => async (dispatch) => {
   }
 };
 
-export const getBotIdRequest = createAction('GET_BOT_ID_REQUEST');
-export const getBotIdFailure = createAction('GET_BOT_ID_FAILURE');
-export const getBotIdSuccess = createAction('GET_BOT_ID_SUCCESS');
+export const getBotsIdRequest = createAction('GET_BOTS_ID_REQUEST');
+export const getBotsIdFailure = createAction('GET_BOTS_ID_FAILURE');
+export const getBotsIdSuccess = createAction('GET_BOTS_ID_SUCCESS');
 
-export const getBotId = () => async (dispatch) => {
-  dispatch(getBotIdRequest());
+export const getBotsId = () => async (dispatch) => {
+  dispatch(getBotsIdRequest());
   try {
     const response = await httpClient.get(api.getBot());
-    dispatch(getBotIdSuccess({ data: response.data }));
+    dispatch(getBotsIdSuccess({ data: response.data }));
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
       localStorage.removeItem('token');
       dispatch(loginFailure());
     }
-    dispatch(getBotIdFailure());
+    dispatch(getBotsIdFailure());
   }
 };
