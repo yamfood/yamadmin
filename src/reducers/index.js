@@ -2,6 +2,7 @@ import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
 
 import * as actions from '../actions';
+import {getMeSuccess} from "../actions";
 
 
 const clients = handleActions({
@@ -651,12 +652,23 @@ const auth = handleActions({
     return {
       ...state,
       status: 'success',
-      token: data.token,
+      ...data,
+    }
+  },
+  [actions.getMeSuccess](state, { payload: { data } }) {
+    console.log(data);
+    return {
+      ...state,
+      status: 'success',
+      ...data,
     }
   },
 }, {
   token: null,
   status: null,
+  payload: {
+    permissions: [],
+  },
 });
 
 const activeOrders = handleActions({
