@@ -31,4 +31,5 @@ export default {
   availableProducts: (id) => [host, `orders/${id}/products/`].join('/'),
   editParam: (id) => [host, `params/${id}/`].join('/'),
   getBot: () => [host, 'bots/'].join('/'),
+  getMe: () => [host, 'admins/me/'].join('/'),
 };

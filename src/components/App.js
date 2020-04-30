@@ -1,5 +1,5 @@
 import '../App.css';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Router, Switch, Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import Navigation from './Navigation';
@@ -27,39 +27,49 @@ import Announcements from './Announcements';
 import AnnouncementCreate from './AnnouncementCreate';
 import AnnouncementEdit from './AnnouncementEdit';
 import ParamsList from './ParamsList';
+import {useDispatch} from 'react-redux';
+import * as actions from '../actions';
 
 
-const App = () => (
-  <Layout className="App">
-    <Router history={history}>
-      <Navigation />
+const App = () => {
+  const dispatch = useDispatch();
 
-      <Switch>
-        <Route path="/login/" component={Login} />
-        <PrivateRoute exact path="/products/create/" component={ProductCreate} />
-        <PrivateRoute exact path="/products" component={Products} />
-        <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
-        <PrivateRoute exact path="/kitchens/create/" component={KitchenCreate} />
-        <PrivateRoute exact path="/kitchens" component={KitchensList} />
-        <PrivateRoute exact path="/kitchens/:id/edit/" component={KitchenEdit} />
-        <PrivateRoute path="/clients/" component={Clients} />
-        <PrivateRoute exact path="/admins/" component={AdminsList} />
-        <PrivateRoute exact path="/admins/:id/edit/" component={AdminEdit} />
-        <PrivateRoute exact path="/admins/create/" component={AdminCreate} />
-        <PrivateRoute exact path="/riders" component={RidersList} />
-        <PrivateRoute exact path="/riders/:id/edit/" component={RiderEdit} />
-        <PrivateRoute exact path="/orders/active/" component={OrdersActive} />
-        <PrivateRoute exact path="/riders/create/" component={RiderCreate} />
-        <PrivateRoute exact path="/orders/finished/" component={OrdersFinished} />
-        <PrivateRoute exact path="/orders/:id/" component={OrderDetails} />
-        <PrivateRoute exact path="/announcements/" component={Announcements} />
-        <PrivateRoute exact path="/announcements/create/" component={AnnouncementCreate} />
-        <PrivateRoute exact path="/announcements/:id/edit/" component={AnnouncementEdit} />
-        <PrivateRoute exact path="/params/" component={ParamsList} />
-        <PrivateRoute path="/" component={Home} />
-      </Switch>
-    </Router>
-  </Layout>
-);
+  useEffect(() => {
+    dispatch(actions.getMe());
+  }, [dispatch]);
+
+  return (
+    <Layout className="App">
+      <Router history={history}>
+        <Navigation />
+
+        <Switch>
+          <Route path="/login/" component={Login} />
+          <PrivateRoute exact path="/products/create/" component={ProductCreate} />
+          <PrivateRoute exact path="/products" component={Products} />
+          <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
+          <PrivateRoute exact path="/kitchens/create/" component={KitchenCreate} />
+          <PrivateRoute exact path="/kitchens" component={KitchensList} />
+          <PrivateRoute exact path="/kitchens/:id/edit/" component={KitchenEdit} />
+          <PrivateRoute path="/clients/" component={Clients} />
+          <PrivateRoute exact path="/admins/" component={AdminsList} />
+          <PrivateRoute exact path="/admins/:id/edit/" component={AdminEdit} />
+          <PrivateRoute exact path="/admins/create/" component={AdminCreate} />
+          <PrivateRoute exact path="/riders" component={RidersList} />
+          <PrivateRoute exact path="/riders/:id/edit/" component={RiderEdit} />
+          <PrivateRoute exact path="/orders/active/" component={OrdersActive} />
+          <PrivateRoute exact path="/riders/create/" component={RiderCreate} />
+          <PrivateRoute exact path="/orders/finished/" component={OrdersFinished} />
+          <PrivateRoute exact path="/orders/:id/" component={OrderDetails} />
+          <PrivateRoute exact path="/announcements/" component={Announcements} />
+          <PrivateRoute exact path="/announcements/create/" component={AnnouncementCreate} />
+          <PrivateRoute exact path="/announcements/:id/edit/" component={AnnouncementEdit} />
+          <PrivateRoute exact path="/params/" component={ParamsList} />
+          <PrivateRoute path="/" component={Home} />
+        </Switch>
+      </Router>
+    </Layout>
+  );
+}
 
 export default App;
