@@ -29,4 +29,5 @@ export default {
   viewOrderSocket: () => [host, 'ws/order/'].join('/'),
   getSignedURL: () => [host, 'sign-s3'].join('/'),
   availableProducts: (id) => [host, `orders/${id}/products/`].join('/'),
+  editParam: (id) => [host, `params/${id}/`].join('/'),
 };

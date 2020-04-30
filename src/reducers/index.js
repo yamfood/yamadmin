@@ -1010,8 +1010,43 @@ const params = handleActions({
       list: data,
     };
   },
+  [actions.openSettingModal](state, { payload }) {
+    return {
+      ...state,
+      editParam: payload,
+      isEditVisible: true,
+    }
+  },
+  [actions.closeSettingModal](state) {
+    return {
+      ...state,
+      isEditVisible: false,
+      editParam: '',
+    }
+  },
+  [actions.editParametersRequest](state) {
+    return {
+      ...state,
+      editStatus: 'request',
+    }
+  },
+  [actions.editParametersFailure](state) {
+    return {
+      ...state,
+      editStatus: 'failure',
+    }
+  },
+  [actions.editParametersSuccess](state) {
+    return {
+      ...state,
+      editStatus: 'success',
+    }
+  },
 }, {
   list: [],
+  editParam: {
+    name: '',
+  },
 });
 
 export default combineReducers({
