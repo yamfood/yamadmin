@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Modal,
   Form,
-  Input,
+  Input, Button,
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { closeSettingModal, editParameters } from '../actions';
@@ -26,7 +26,6 @@ const ParamsEditModal = ({ form }) => {
 
   useEffect(() => {
     setVisible(param.isEditVisible);
-    // console.log('editParam.value: ', editParam.value);
   }, [param.isEditVisible])
 
   const handleCancel = () => {
@@ -34,15 +33,15 @@ const ParamsEditModal = ({ form }) => {
   };
 
   return (
-    <Form>
-      <Modal
-        title={editParam.name}
-        visible={isVisible}
-        onOk={handleSubmit}
-        onCancel={handleCancel}
-        confirmLoading={param.editStatus === 'request'}
-      >
-        <p>{editParam.docs || 'docs here'}</p>
+    <Modal
+      title={`Изменить "${editParam.name}"`}
+      visible={isVisible}
+      footer={null}
+      closable={false}
+      confirmLoading={param.editStatus === 'request'}
+    >
+      <Form onSubmit={handleSubmit}>
+        <p>{editParam.docs || ''}</p>
         <Form.Item>
           {getFieldDecorator('value', {
             initialValue: editParam.value,
@@ -50,10 +49,27 @@ const ParamsEditModal = ({ form }) => {
             <Input />,
           )}
         </Form.Item>
-      </Modal>
-    </Form>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Form.Item>
+            <Button onClick={handleCancel} disabled={param.editStatus === 'request'}>
+              Назад
+            </Button>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              style={{ marginLeft: 10 }}
+              type="primary"
+              htmlType="submit"
+              loading={param.editStatus === 'request'}
+            >
+              Сохранить
+            </Button>
+          </Form.Item>
+        </div>
+      </Form>
+    </Modal>
   );
-}
+};
 
 const WrappedModal = Form.create()(ParamsEditModal);
 export default WrappedModal;
