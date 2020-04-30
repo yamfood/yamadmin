@@ -627,6 +627,7 @@ export const createKitchen = (params) => async (dispatch) => {
   dispatch(createKitchenRequest());
   try {
     await httpClient.post(api.kitchens(), {
+      bot_id: params.bot_id,
       name: params.name,
       location: {
         longitude: parseFloat(params.longitude),
@@ -684,6 +685,7 @@ export const editKitchen = (params) => async (dispatch) => {
   dispatch(editKitchenRequest());
   try {
     await httpClient.patch(api.kitchenDetails(params.id), {
+      bot_id: params.bot_id,
       name: params.name,
       location: {
         longitude: parseFloat(params.longitude),
@@ -1004,5 +1006,24 @@ export const editParameters = (editId, value) => async (dispatch) => {
     }
     dispatch(editParametersFailure());
     message.error('Ошибка при измении настройки', 3);
+  }
+};
+
+export const getBotsIdRequest = createAction('GET_BOTS_ID_REQUEST');
+export const getBotsIdFailure = createAction('GET_BOTS_ID_FAILURE');
+export const getBotsIdSuccess = createAction('GET_BOTS_ID_SUCCESS');
+
+export const getBotsId = () => async (dispatch) => {
+  dispatch(getBotsIdRequest());
+  try {
+    const response = await httpClient.get(api.getBot());
+    dispatch(getBotsIdSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getBotsIdFailure());
   }
 };

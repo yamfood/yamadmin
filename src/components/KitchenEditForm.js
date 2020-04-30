@@ -6,6 +6,7 @@ import {
   TimePicker,
   Switch,
   Input,
+  Select,
 } from 'antd';
 import moment from 'moment';
 import * as actions from '../actions';
@@ -23,6 +24,7 @@ const KitchenEditForm = ({ form, id, history }) => {
   useEffect(() => {
     dispatch(actions.getKitchenDetails(id));
     dispatch(actions.setMenuActive(2));
+    dispatch(actions.getBotsId());
   }, []);
 
   const handleSubmit = (e) => {
@@ -58,6 +60,27 @@ const KitchenEditForm = ({ form, id, history }) => {
           initialValue: details ? details.location.latitude : null,
         })(
           <Input disabled={kitchen.detailStatus === 'request'} type="number" />,
+        )}
+      </Form.Item>
+      <Form.Item label="Бот: " style={{ width: 200 }}>
+        {getFieldDecorator('bot_id', {
+          initialValue: details
+            ? details.bot_id : null,
+          rules: [{ required: true, message: 'Это обязательное поле' }],
+        })(
+          <Select
+            disabled={kitchen.botsRequestStatus === 'request'}
+            allowClear
+          >
+            {kitchen.botsList.map((bot) => (
+              <Select.Option
+                value={bot.id}
+                key={bot.id}
+              >
+                {bot.name}
+              </Select.Option>
+            ))}
+          </Select>,
         )}
       </Form.Item>
       <Form.Item label="Техническая информация">
