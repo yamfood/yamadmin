@@ -30,4 +30,5 @@ export default {
   getSignedURL: () => [host, 'sign-s3'].join('/'),
   availableProducts: (id) => [host, `orders/${id}/products/`].join('/'),
   editParam: (id) => [host, `params/${id}/`].join('/'),
+  getBot: () => [host, 'bots/'].join('/'),
 };

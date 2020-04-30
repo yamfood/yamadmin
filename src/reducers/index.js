@@ -598,6 +598,25 @@ const kitchens = handleActions({
       disabledProducts: data.disabled_products,
     }
   },
+  [actions.getBotsIdRequest](state) {
+    return {
+      ...state,
+      botsRequestStatus: 'request',
+    }
+  },
+  [actions.getBotsIdFailure](state) {
+    return {
+      ...state,
+      botsRequestStatus: 'failure',
+    }
+  },
+  [actions.getBotsIdSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      botsRequestStatus: 'success',
+      botsList: data,
+    }
+  },
 }, {
   list: [],
   status: null,
@@ -609,6 +628,7 @@ const kitchens = handleActions({
   },
   productsForModal: [],
   disabledProducts: [],
+  botsList: [],
 });
 
 
@@ -974,9 +994,29 @@ const announcements = handleActions({
       deleteStatus: 'success',
     }
   },
+  [actions.getBotsIdRequest](state) {
+    return {
+      ...state,
+      botsRequestStatus: 'request',
+    }
+  },
+  [actions.getBotsIdFailure](state) {
+    return {
+      ...state,
+      botsRequestStatus: 'failure',
+    }
+  },
+  [actions.getBotsIdSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      botsRequestStatus: 'success',
+      botsList: data,
+    }
+  },
 }, {
   page: 1,
   advertisements: [],
+  botsList: [],
 });
 
 const menu = handleActions({
