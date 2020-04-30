@@ -1027,3 +1027,24 @@ export const getBotsId = () => async (dispatch) => {
     dispatch(getBotsIdFailure());
   }
 };
+
+
+export const getMeRequest = createAction('GET_ME_REQUEST');
+export const getMeFailure = createAction('GET_ME_FAILURE');
+export const getMeSuccess = createAction('GET_ME_SUCCESS');
+
+export const getMe = () => async (dispatch) => {
+  dispatch(getMeRequest());
+  try {
+    const response = await httpClient.get(api.getMe());
+    dispatch(getMeSuccess({ data: response.data }));
+    console.log(response.data)
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getMeFailure());
+  }
+};
