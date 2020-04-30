@@ -666,6 +666,9 @@ const auth = handleActions({
 }, {
   token: null,
   status: null,
+  payload: {
+    permissions: [],
+  },
 });
 
 const activeOrders = handleActions({
