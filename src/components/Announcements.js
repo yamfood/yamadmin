@@ -39,6 +39,7 @@ const Announcements = () => {
       key: 'image_url',
       render: (image) => <img alt="" style={{ width: 100 }} src={image} />,
     },
+    { title: 'Bot', dataIndex: 'bot', key: 'bot' },
     { title: 'Текст', dataIndex: 'text', key: 'text' },
     { title: 'Статус', dataIndex: 'status', key: 'status' },
     {

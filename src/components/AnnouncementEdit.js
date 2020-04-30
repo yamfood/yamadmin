@@ -5,6 +5,7 @@ import {
   Input,
   Button,
   DatePicker,
+  Select,
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
@@ -27,6 +28,7 @@ const AnnouncementsEditForm = ({
   useEffect(() => {
     dispatch(actions.getAnnouncementDetails(id));
     dispatch(actions.setMenuActive(6));
+    dispatch(actions.getBotId());
   }, [])
 
   const handleSubmit = (e) => {
@@ -64,6 +66,27 @@ const AnnouncementsEditForm = ({
                 accept=".png,.jpg"
                 loading={announcement.signedURLStatus === 'request' || announcement.uploadFileStatus === 'request'}
               />,
+            )}
+          </Form.Item>
+          <Form.Item label="Бот: " style={{ width: 200 }}>
+            {getFieldDecorator('bot_id', {
+              initialValue: announcement.details
+                ? announcement.details.bot_id : null,
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+            })(
+              <Select
+                disabled={announcement.detailsStatus === 'request'}
+                allowClear
+              >
+                {announcement.botList.map((category) => (
+                  <Select.Option
+                    value={category.id}
+                    key={category.id}
+                  >
+                    {category.name}
+                  </Select.Option>
+                ))}
+              </Select>,
             )}
           </Form.Item>
           <Form.Item label="Отправить в">

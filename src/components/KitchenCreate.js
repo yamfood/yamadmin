@@ -5,6 +5,7 @@ import {
   Input,
   Layout,
   TimePicker,
+  Select,
 } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,6 +24,7 @@ const KitchenCreate = (props) => {
 
   useEffect(() => {
     dispatch(actions.setMenuActive(2));
+    dispatch(actions.getBotId());
   }, []);
 
   const handleSubmit = (e) => {
@@ -63,6 +65,25 @@ const KitchenCreate = (props) => {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Input />,
+            )}
+          </Form.Item>
+          <Form.Item label="Бот: " style={{ width: 200 }}>
+            {getFieldDecorator('bot_id', {
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+            })(
+              <Select
+                disabled={kitchens.botStatus === 'request'}
+                allowClear
+              >
+                {kitchens.botList.map((category) => (
+                  <Select.Option
+                    value={category.id}
+                    key={category.id}
+                  >
+                    {category.name}
+                  </Select.Option>
+                ))}
+              </Select>,
             )}
           </Form.Item>
           <Form.Item label="Техническая информация">

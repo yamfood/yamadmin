@@ -26,6 +26,7 @@ const KitchensList = () => {
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
     { title: 'Название', dataIndex: 'name', key: 'name' },
+    { title: 'Bot', dataIndex: 'bot', key: 'bot' },
     {
       title: 'Открывается',
       dataIndex: 'start_at',
