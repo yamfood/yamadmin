@@ -4,7 +4,6 @@ import {
   Icon,
   Layout,
   Table,
-  Switch,
 } from 'antd';
 import {
   EditOutlined,
@@ -39,14 +38,7 @@ const RidersList = () => {
       title: 'Блокирован',
       dataIndex: 'is_blocked',
       key: 'is_blocked',
-      render: (blocked, client) => (
-        <Switch
-          defaultChecked={blocked}
-          onChange={(checked) => {
-            dispatch(actions.editRider({ is_blocked: checked }, client.id))
-          }}
-        />
-      ),
+      render: (blocked) => (blocked ? <p style={{ color: 'red' }}>Блокирован</p> : null),
     },
     {
       title: 'Изменить',
