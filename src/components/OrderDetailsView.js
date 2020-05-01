@@ -53,7 +53,7 @@ const OrderDetailsView = (props) => {
           return form.getFieldDecorator(
             `products[${index}].count`,
             { initialValue: value || 1 },
-          )(<Input type="number" />)
+          )(<Input type="number" disabled={order.payment !== 'cash'} />)
         }
         return value;
       },
@@ -228,7 +228,7 @@ const OrderDetailsView = (props) => {
         </Descriptions.Item>
         <Descriptions.Item label="Доставка">
           {
-            order.status === 'new'
+            order.status === 'new' && order.payment === 'cash'
               ? (
                 form.getFieldDecorator(('delivery_cost'), {
                   initialValue: order.delivery_cost,
@@ -244,7 +244,7 @@ const OrderDetailsView = (props) => {
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <h3><strong>Продукты</strong></h3>
         {
-          order.status === 'new'
+          order.status === 'new' && order.payment === 'cash'
             ? <OrderAvailableModal orderId={order.id} />
             : ''
         }
@@ -254,7 +254,7 @@ const OrderDetailsView = (props) => {
           ...item,
           key: item.id,
         }))}
-        columns={order.status === 'new' ? [...columns, deleteColumn] : columns}
+        columns={order.status === 'new' && order.payment === 'cash' ? [...columns, deleteColumn] : columns}
         size="small"
         pagination={false}
         loading={editStatus === 'request'}
