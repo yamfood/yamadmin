@@ -2,7 +2,6 @@ import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
 
 import * as actions from '../actions';
-import {getMeSuccess} from "../actions";
 
 
 const clients = handleActions({
@@ -66,6 +65,24 @@ const clients = handleActions({
     return {
       ...state,
       blockedStatus: 'success',
+    }
+  },
+  [actions.editClientDetailsRequest](state) {
+    return {
+      ...state,
+      editStatus: 'request',
+    }
+  },
+  [actions.editClientDetailsFailure](state) {
+    return {
+      ...state,
+      editStatus: 'failure',
+    }
+  },
+  [actions.editClientDetailsSuccess](state) {
+    return {
+      ...state,
+      editStatus: 'success',
     }
   },
 }, {
