@@ -22,6 +22,7 @@ const KitchensList = () => {
   const dispatch = useDispatch();
   const kitchens = useSelector((state) => state.kitchens);
   const history = useHistory();
+  const format = 'HH:mm';
 
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
@@ -31,13 +32,13 @@ const KitchensList = () => {
       title: 'Открывается',
       dataIndex: 'start_at',
       key: 'start_at',
-      render: (time) => moment(time).format('HH:mm'),
+      render: (time) => moment.utc(time, format).local().format(format),
     },
     {
       title: 'Закрывается',
       dataIndex: 'end_at',
       key: 'end_at',
-      render: (time) => moment(time).format('HH:mm'),
+      render: (time) => moment.utc(time, format).local().format(format),
     },
     {
       title: 'Отключен',
