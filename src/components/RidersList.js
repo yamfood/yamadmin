@@ -41,7 +41,7 @@ const RidersList = () => {
       key: 'is_blocked',
       render: (blocked, client) => (
         <Switch
-          defaultChecked={blocked === true}
+          defaultChecked={blocked}
           onChange={(checked) => {
             dispatch(actions.editRider({ is_blocked: checked }, client.id))
           }}
