@@ -27,16 +27,6 @@ const KitchenEditForm = ({ form, id, history }) => {
     dispatch(actions.getBotsId());
   }, []);
 
-  const handleBlocked = () => {
-    if (details) {
-      if (details.is_disabled) {
-        return true;
-      }
-      return false;
-    }
-    return null;
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -124,7 +114,7 @@ const KitchenEditForm = ({ form, id, history }) => {
       </Form.Item>
       <Form.Item label="Отключен">
         {getFieldDecorator('is_disabled', {
-          initialValue: handleBlocked(),
+          initialValue: details.is_disabled,
           valuePropName: 'checked',
         })(
           <Switch

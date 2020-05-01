@@ -31,6 +31,12 @@ const Announcements = () => {
     dispatch(actions.setMenuActive(6));
   }, []);
 
+  const statusesMap = {
+    scheduled: <p style={{ fontWeight: 'bold', color: 'blue' }}>Запланирован</p>,
+    sending: <p style={{ fontWeight: 'bold', color: 'yellow' }}>Рассылается</p>,
+    sent: <p style={{ fontWeight: 'bold', color: 'green' }}>Отправлен</p>,
+  };
+
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
     {
@@ -41,45 +47,60 @@ const Announcements = () => {
     },
     { title: 'Бот', dataIndex: 'bot', key: 'bot' },
     { title: 'Текст', dataIndex: 'text', key: 'text' },
-    { title: 'Статус', dataIndex: 'status', key: 'status' },
+    {
+      title: 'Статус',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status) => statusesMap[status],
+    },
     {
       title: 'Отправить в',
       dataIndex: 'send_at',
       key: 'send_at',
-      render: (time) => moment(time).format('YYYY-MM-DD HH:mm:ss'),
+      render: (time) => moment(time).format('DD.MM.YYYY HH:mm:ss'),
     },
     {
       title: 'Изменить',
       dataIndex: 'edit',
       key: 'edit',
-      render: (arg, announcement) => (
-        <span>
-          <Link
-            to={`/announcements/${announcement.id}/edit/`}
-          >
-            <EditOutlined />
-          </Link>
-        </span>
-      ),
+      render: (arg, announcement) => {
+        if (announcement.status === 'scheduled') {
+          return (
+            <span>
+              <Link
+                to={`/announcements/${announcement.id}/edit/`}
+              >
+                <EditOutlined />
+              </Link>
+            </span>
+          )
+        }
+        return ''
+      },
     },
     {
       title: 'Удалить',
       dataIndex: 'delete',
       key: 'delete',
-      render: (arg, announcement) => (
-        <Popconfirm
-          title="Вы уверены в удалении?"
-          onConfirm={() => dispatch(actions.deleteAnnouncement(announcement.id))}
-          okText="Да"
-          cancelText="Нет"
-        >
-          <Button
-            type="link"
-          >
-            <DeleteOutlined />
-          </Button>
-        </Popconfirm>
-      ),
+      render: (arg, announcement) => {
+        if (announcement.status === 'scheduled') {
+          return (
+            <Popconfirm
+              title="Вы уверены в удалении?"
+              onConfirm={() => dispatch(actions.deleteAnnouncement(announcement.id))}
+              okText="Да"
+              cancelText="Нет"
+            >
+              <Button
+                type="link"
+              >
+                <DeleteOutlined />
+              </Button>
+            </Popconfirm>
+          )
+        }
+        return ''
+      },
     },
   ]
 
