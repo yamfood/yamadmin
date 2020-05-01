@@ -9,6 +9,7 @@ import {
 } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 
@@ -21,6 +22,7 @@ const KitchenCreate = (props) => {
   const kitchens = useSelector((state) => state.kitchens);
   const { form } = props;
   const { getFieldDecorator } = form;
+  const format = 'HH:mm';
 
   useEffect(() => {
     dispatch(actions.setMenuActive(2));
@@ -36,8 +38,6 @@ const KitchenCreate = (props) => {
       }
     });
   };
-
-  const format = 'HH:mm';
 
   return (
     <Layout>
@@ -98,6 +98,7 @@ const KitchenCreate = (props) => {
           <Form.Item label="Открывается">
             {getFieldDecorator('startAt')(
               <TimePicker
+                defaultOpenValue={moment('09:00:00', format)}
                 format={format}
                 placeholder="время"
               />,
@@ -106,6 +107,7 @@ const KitchenCreate = (props) => {
           <Form.Item label="Закрывается">
             {getFieldDecorator('endAt')(
               <TimePicker
+                defaultOpenValue={moment('23:00:00', format)}
                 format={format}
                 placeholder="время"
               />,
