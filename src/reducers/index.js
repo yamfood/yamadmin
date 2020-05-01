@@ -669,12 +669,23 @@ const auth = handleActions({
     return {
       ...state,
       status: 'success',
-      token: data.token,
+      ...data,
+    }
+  },
+  [actions.getMeSuccess](state, { payload: { data } }) {
+    console.log(data);
+    return {
+      ...state,
+      status: 'success',
+      ...data,
     }
   },
 }, {
   token: null,
   status: null,
+  payload: {
+    permissions: [],
+  },
 });
 
 const activeOrders = handleActions({
