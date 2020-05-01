@@ -86,6 +86,7 @@ const ClientDetails = ({ form }) => {
               <Form.Item>
                 {getFieldDecorator('is_blocked', {
                   initialValue: detailsData[id] ? detailsData[id].is_blocked : null,
+                  valuePropName: 'checked',
                 })(
                   <Switch disabled={clients.detailsStatus === 'request'} defaultChecked={handleBlocked()} />,
                 )}
