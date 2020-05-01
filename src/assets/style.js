@@ -12,3 +12,9 @@ export const contentStyle = {
   background: '#fff',
   minHeight: 'auto',
 };
+
+export const clientEditButtonsStyle = {
+  display: 'flex',
+  justifyContent: 'flex-end',
+  marginTop: '20px',
+};

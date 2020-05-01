@@ -1,7 +1,8 @@
 import '../App.css';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { Router, Switch, Route } from 'react-router-dom';
 import { Layout } from 'antd';
+import { useDispatch } from 'react-redux';
 import Navigation from './Navigation';
 import Products from './Products';
 import Home from './Home';
@@ -27,13 +28,12 @@ import Announcements from './Announcements';
 import AnnouncementCreate from './AnnouncementCreate';
 import AnnouncementEdit from './AnnouncementEdit';
 import ParamsList from './ParamsList';
-import {useDispatch} from 'react-redux';
+import TestDetails from './ClientEdit';
 import * as actions from '../actions';
 
 
 const App = () => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(actions.getMe());
   }, [dispatch]);
@@ -42,7 +42,6 @@ const App = () => {
     <Layout className="App">
       <Router history={history}>
         <Navigation />
-
         <Switch>
           <Route path="/login/" component={Login} />
           <PrivateRoute exact path="/products/create/" component={ProductCreate} />
@@ -51,7 +50,8 @@ const App = () => {
           <PrivateRoute exact path="/kitchens/create/" component={KitchenCreate} />
           <PrivateRoute exact path="/kitchens" component={KitchensList} />
           <PrivateRoute exact path="/kitchens/:id/edit/" component={KitchenEdit} />
-          <PrivateRoute path="/clients/" component={Clients} />
+          <PrivateRoute exact path="/clients/" component={Clients} />
+          <PrivateRoute exact path="/clients/:id/" component={TestDetails} />
           <PrivateRoute exact path="/admins/" component={AdminsList} />
           <PrivateRoute exact path="/admins/:id/edit/" component={AdminEdit} />
           <PrivateRoute exact path="/admins/create/" component={AdminCreate} />
@@ -69,7 +69,7 @@ const App = () => {
         </Switch>
       </Router>
     </Layout>
-  );
-}
+  )
+};
 
 export default App;
