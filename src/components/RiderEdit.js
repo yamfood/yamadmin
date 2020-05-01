@@ -31,7 +31,6 @@ const RidersForm = (props) => {
 
   const { getFieldDecorator } = form;
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const { editRiderDetails } = riders;
@@ -87,14 +86,17 @@ const RidersForm = (props) => {
           <Form.Item label="Блокирован">
             {getFieldDecorator('is_blocked', {
               initialValue: riders.editRiderDetails.is_blocked,
+              valuePropName: 'checked',
             })(
-              <Switch disabled={riders.riderDetailsStatus === 'request'} defaultChecked={riders.editRiderDetails.is_blocked === true} />,
+              <Switch
+                disabled={riders.riderDetailsStatus === 'request'}
+              />,
             )}
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Form.Item>
               <Button onClick={() => history.push('/riders/')}>
-                  Назад
+                Назад
               </Button>
             </Form.Item>
             <Form.Item>
