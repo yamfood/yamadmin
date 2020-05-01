@@ -15,6 +15,7 @@ import FileUploader from './shared/FileUploader';
 import { contentStyle } from '../assets/style';
 
 const { Content } = Layout;
+const { TextArea } = Input;
 
 const AnnouncementsEditForm = ({
   form,
@@ -52,7 +53,9 @@ const AnnouncementsEditForm = ({
               initialValue: announcement.details ? announcement.details.text : null,
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
-              <Input />,
+              <TextArea
+                autoSize={{ minRows: 4 }}
+              />,
             )}
           </Form.Item>
           <Form.Item label="Фото">

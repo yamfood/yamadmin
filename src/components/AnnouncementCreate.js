@@ -14,6 +14,7 @@ import FileUploader from './shared/FileUploader';
 import { contentStyle } from '../assets/style';
 
 const { Content } = Layout;
+const { TextArea } = Input;
 
 const AnnouncementsCreateFrom = ({
   form,
@@ -48,7 +49,9 @@ const AnnouncementsCreateFrom = ({
             {getFieldDecorator('text', {
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
-              <Input />,
+              <TextArea
+                autoSize={{ minRows: 4 }}
+              />,
             )}
           </Form.Item>
           <Form.Item label="Фото">
