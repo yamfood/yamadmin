@@ -1059,7 +1059,6 @@ export const getMe = () => async (dispatch) => {
   try {
     const response = await httpClient.get(api.getMe());
     dispatch(getMeSuccess({ data: response.data }));
-    console.log('hello', response.data)
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
