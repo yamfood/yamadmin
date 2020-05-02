@@ -10,7 +10,6 @@ import moment from 'moment';
 import * as actions from '../actions';
 import CancelOrderButton from './CancelOrderButton';
 import OrderAvailableModal from './OrderAvailableModal';
-import moment from "moment";
 
 
 const OrderDetailsView = (props) => {
@@ -147,7 +146,7 @@ const OrderDetailsView = (props) => {
     return (
       <>
         {
-          ['onKitchen', 'onWay'].includes(order.status) ? (
+          ['new', 'onKitchen', 'onWay'].includes(order.status) ? (
             <CancelOrderButton
               btnType="danger"
               loading={activeOrders.cancelStatus === 'request'}
