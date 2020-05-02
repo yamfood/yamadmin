@@ -437,6 +437,31 @@ export const createAdmin = (params) => async (dispatch) => {
   }
 };
 
+
+export const setMenuActive = createAction('SET_MENU_ACTIVE');
+export const setOrderStateChanged = createAction('ORDER_STATE_CHANGED_SET');
+
+
+export const getAvailableProductsRequest = createAction('GET_AVAILABLE_PRODUCTS_REQUEST');
+export const getAvailableProductsFailure = createAction('GET_AVAILABLE_PRODUCTS_FAILURE');
+export const getAvailableProductsSuccess = createAction('GET_AVAILABLE_PRODUCTS_SUCCESS');
+
+export const getAvailableProducts = (orderId) => async (dispatch) => {
+  dispatch(getAvailableProductsRequest());
+  try {
+    const response = await httpClient.get(api.availableProducts(orderId));
+    dispatch(getAvailableProductsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getAvailableProductsFailure());
+  }
+};
+
+
 export const acceptOrderRequest = createAction('ACCEPT_ORDER_REQUEST');
 export const acceptOrderFailure = createAction('ACCEPT_ORDER_FAILURE');
 export const acceptOrderSuccess = createAction('ACCEPT_ORDER_SUCCESS');
@@ -448,6 +473,8 @@ export const acceptOrder = (orderId, successURL) => async (dispatch) => {
     dispatch(acceptOrderSuccess());
     message.success('Заказ успешно принят', 3);
     history.push(successURL);
+    dispatch(getOrderDetails(orderId));
+    dispatch(getAvailableProducts(orderId));
     dispatch(getActiveOrders());
   } catch (error) {
     console.error(error);
@@ -936,29 +963,6 @@ export const deleteAnnouncement = (announcementsId) => async (dispatch) => {
   }
 };
 
-
-export const setMenuActive = createAction('SET_MENU_ACTIVE');
-export const setOrderStateChanged = createAction('ORDER_STATE_CHANGED_SET');
-
-
-export const getAvaialbeProductsRequest = createAction('GET_AVAILABLE_PRODUCTS_REQUEST');
-export const getAvaialbeProductsFailure = createAction('GET_AVAILABLE_PRODUCTS_FAILURE');
-export const getAvaialbeProductsSuccess = createAction('GET_AVAILABLE_PRODUCTS_SUCCESS');
-
-export const getAvaialbeProducts = (orderId) => async (dispatch) => {
-  dispatch(getAvaialbeProductsRequest());
-  try {
-    const response = await httpClient.get(api.availableProducts(orderId));
-    dispatch(getAvaialbeProductsSuccess({ data: response.data }));
-  } catch (error) {
-    console.error(error);
-    if (error.response.status === 403 || error.response.status === 401) {
-      localStorage.removeItem('token');
-      dispatch(loginFailure());
-    }
-    dispatch(getAvaialbeProductsFailure());
-  }
-};
 
 export const getParamsRequest = createAction('GET_PARAMS_REQUEST');
 export const getParamsFailure = createAction('GET_PARAMS_FAILURE');

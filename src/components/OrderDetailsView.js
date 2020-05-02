@@ -9,6 +9,7 @@ import {
 import * as actions from '../actions';
 import CancelOrderButton from './CancelOrderButton';
 import OrderAvailableModal from './OrderAvailableModal';
+import moment from "moment";
 
 
 const OrderDetailsView = (props) => {
@@ -144,14 +145,18 @@ const OrderDetailsView = (props) => {
     }
     return (
       <>
-        <CancelOrderButton
-          btnType="danger"
-          loading={activeOrders.cancelStatus === 'request'}
-          onSubmit={handleCancel}
-          disabled={activeOrders.acceptStatus === 'request'}
-        >
-          Отменить
-        </CancelOrderButton>
+        {
+          ['onKitchen', 'onWay'].includes(order.status) ? (
+            <CancelOrderButton
+              btnType="danger"
+              loading={activeOrders.cancelStatus === 'request'}
+              onSubmit={handleCancel}
+              disabled={activeOrders.acceptStatus === 'request'}
+            >
+              Отменить
+            </CancelOrderButton>
+          ) : null
+        }
         {
           order.status === 'new' ? (
             <Button
@@ -213,7 +218,9 @@ const OrderDetailsView = (props) => {
         <Descriptions.Item label="Тип оплаты" span={1}>
           {order.payment === 'cash' ? 'Наличными' : 'Картой'}
         </Descriptions.Item>
-        <Descriptions.Item label="Создан в">{order.created_at}</Descriptions.Item>
+        <Descriptions.Item label="Создан в">
+          {moment(order.created_at).format('DD.MM.YYYY HH:mm')}
+        </Descriptions.Item>
         <Descriptions.Item label="Заметки" span={2}>
           {
             order.status === 'new'
