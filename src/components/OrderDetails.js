@@ -41,10 +41,11 @@ const actionsCreator = {
   setMenuActive: actions.setMenuActive
 };
 
+
 const OrderDetails = (props) => {
   const { id } = useParams();
   const order = useSelector((state) => (state.orderDetails[id] || null));
-  const editStatus = useSelector((state) => state.orderDetails.editStatus)
+  const editStatus = useSelector((state) => state.orderDetails.editStatus);
   const editedState = useSelector((state) => state.orderDetails.editedState);
 
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ const OrderDetails = (props) => {
 
     if (order === null) {
       dispatch(actions.getOrderDetails(id));
-      dispatch(actions.getAvaialbeProducts(id));
+      dispatch(actions.getAvailableProducts(id));
       return
     }
 
