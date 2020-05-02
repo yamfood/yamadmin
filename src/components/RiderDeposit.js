@@ -30,10 +30,10 @@ const RiderDeposit = (props) => {
 
   return (
     <Form layout="inline" onSubmit={handleSubmit}>
-      <Form.Item label="Депозит">
+      <Form.Item label="Баланс">
         {getFieldDecorator('amount')(
           <Input
-            placeholder="Депозит"
+            placeholder="Баланс"
             type="number"
             disabled={status === 'request'}
           />,
@@ -50,7 +50,7 @@ const RiderDeposit = (props) => {
       </Form.Item>
     </Form>
   );
-}
+};
 
 const WrappedForm = Form.create()(RiderDeposit);
 export default WrappedForm;
