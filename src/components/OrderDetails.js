@@ -19,7 +19,7 @@ const mapStateToProps = (state, ownProps) => ({
   editedState: state.orderDetails.editedState,
 });
 
-const openViewSocket = async (orderID) => {
+const openViewSocket = (orderID) => {
   try {
     const url = api.viewOrderSocket().replace('http', 'ws');
     const socket = new WebSocket(url);
@@ -30,6 +30,7 @@ const openViewSocket = async (orderID) => {
       });
       socket.send(data)
     };
+    return socket;
   } catch (error) {
     console.error(error);
   }
@@ -52,16 +53,22 @@ const OrderDetails = (props) => {
 
   const { form } = props;
 
-  useEffect(() => {
+  useEffect( () => {
     dispatch(actions.setMenuActive(7));
+    dispatch(actions.getOrderDetails(id));
+    dispatch(actions.getAvailableProducts(id));
 
+    const socket = openViewSocket(id);
+
+    return () => {
+      socket.close()
+    }
+  }, []);
+
+  useEffect(() => {
     if (order === null) {
-      dispatch(actions.getOrderDetails(id));
-      dispatch(actions.getAvailableProducts(id));
       return
     }
-
-    openViewSocket(id);
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g';
     var map = new mapboxgl.Map({
