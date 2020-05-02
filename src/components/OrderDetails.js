@@ -53,7 +53,7 @@ const OrderDetails = (props) => {
 
   const { form } = props;
 
-  useEffect( () => {
+  useEffect(() => {
     dispatch(actions.setMenuActive(7));
     dispatch(actions.getOrderDetails(id));
     dispatch(actions.getAvailableProducts(id));
@@ -63,7 +63,7 @@ const OrderDetails = (props) => {
     return () => {
       socket.close()
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (order === null) {
