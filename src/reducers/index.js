@@ -840,19 +840,19 @@ const orderDetails = handleActions({
       },
     }
   },
-  [actions.getAvaialbeProductsRequest](state) {
+  [actions.getAvailableProductsRequest](state) {
     return {
       ...state,
       availableStatus: 'request',
     };
   },
-  [actions.getAvaialbeProductsFailure](state) {
+  [actions.getAvailableProductsFailure](state) {
     return {
       ...state,
       availableStatus: 'failure',
     };
   },
-  [actions.getAvaialbeProductsSuccess](state, { payload: { data } }) {
+  [actions.getAvailableProductsSuccess](state, { payload: { data } }) {
     return {
       ...state,
       availableStatus: 'success',
