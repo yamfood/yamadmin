@@ -391,6 +391,7 @@ const products = handleActions({
   productDetails: [],
   getSignedURLStatus: null,
   uploadStatus: null,
+  botsList: [],
 });
 
 

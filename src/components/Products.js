@@ -7,7 +7,6 @@ import {
   Popconfirm,
   Input,
   Cascader,
-  Select,
 } from 'antd';
 import {
   DeleteOutlined,
@@ -19,121 +18,88 @@ import Title from './shared/Title';
 import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 
-const { Option } = Select;
 const { Content } = Layout;
 
 const Products = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const food = useSelector((state) => state.products);
-  const { list } = food;
-  const [products, setProducts] = useState([]);
-  const [names, setNames] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [categoryProductStatus, setCategoryProductStatus] = useState();
-  const [nameStatus, setNametatus] = useState();
+  const productsState = useSelector((state) => state.products);
+  const { list } = productsState;
 
-  const filter = () => {
-    if (food.botsList) {
-      return [
-        { value: 'all', label: 'Все' },
-        ...food.botsList.map((product) => ({
-          value: product.id,
-          label: product.name,
-          children: food.categories.reduce((acc, curVal) => {
-            if (curVal.bot_id === product.id) {
-              return [
-                ...acc,
-                {
-                  value: curVal.id,
-                  label: `${curVal.name} ${curVal.emoji}`,
-                },
-              ];
-            }
-            return acc;
-          }, []),
-        })),
-      ];
-    }
-    return [];
-  }
+  const [categoryFilter, setCategoryFilter] = useState(() => (product) => product);
+  const [nameFilter, setNameFilter] = useState(() => (product) => product);
+
+  const [products, setProducts] = useState([]);
+
+  const filterChoices = () => [
+    {
+      value: 0,
+      label: 'Все',
+    },
+    ...productsState.botsList.map((bot) => ({
+      value: bot.id,
+      label: bot.name,
+      children: [
+        {
+          value: 0,
+          label: 'Все',
+        },
+        ...productsState.categories.reduce((acc, category) => {
+          if (category.bot_id === bot.id) {
+            return [
+              ...acc,
+              {
+                value: category.id,
+                label: `${category.name} ${category.emoji}`,
+              },
+            ];
+          }
+          return acc;
+        }, []),
+      ],
+    })),
+  ];
 
   const nameSearch = ({ target }) => {
-    if (categoryProductStatus === 'not found') {
-      setProducts([]);
-      return null;
-    }
     if (target.value) {
-      if (categoryProductStatus === 'found') {
-        const filteredCategory = categories.filter(
-          (product) => product.name.toLowerCase().includes(target.value.toLowerCase()),
-        );
-        if (filteredCategory.length === 0) {
-          setNametatus('not found');
-          setProducts([]);
-          return null;
-        }
-        setNames(filteredCategory);
-        setProducts(filteredCategory);
-        return null;
-      }
-      const filteredCategory = list.filter(
-        (product) => product.name.toLowerCase().includes(target.value.toLowerCase()),
+      setNameFilter(
+        () => (product) => product.name.toLowerCase().includes(target.value.toLowerCase()),
       );
-      if (filteredCategory.length === 0) {
-        setNametatus('not found');
-        setProducts([]);
-        return null;
-      }
-      setNames(filteredCategory);
-      setProducts(filteredCategory);
-      return null;
+      return
     }
-    if (categoryProductStatus === 'found') {
-      const filteredCategory = categories.filter(
-        (product) => product.name.toLowerCase().includes(target.value.toLowerCase()),
-      );
-      if (filteredCategory.length === 0) {
-        setNametatus('not found');
-        setProducts([]);
-        return null;
-      }
-      setNames(filteredCategory);
-      setProducts(filteredCategory);
-      return null;
-    }
-    setNames('all');
-    setProducts(list);
-    return null;
+
+    setNameFilter(() => (product) => product);
   };
 
-  const categorySearch = (categoryId) => {
-    if (categoryId[0] === 'all') {
-      setCategoryProductStatus('all');
+  const categorySearch = (selected) => {
+    const botID = selected[0];
+    const categoryID = selected[1];
+
+    if (botID === 0) {
+      setCategoryFilter(() => (product) => product);
+      return
     }
-    if (nameStatus === 'found') {
-      const filteredCategory = names.filter(
-        (product) => product.category_id === categoryId[1],
-      );
-      setCategoryProductStatus('found');
-      setCategories(filteredCategory);
-      setProducts(filteredCategory);
-      return null;
+
+    if (categoryID === 0) {
+      setCategoryFilter(() => (product) => product.bot_id === botID);
+      return;
     }
-    const filteredCategory = list.filter(
-      (product) => product.category_id === categoryId[1],
-    );
-    if (filteredCategory.length === 0) {
-      setCategoryProductStatus('not found');
-      setProducts([]);
-      return null;
-    }
-    setCategoryProductStatus('found');
-    setCategories(filteredCategory);
-    setProducts(filteredCategory);
-    return null;
+
+    setCategoryFilter(() => (product) => product.category_id === categoryID);
   };
 
+
+  useEffect(() => {
+    dispatch(actions.setMenuActive(3));
+    dispatch(actions.getBotsId());
+    dispatch(actions.getProducts());
+    dispatch(actions.getCategory());
+  }, [dispatch]);
+
+
+  useEffect(() => {
+    setProducts(list.filter(nameFilter).filter(categoryFilter))
+  }, [list, nameFilter, categoryFilter]);
 
   const columns = [
     {
@@ -203,17 +169,7 @@ const Products = () => {
     },
   ];
 
-  useEffect(() => {
-    dispatch(actions.setMenuActive(3));
-    dispatch(actions.getBotsId());
-    if (products.length === 0) {
-      dispatch(actions.getProducts());
-    }
-    setProducts(list);
-    dispatch(actions.getCategory());
-  }, [list]);
-
-  const loading = products.status === 'request';
+  const loading = productsState.status === 'request';
 
   return (
     <>
@@ -251,7 +207,7 @@ const Products = () => {
             />
             <Cascader
               style={{ marginLeft: 10, width: 250 }}
-              options={filter()}
+              options={filterChoices()}
               onChange={categorySearch}
               defaultValue={['all']}
               allowClear={false}
