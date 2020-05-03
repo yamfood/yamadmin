@@ -10,7 +10,6 @@ import moment from 'moment';
 import * as actions from '../actions';
 import CancelOrderButton from './CancelOrderButton';
 import OrderAvailableModal from './OrderAvailableModal';
-import moment from "moment";
 
 
 const OrderDetailsView = (props) => {

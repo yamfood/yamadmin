@@ -365,6 +365,25 @@ const products = handleActions({
       uploadStatus: 'failure',
     };
   },
+  [actions.getBotsIdRequest](state) {
+    return {
+      ...state,
+      botsRequestStatus: 'request',
+    }
+  },
+  [actions.getBotsIdFailure](state) {
+    return {
+      ...state,
+      botsRequestStatus: 'failure',
+    }
+  },
+  [actions.getBotsIdSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      botsRequestStatus: 'success',
+      botsList: data,
+    }
+  },
 }, {
   list: [],
   status: null,
