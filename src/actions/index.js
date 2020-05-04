@@ -1072,3 +1072,108 @@ export const getMe = () => async (dispatch) => {
     dispatch(getMeFailure());
   }
 };
+
+export const createCategoryRequest = createAction('CREATE_CATEGORY_REQUEST');
+export const createCategoryFailure = createAction('CREATE_CATEGORY_FAILURE');
+export const createCategorySuccess = createAction('CREATE_CATEGORY_SUCCESS');
+
+export const createCategory = (params) => async (dispatch) => {
+  dispatch(createCategoryRequest());
+  try {
+    await httpClient.post(api.productsCategory(), {
+      name: {
+        ru: params.name_ru,
+        uz: params.name_uz,
+        en: params.name_en,
+      },
+      bot_id: params.bot_id,
+      position: parseInt(params.position, 10),
+      emoji: params.emoji,
+      is_delivery_free: params.shipping,
+    });
+    dispatch(createCategorySuccess());
+    message.success('Категория успешно создана', 3);
+    history.push('/products/categories/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(createCategoryFailure());
+    message.error('Ошибка при создании категории', 3);
+  }
+};
+
+export const deleteCategoryRequest = createAction('DELETE_Category_REQUEST');
+export const deleteCategoryFailure = createAction('DELETE_Category_FAILURE');
+export const deleteCategorySuccess = createAction('DELETE_Category_SUCCESS');
+
+export const deleteCategory = (id) => async (dispatch) => {
+  dispatch(deleteCategoryRequest());
+  try {
+    await httpClient.delete(api.categoryDetails(id));
+    dispatch(deleteCategorySuccess());
+    message.success('Категория успешно удалена', 3);
+    dispatch(getCategory());
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(deleteCategoryFailure());
+    message.error('Ошибка при удалении категории', 3);
+  }
+};
+
+export const getCategoryDetailsRequest = createAction('GET_CATEGORY_DETAILS_REQUEST');
+export const getCategoryDetailsFailure = createAction('GET_CATEGORY_DETAILS_FAILURE');
+export const getCategoryDetailsSuccess = createAction('GET_CATEGORY_DETAILS_SUCCESS');
+
+export const getCategoryDetails = (id) => async (dispatch) => {
+  dispatch(getCategoryDetailsRequest());
+  try {
+    const response = await httpClient.get(api.categoryDetails(id));
+    dispatch(getCategoryDetailsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getCategoryDetailsFailure());
+  }
+};
+
+export const editCategoryDetailsRequest = createAction('EDIT_CATEGORY_DETAILS_REQUEST');
+export const editCategoryDetailsFailure = createAction('EDIT_CATEGORY_DETAILS_FAILURE');
+export const editCategoryDetailsSuccess = createAction('EDIT_CATEGORY_DETAILS_SUCCESS');
+
+export const editCategoryDetails = (params, id) => async (dispatch) => {
+  dispatch(editCategoryDetailsRequest());
+  try {
+    await httpClient.patch(api.categoryDetails(id), {
+      name: {
+        ru: params.name_ru,
+        uz: params.name_uz,
+        en: params.name_en,
+      },
+      bot_id: params.bot_id,
+      position: parseInt(params.position, 10),
+      emoji: params.emoji,
+      is_delivery_free: params.shipping,
+    });
+    dispatch(editCategoryDetailsSuccess());
+    history.push('/products/categories/');
+    message.success('Категория успешно изменена', 3);
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    message.success('Ошибка при изменеии категории', 3);
+    dispatch(editCategoryDetailsFailure());
+  }
+};

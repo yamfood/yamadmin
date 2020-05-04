@@ -28,7 +28,7 @@ const AnnouncementsEditForm = ({
 
   useEffect(() => {
     dispatch(actions.getAnnouncementDetails(id));
-    dispatch(actions.setMenuActive(6));
+    dispatch(actions.setMenuActive(7));
     dispatch(actions.getBotsId());
   }, [])
 

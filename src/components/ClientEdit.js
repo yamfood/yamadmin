@@ -25,7 +25,7 @@ const ClientDetails = ({ form }) => {
 
   useEffect(() => {
     dispatch(actions.getClientDetails(id));
-    dispatch(actions.setMenuActive(4));
+    dispatch(actions.setMenuActive(5));
   }, []);
 
   const handleSubmit = (e) => {

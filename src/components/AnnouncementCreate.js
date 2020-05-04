@@ -25,7 +25,7 @@ const AnnouncementsCreateFrom = ({
   const history = useHistory();
 
   useEffect(() => {
-    dispatch(actions.setMenuActive(6));
+    dispatch(actions.setMenuActive(7));
     dispatch(actions.getBotsId());
   }, []);
 

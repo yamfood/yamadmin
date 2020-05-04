@@ -1138,6 +1138,122 @@ const params = handleActions({
   },
 });
 
+const category = handleActions({
+  [actions.getCategoryRequest](state) {
+    return {
+      ...state,
+      getRequestStatus: 'request',
+    }
+  },
+  [actions.getCategoryFailure](state) {
+    return {
+      ...state,
+      getRequestStatus: 'failure',
+    }
+  },
+  [actions.getCategorySuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      getRequestStatus: 'success',
+      list: data,
+    }
+  },
+  [actions.getBotsIdRequest](state) {
+    return {
+      ...state,
+      botsRequestStatus: 'request',
+    }
+  },
+  [actions.getBotsIdFailure](state) {
+    return {
+      ...state,
+      botsRequestStatus: 'failure',
+    }
+  },
+  [actions.getBotsIdSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      botsRequestStatus: 'success',
+      botsList: data,
+    }
+  },
+  [actions.createCategoryRequest](state) {
+    return {
+      ...state,
+      createRequestStatus: 'request',
+    }
+  },
+  [actions.createCategoryFailure](state) {
+    return {
+      ...state,
+      createRequestStatus: 'failure',
+    }
+  },
+  [actions.createCategorySuccess](state) {
+    return {
+      ...state,
+      createRequestStatus: 'success',
+    }
+  },
+  [actions.deleteCategoryRequest](state) {
+    return {
+      ...state,
+      deleteRequestStatus: 'request',
+    };
+  },
+  [actions.deleteCategoryFailure](state) {
+    return {
+      ...state,
+      deleteRequestStatus: 'failure',
+    };
+  },
+  [actions.deleteCategorySuccess](state) {
+    return {
+      ...state,
+      deleteRequestStatus: 'success',
+    };
+  },
+  [actions.getCategoryDetailsRequest](state) {
+    return {
+      ...state,
+      getDetailsStatus: 'request',
+    }
+  },
+  [actions.getCategoryDetailsFailure](state) {
+    return {
+      ...state,
+      getDetailsStatus: 'failure',
+    }
+  },
+  [actions.getCategoryDetailsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      getDetailsStatus: 'success',
+      details: data,
+    }
+  },
+  [actions.editCategoryDetailsRequest](state) {
+    return {
+      ...state,
+      editRequestStatus: 'request',
+    }
+  },
+  [actions.editCategoryDetailsFailure](state) {
+    return {
+      ...state,
+      editRequestStatus: 'failure',
+    }
+  },
+  [actions.editCategoryDetailsSuccess](state) {
+    return {
+      ...state,
+      editRequestStatus: 'success',
+    }
+  },
+}, {
+  list: [],
+  botsList: [],
+});
 export default combineReducers({
   clients,
   riders,
@@ -1151,4 +1267,5 @@ export default combineReducers({
   announcements,
   menu,
   params,
+  category,
 });

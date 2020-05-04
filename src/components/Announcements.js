@@ -28,7 +28,7 @@ const Announcements = () => {
 
   useEffect(() => {
     dispatch(actions.getAnnouncements());
-    dispatch(actions.setMenuActive(6));
+    dispatch(actions.setMenuActive(7));
   }, []);
 
   const statusesMap = {

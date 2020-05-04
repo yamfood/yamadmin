@@ -9,6 +9,7 @@ export default {
   kitchenDisabledAction: (kitchenId, productId) => [host, `kitchens/${kitchenId}/disabled/${productId}/`].join('/'),
   products: () => [host, 'products/'].join('/'),
   product: (id) => [host, `products/${id}/`].join('/'),
+  categoryDetails: (id) => [host, `products/categories/${id}/`].join('/'),
   productsCategory: () => [host, 'products/categories/'].join('/'),
   riders: () => [host, 'riders/'].join('/'),
   orderDetails: (id) => [host, `orders/${id}/`].join('/'),

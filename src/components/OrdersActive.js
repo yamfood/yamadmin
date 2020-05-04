@@ -17,7 +17,7 @@ const OrdersActive = () => {
   const orders = useSelector((state) => state.activeOrders);
   useEffect(() => {
     dispatch(actions.getActiveOrders());
-    dispatch(actions.setMenuActive(7));
+    dispatch(actions.setMenuActive(8));
     const intervalId = setInterval(() => dispatch(actions.getActiveOrders()), 3000);
     return () => clearInterval(intervalId);
   }, []);

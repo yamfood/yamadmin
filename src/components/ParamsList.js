@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   Icon,
@@ -45,7 +45,7 @@ const ParamsList = () => {
 
   useEffect(() => {
     dispatch(actions.getParams());
-    dispatch(actions.setMenuActive(10));
+    dispatch(actions.setMenuActive(11));
   }, []);
 
   const loading = [

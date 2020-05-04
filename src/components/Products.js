@@ -90,7 +90,7 @@ const Products = () => {
 
 
   useEffect(() => {
-    dispatch(actions.setMenuActive(3));
+    dispatch(actions.setMenuActive(4));
     dispatch(actions.getBotsId());
     dispatch(actions.getProducts());
     dispatch(actions.getCategory());

@@ -68,7 +68,7 @@ const OrdersFinished = () => {
 
   useEffect(() => {
     dispatch(actions.getFinishedOrders());
-    dispatch(actions.setMenuActive(8));
+    dispatch(actions.setMenuActive(9));
   }, []);
 
   const loading = orders.status === 'request';
