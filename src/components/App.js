@@ -30,6 +30,7 @@ import AnnouncementEdit from './AnnouncementEdit';
 import ParamsList from './ParamsList';
 import TestDetails from './ClientEdit';
 import * as actions from '../actions';
+import OrderLogs from './OrderLogs';
 
 
 const App = () => {
@@ -61,6 +62,7 @@ const App = () => {
           <PrivateRoute exact path="/riders/create/" component={RiderCreate} />
           <PrivateRoute exact path="/orders/finished/" component={OrdersFinished} />
           <PrivateRoute exact path="/orders/:id/" component={OrderDetails} />
+          <PrivateRoute exact path="/orders/:id/logs/" component={OrderLogs} />
           <PrivateRoute exact path="/announcements/" component={Announcements} />
           <PrivateRoute exact path="/announcements/create/" component={AnnouncementCreate} />
           <PrivateRoute exact path="/announcements/:id/edit/" component={AnnouncementEdit} />

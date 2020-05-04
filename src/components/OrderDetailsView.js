@@ -2,6 +2,7 @@ import {
   Button, Descriptions, Input, Table, Tag,
 } from 'antd';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   DeleteOutlined,
@@ -175,6 +176,7 @@ const OrderDetailsView = (props) => {
 
   return (
     <div>
+      <Link to={`/orders/${order.id}/logs/`}>Журнал</Link>
       {form.getFieldDecorator('orderId', { initialValue: order.id })(<Input type="hidden" />)}
       <Descriptions
         title={`Заказ # ${order.id}`}
