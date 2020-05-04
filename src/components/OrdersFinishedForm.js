@@ -24,7 +24,7 @@ const OrdersFinishedForm = (props) => {
   }
 
   useEffect(() => {
-    dispatch(setMenuActive(8));
+    dispatch(setMenuActive(9));
   }, []);
 
   return (

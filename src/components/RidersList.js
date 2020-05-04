@@ -58,7 +58,7 @@ const RidersList = () => {
 
   useEffect(() => {
     dispatch(actions.getRiders({ page: riders.page }));
-    dispatch(actions.setMenuActive(5));
+    dispatch(actions.setMenuActive(6));
   }, []);
 
   const loading = [

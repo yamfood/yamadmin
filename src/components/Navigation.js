@@ -22,28 +22,41 @@ const Navigation = () => {
       </Menu.Item>
     ),
     Продукты: (
-      <Menu.Item key="3">
-        <Icon type="shopping" />
-        <span>Продукты</span>
-        <Link to="/products/" />
-      </Menu.Item>
+      <SubMenu
+        key="sub1"
+        title={(
+          <span>
+            <Icon type="shopping" />
+            <span>Продукты</span>
+          </span>
+        )}
+      >
+        <Menu.Item key="3">
+          Категории
+          <Link to="/products/categories/" />
+        </Menu.Item>
+        <Menu.Item key="4">
+          Продукты
+          <Link to="/products/" />
+        </Menu.Item>
+      </SubMenu>
     ),
     Клиенты: (
-      <Menu.Item key="4">
+      <Menu.Item key="5">
         <Icon type="smile" />
         <span>Клиенты</span>
         <Link to="/clients/" />
       </Menu.Item>
     ),
     Курьеры: (
-      <Menu.Item key="5">
+      <Menu.Item key="6">
         <Icon type="car" />
         <span>Курьеры</span>
         <Link to="/riders/" />
       </Menu.Item>
     ),
     Объявления: (
-      <Menu.Item key="6">
+      <Menu.Item key="7">
         <Icon type="sound" />
         <span>Объявления</span>
         <Link to="/announcements/" />
@@ -51,7 +64,7 @@ const Navigation = () => {
     ),
     Заказы: (
       <SubMenu
-        key="sub1"
+        key="sub2"
         title={(
           <span>
             <Icon type="shopping-cart" />
@@ -59,25 +72,25 @@ const Navigation = () => {
           </span>
         )}
       >
-        <Menu.Item key="7">
+        <Menu.Item key="8">
           Активные
           <Link to="/orders/active/" />
         </Menu.Item>
-        <Menu.Item key="8">
+        <Menu.Item key="9">
           Завершенные
           <Link to="/orders/finished/" />
         </Menu.Item>
       </SubMenu>
     ),
     Администраторы: (
-      <Menu.Item key="9">
+      <Menu.Item key="10">
         <Icon type="user" />
         <span>Администраторы</span>
         <Link to="/admins/" />
       </Menu.Item>
     ),
     Настройки: (
-      <Menu.Item key="10">
+      <Menu.Item key="11">
         <Icon type="setting" />
         <span>Настройки</span>
         <Link to="/params/" />

@@ -21,7 +21,7 @@ const OrderCard = ({ order }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    dispatch(actions.setMenuActive(7));
+    dispatch(actions.setMenuActive(8));
   }, []);
 
   const handleAccept = async () => {

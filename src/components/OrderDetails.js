@@ -44,7 +44,7 @@ const OrderDetails = (props) => {
   const { form } = props;
 
   useEffect(() => {
-    dispatch(actions.setMenuActive(7));
+    dispatch(actions.setMenuActive(8));
     dispatch(actions.getOrderDetails(id));
     dispatch(actions.getAvailableProducts(id));
 

@@ -23,7 +23,7 @@ const AdminCreate = (props) => {
 
   useEffect(() => {
     dispatch(actions.getAdminPermissions());
-    dispatch(actions.setMenuActive(9));
+    dispatch(actions.setMenuActive(10));
   }, []);
 
   const { getFieldDecorator } = form;
