@@ -35,6 +35,7 @@ const Clients = () => {
     { title: 'TID', dataIndex: 'tid', key: 'tid' },
     { title: 'Имя', dataIndex: 'name', key: 'name' },
     { title: 'Номер', dataIndex: 'phone', key: 'phone' },
+    { title: 'Бот', dataIndex: 'bot', key: 'bot' },
     {
       title: 'Блокирован',
       dataIndex: 'is_blocked',
