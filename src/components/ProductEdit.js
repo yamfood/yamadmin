@@ -31,7 +31,7 @@ const ProductCreate = (props) => {
     const productId = match.params.id;
     dispatch(actions.getProductDetails(productId));
     dispatch(actions.getCategory());
-    dispatch(actions.setMenuActive(3));
+    dispatch(actions.setMenuActive(4));
   }, [])
 
   const { getFieldDecorator } = form;

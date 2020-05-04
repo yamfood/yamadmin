@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import {
   Layout,
   Table,
-  Switch,
   Button,
   Icon,
 } from 'antd';
@@ -28,7 +27,7 @@ const Clients = () => {
 
   useEffect(() => {
     dispatch(getClients({ page: clients.page }));
-    dispatch(actions.setMenuActive(4));
+    dispatch(actions.setMenuActive(5));
   }, []);
 
   const columns = [

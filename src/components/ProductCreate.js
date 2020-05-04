@@ -27,7 +27,7 @@ const ProductCreate = (props) => {
 
   useEffect(() => {
     dispatch(actions.getCategory());
-    dispatch(actions.setMenuActive(3));
+    dispatch(actions.setMenuActive(4));
   }, [])
 
   const { getFieldDecorator } = form;
