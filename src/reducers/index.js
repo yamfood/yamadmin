@@ -810,6 +810,25 @@ const orderDetails = handleActions({
       [data.id]: data,
     }
   },
+  [actions.getOrderLogsRequest](state) {
+    return {
+      ...state,
+      logsStatus: 'request',
+    }
+  },
+  [actions.getOrderLogsFailure](state) {
+    return {
+      ...state,
+      logsStatus: 'failure',
+    }
+  },
+  [actions.getOrderLogsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      logsStatus: 'success',
+      logs: data,
+    }
+  },
   [actions.setOrderStateChanged](state) {
     return { ...state, editedState: 'changed' };
   },
@@ -881,6 +900,7 @@ const orderDetails = handleActions({
   },
 }, {
   status: null,
+  logsStatus: null,
   editedState: 'unchanged',
 });
 
