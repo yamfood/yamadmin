@@ -37,14 +37,6 @@ const ClientDetails = ({ form }) => {
     });
   };
 
-  const handleBlocked = () => {
-    if (detailsData[id]) {
-      if (detailsData[id].is_blocked) {
-        return 'checked';
-      }
-    }
-    return null;
-  }
 
   return (
     <Layout>
@@ -88,11 +80,11 @@ const ClientDetails = ({ form }) => {
                   initialValue: detailsData[id] ? detailsData[id].is_blocked : null,
                   valuePropName: 'checked',
                 })(
-                  <Switch disabled={clients.detailsStatus === 'request'} defaultChecked={handleBlocked()} />,
+                  <Switch disabled={clients.detailsStatus === 'request'} />,
                 )}
               </Form.Item>
             </Descriptions.Item>
-            <Descriptions.Item label="Data">
+            <Descriptions.Item label="Data" span={2}>
               <ul>
                 {detailsData[id] ? (
                   detailsData[id].data.map((detail) => (
@@ -106,6 +98,9 @@ const ClientDetails = ({ form }) => {
                   ))
                 ) : null}
               </ul>
+            </Descriptions.Item>
+            <Descriptions.Item label="Бот" span={2}>
+              {detailsData[id] ? detailsData[id].bot : null}
             </Descriptions.Item>
           </Descriptions>
           <Form.Item>
