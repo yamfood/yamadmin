@@ -128,16 +128,12 @@ const riders = handleActions({
     };
   },
   [actions.getRiderDetailsSuccess](state, { payload: { data, riderId } }) {
-    const riderDetail = Object.entries(data).map(((detail) => ({
-      label: detail[0],
-      value: detail[1],
-    })));
     return {
       ...state,
       riderDetailsStatus: 'success',
       riderDetails: {
         ...state.riderDetails,
-        [riderId]: riderDetail,
+        [riderId]: data,
       },
       editRiderDetails: data,
     };
