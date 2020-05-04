@@ -154,6 +154,27 @@ export const getOrderDetails = (id) => async (dispatch) => {
   }
 };
 
+
+export const getOrderLogsRequest = createAction('GET_ORDER_LOGS_REQUEST');
+export const getOrderLogsFailure = createAction('GET_ORDER_LOGS_FAILURE');
+export const getOrderLogsSuccess = createAction('GET_ORDER_LOGS_SUCCESS');
+
+export const getOrderLogs = (id) => async (dispatch) => {
+  dispatch(getOrderLogsRequest());
+  try {
+    const response = await httpClient.get(api.orderLogs(id));
+    dispatch(getOrderLogsSuccess({ data: response.data, id }));
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getOrderLogsFailure());
+  }
+};
+
+
 export const setOrderStateUnchanged = createAction('ORDER_STATE_UNCHANGED_SET');
 
 export const patchOrderDetailsRequest = createAction('PATCH_ORDER_DETAILS_REQUEST');
