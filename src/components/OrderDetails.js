@@ -1,23 +1,18 @@
-/* eslint-disable */
 import React, { useEffect } from 'react';
-const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 import {
   Layout,
 } from 'antd';
 import { withRouter, useParams } from 'react-router-dom';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../actions'
-import Title from './shared/Title';
-import api from "../apiRoutes";
-
-const { Content } = Layout;
+import api from '../apiRoutes';
 
 import OrderDetailsView from './OrderDetailsView';
 import formWrap from './wrappers/formWrapper';
 
-const mapStateToProps = (state, ownProps) => ({
-  editedState: state.orderDetails.editedState,
-});
+const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
+
+const { Content } = Layout;
 
 const openViewSocket = (orderID) => {
   try {
@@ -34,12 +29,7 @@ const openViewSocket = (orderID) => {
   } catch (error) {
     console.error(error);
   }
-};
-
-
-const actionsCreator = {
-  getOrderDetails: actions.getOrderDetails,
-  setMenuActive: actions.setMenuActive
+  return null;
 };
 
 
@@ -71,11 +61,11 @@ const OrderDetails = (props) => {
     }
 
     mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g';
-    var map = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/kensay/ck52ch6ji00o41ctc1n49mnc8',
       center: [69.2401, 41.2995],
-      zoom: 10
+      zoom: 10,
     });
 
     new mapboxgl.Marker()
@@ -94,9 +84,14 @@ const OrderDetails = (props) => {
           overflow: 'auto',
         }}
       >
-        {order !== null
-          ? <OrderDetailsView order={order} editStatus={editStatus} editedState={editedState} form={form} />
-          : <h1>Loading...</h1>}
+        {order !== null ? (
+          <OrderDetailsView
+            order={order}
+            editStatus={editStatus}
+            editedState={editedState}
+            form={form}
+          />
+        ) : <h1>Loading...</h1>}
       </Content>
     </Layout>
   )
