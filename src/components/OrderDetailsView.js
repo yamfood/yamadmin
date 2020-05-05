@@ -237,12 +237,12 @@ const OrderDetailsView = (props) => {
         </Descriptions.Item>
         <Descriptions.Item label="Доставка">
           {
-            order.status === 'new' && order.payment === 'cash'
+            order.status === 'new'
               ? (
                 form.getFieldDecorator(('delivery_cost'), {
                   initialValue: order.delivery_cost,
                 })(
-                  <Input style={{ width: '100%' }} type="number" />,
+                  <Input style={{ width: '100%' }} type="number" disabled={order.payment !== 'cash'}/>,
                 )
               ) : order.delivery_cost
           }
