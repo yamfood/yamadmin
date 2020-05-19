@@ -106,7 +106,7 @@ const KitchenCreate = (props) => {
                     value={terminal.deliveryTerminalId}
                     key={terminal.deliveryTerminalId}
                   >
-                    {`${terminal.deliveryRestaurantName} ${terminal.name}`}
+                    {terminal.deliveryRestaurantName}
                   </Select.Option>
                 ))}
               </Select>,
