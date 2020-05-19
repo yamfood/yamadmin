@@ -20,6 +20,7 @@ const KitchenCreate = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const kitchens = useSelector((state) => state.kitchens);
+  const terminals = useSelector((state) => state.terminals);
   const { form } = props;
   const { getFieldDecorator } = form;
   const format = 'HH:mm';
@@ -27,6 +28,7 @@ const KitchenCreate = (props) => {
   useEffect(() => {
     dispatch(actions.setMenuActive(2));
     dispatch(actions.getBotsId());
+    dispatch(actions.getTerminals());
   }, []);
 
   const handleSubmit = (e) => {
@@ -34,7 +36,8 @@ const KitchenCreate = (props) => {
 
     props.form.validateFields((err, values) => {
       if (!err) {
-        dispatch(actions.createKitchen(values));
+        const payload = JSON.stringify({ deliveryTerminalId: values.deliveryTerminalId });
+        dispatch(actions.createKitchen({ ...values, payload }));
       }
     });
   };
@@ -86,13 +89,27 @@ const KitchenCreate = (props) => {
               </Select>,
             )}
           </Form.Item>
-          <Form.Item label="Техническая информация">
-            {getFieldDecorator('payload', {
-              initialValue: '{ }',
+          <Form.Item label="Терминал: " style={{ width: 400 }}>
+            {getFieldDecorator('deliveryTerminalId', {
+              initialValue: null,
+              rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
-              <TextArea
-                autoSize={{ minRows: 4 }}
-              />,
+              <Select
+                disabled={terminals.status === 'request'}
+                allowClear
+                showSearch
+                optionFilterProp="children"
+                filterOption
+              >
+                {terminals.list.map((terminal) => (
+                  <Select.Option
+                    value={terminal.deliveryTerminalId}
+                    key={terminal.deliveryTerminalId}
+                  >
+                    {terminal.deliveryRestaurantName}
+                  </Select.Option>
+                ))}
+              </Select>,
             )}
           </Form.Item>
           <Form.Item label="Открывается">

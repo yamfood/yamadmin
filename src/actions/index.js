@@ -667,6 +667,25 @@ export const getKitchenDetails = (kitchenId) => async (dispatch) => {
   }
 };
 
+export const getTerminalsRequest = createAction('GET_TERMINALS_REQUEST');
+export const getTerminalsFailure = createAction('GET_TERMINALS_FAILURE');
+export const getTerminalsSuccess = createAction('GET_TERMINALS_SUCCESS');
+
+export const getTerminals = () => async (dispatch) => {
+  dispatch(getTerminalsRequest());
+  try {
+    const response = await httpClient.get(api.terminals());
+    dispatch(getTerminalsSuccess({data: response.data}));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getTerminalsFailure());
+  }
+};
+
 export const createKitchenRequest = createAction('CREATE_KITCHEN_REQUEST');
 export const createKitchenFailure = createAction('CREATE_KITCHEN_FAILURE');
 export const createKitchenSuccess = createAction('CREATE_KITCHEN_SUCCESS');

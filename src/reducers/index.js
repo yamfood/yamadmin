@@ -497,6 +497,30 @@ const admins = handleActions({
   permissions: [],
 });
 
+const terminals = handleActions({
+  [actions.getTerminalsRequest](state) {
+    return {
+      ...state,
+      status: 'request',
+    };
+  },
+  [actions.getTerminalsFailure](state) {
+    return {
+      ...state,
+      status: 'failure',
+    };
+  },
+  [actions.getTerminalsSuccess](state, {payload: {data}}) {
+    return {
+      ...state,
+      status: 'success',
+      list: data,
+    };
+  },
+}, {
+  list: [],
+  status: null,
+})
 
 const kitchens = handleActions({
   [actions.getKitchensRequest](state) {
@@ -1284,4 +1308,5 @@ export default combineReducers({
   menu,
   params,
   category,
+  terminals
 });
