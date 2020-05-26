@@ -30,6 +30,15 @@ const OrderDetailsView = (props) => {
   const columns = [
     { title: 'Название', dataIndex: 'name', key: 'name' },
     {
+      title: 'Опции',
+      dataIndex: 'modifiers',
+      key: 'modifiers',
+      render: (modifiers) => {
+        console.log(modifiers);
+        return modifiers.map((m) => <p>{m.name.ru}</p>)
+      },
+    },
+    {
       title: 'Комментарий',
       dataIndex: 'comment',
       key: 'comment',
