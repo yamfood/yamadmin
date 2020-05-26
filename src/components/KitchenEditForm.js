@@ -17,6 +17,7 @@ const format = 'HH:mm';
 
 const KitchenEditForm = ({ form, id, history }) => {
   const kitchen = useSelector((state) => state.kitchens);
+  const terminals = useSelector((state) => state.terminals);
   const { details } = kitchen;
   const { getFieldDecorator } = form;
   const dispatch = useDispatch();
@@ -25,14 +26,23 @@ const KitchenEditForm = ({ form, id, history }) => {
     dispatch(actions.getKitchenDetails(id));
     dispatch(actions.setMenuActive(2));
     dispatch(actions.getBotsId());
+    dispatch(actions.getTerminals());
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     form.validateFields((err, values) => {
+      let payload = details.payload;
+      payload = JSON.stringify({
+        ...payload,
+        deliveryTerminalId: values.deliveryTerminalId,
+      })
+
       if (!err) {
-        dispatch(actions.editKitchen({ ...values, id }))
+        dispatch(actions.editKitchen({
+          ...values, payload, id,
+        }))
       }
     });
   };
@@ -83,13 +93,28 @@ const KitchenEditForm = ({ form, id, history }) => {
           </Select>,
         )}
       </Form.Item>
-      <Form.Item label="Техническая информация">
-        {getFieldDecorator('payload', {
-          initialValue: details ? JSON.stringify(details.payload) : null,
+      <Form.Item label="Терминал: " style={{ width: 400 }}>
+        {getFieldDecorator('deliveryTerminalId', {
+          initialValue: details && details.payload
+            ? details.payload.deliveryTerminalId : null,
+          rules: [{ required: true, message: 'Это обязательное поле' }],
         })(
-          <TextArea
-            autoSize={{ minRows: 4 }}
-          />,
+          <Select
+            disabled={terminals.status === 'request'}
+            allowClear
+            showSearch
+            optionFilterProp="children"
+            filterOption
+          >
+            {terminals.list.map((terminal) => (
+              <Select.Option
+                value={terminal.deliveryTerminalId}
+                key={terminal.deliveryTerminalId}
+              >
+                {terminal.deliveryRestaurantName}
+              </Select.Option>
+            ))}
+          </Select>,
         )}
       </Form.Item>
       <Form.Item label="Открывается">
