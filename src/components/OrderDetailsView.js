@@ -47,6 +47,7 @@ const OrderDetailsView = (props) => {
           return (
             <>
               {form.getFieldDecorator(`products[${index}].comment`, { initialValue: value })(<Input />)}
+              {form.getFieldDecorator(`products[${index}].payload`, { initialValue: p.payload })(<Input type="hidden" />)}
               {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: p.id })(<Input type="hidden" />)}
             </>
           )
