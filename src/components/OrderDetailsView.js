@@ -33,10 +33,7 @@ const OrderDetailsView = (props) => {
       title: 'Опции',
       dataIndex: 'modifiers',
       key: 'modifiers',
-      render: (modifiers) => {
-        console.log(modifiers);
-        return modifiers.map((m) => <p>{m.name.ru}</p>)
-      },
+      render: (modifiers) => (modifiers ? modifiers.map((m) => <p>{m.name.ru}</p>) : null),
     },
     {
       title: 'Комментарий',
