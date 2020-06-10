@@ -189,6 +189,12 @@ const Products = () => {
               >
                 Создать продукт
               </Button>
+              <Button
+                  style={{ marginLeft: 10 }}
+                  onClick={() => dispatch(actions.syncProducts())}
+              >
+                Синхронизировать
+              </Button>
             </div>
             <p style={{ marginTop: 3 }}>
               <b>Кол-во: </b>
