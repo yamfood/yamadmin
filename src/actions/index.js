@@ -102,7 +102,7 @@ export const syncProducts = () => async (dispatch) => {
       localStorage.removeItem('token');
       dispatch(loginFailure());
     }
-    message.success('Ошибка синхронизации', 3);
+    message.error('Ошибка синхронизации', 3);
   }
 };
 
