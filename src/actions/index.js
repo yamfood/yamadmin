@@ -90,6 +90,24 @@ export const getProducts = () => async (dispatch) => {
 };
 
 
+export const syncProducts = () => async (dispatch) => {
+  dispatch(getProductsRequest());
+  try {
+    await httpClient.get(api.syncProducts());
+    message.success('Продукты синхронизированны', 3);
+    dispatch(getProducts());
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getProductsFailure());
+    message.error('Ошибка синхронизации', 3);
+  }
+};
+
+
 export const getRidersRequest = createAction('GET_RIDERS_REQUEST');
 export const getRidersFailure = createAction('GET_RIDERS_FAILURE');
 export const getRidersSuccess = createAction('GET_RIDERS_SUCCESS');
