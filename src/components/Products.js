@@ -27,11 +27,12 @@ const Products = () => {
   const { list } = productsState;
 
   const [categoryFilter, setCategoryFilter] = useState(() => (product) => product);
+  const [productStateFilter, setProductStateFilter] = useState(() => (product) => product);
   const [nameFilter, setNameFilter] = useState(() => (product) => product);
 
   const [products, setProducts] = useState([]);
 
-  const filterChoices = () => [
+  const filterBotChoices = () => [
     {
       value: 0,
       label: 'Все',
@@ -60,7 +61,20 @@ const Products = () => {
     })),
   ];
 
-  const nameSearch = ({ target }) => {
+
+  const productStateChoices = [
+    {
+      value: 0,
+      label: 'Все',
+    },
+    {
+      label: "Незавершённые",
+      value: null
+    }
+  ];
+
+
+  const nameSearch = ({target}) => {
     if (target.value) {
       setNameFilter(
         () => (product) => product.name.toLowerCase().includes(target.value.toLowerCase()),
@@ -70,6 +84,23 @@ const Products = () => {
 
     setNameFilter(() => (product) => product);
   };
+
+  const productStateSearch = (selected) => {
+    const state = selected[0];
+
+    if (state === 0) {
+      setProductStateFilter(() => (product) => product);
+      return
+    }
+
+    if (state === null) {
+      setProductStateFilter(() => (product) =>
+        product.category_id == null || !product.thumbnail || !product.photo);
+      return;
+    }
+
+  };
+
 
   const categorySearch = (selected) => {
     const botID = selected[0];
@@ -98,8 +129,8 @@ const Products = () => {
 
 
   useEffect(() => {
-    setProducts(list.filter(nameFilter).filter(categoryFilter))
-  }, [list, nameFilter, categoryFilter]);
+    setProducts(list.filter(nameFilter).filter(categoryFilter).filter(productStateFilter))
+  }, [list, nameFilter, categoryFilter, productStateFilter]);
 
   const columns = [
     {
@@ -213,9 +244,16 @@ const Products = () => {
             />
             <Cascader
               style={{ marginLeft: 10, width: 250 }}
-              options={filterChoices()}
+              options={filterBotChoices()}
               onChange={categorySearch}
-              defaultValue={['all']}
+              defaultValue={[0]}
+              allowClear={false}
+            />
+            <Cascader
+              style={{ marginLeft: 10, width: 150 }}
+              options={productStateChoices}
+              onChange={productStateSearch}
+              defaultValue={[0]}
               allowClear={false}
             />
           </div>
