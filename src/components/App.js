@@ -34,6 +34,8 @@ import CategoryCreate from './CategoryCreate';
 import CategoryEdit from './CategoryEdit';
 import * as actions from '../actions';
 import OrderLogs from './OrderLogs';
+import ProductModifiers from "./ProductModifiers";
+import ProductModifierEdit from "./ProductModifierEdit";
 
 
 const App = () => {
@@ -50,6 +52,8 @@ const App = () => {
           <Route path="/login/" component={Login} />
           <PrivateRoute exact path="/products/create/" component={ProductCreate} />
           <PrivateRoute exact path="/products" component={Products} />
+          <PrivateRoute exact path="/products/modifiers" component={ProductModifiers} />
+          <PrivateRoute exact path="/products/modifiers/:id/edit/" component={ProductModifierEdit} />
           <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
           <PrivateRoute exact path="/products/categories/" component={ProductCategories} />
           <PrivateRoute exact path="/products/categories/create/" component={CategoryCreate} />

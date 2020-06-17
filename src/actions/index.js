@@ -70,6 +70,79 @@ export const getKitchens = () => async (dispatch) => {
 };
 
 
+
+export const editModifierRequest = createAction('EDIT_MODIFIER_REQUEST');
+export const editModifierFailure = createAction('EDIT_MODIFIER_FAILURE');
+export const editModifierSuccess = createAction('EDIT_MODIFIER_SUCCESS');
+
+export const editModifier = (params, modifierId) => async (dispatch) => {
+  dispatch(editModifierRequest());
+  try {
+
+    await httpClient.patch(api.modifierDetails(modifierId), {
+      name: {
+        ru: params.name_ru,
+        uz: params.name_uz,
+        en: params.name_en,
+      },
+      price: parseInt(params.price, 10),
+    });
+    dispatch(editModifierSuccess());
+    message.success('Модификатор успешно изменен', 3);
+    history.push('/products/modifiers');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(editModifierFailure());
+    message.error('Ошибка при изменении продукта', 3);
+  }
+};
+
+
+
+export const getModifiersRequest = createAction('GET_MODIFIERS_REQUEST');
+export const getModifiersFailure = createAction('GET_MODIFIERS_FAILURE');
+export const getModifiersSuccess = createAction('GET_MODIFIERS_SUCCESS');
+
+export const getModifiers = () => async (dispatch) => {
+  dispatch(getModifiersRequest());
+  try {
+    const response = await httpClient.get(api.productModifiers());
+    dispatch(getModifiersSuccess({ data: response.data }));
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getModifiersFailure());
+  }
+};
+
+
+export const getModifierDetailsRequest = createAction('GET_MODIFIER_DETAILS_REQUEST');
+export const getModifierDetailsFailure = createAction('GET_MODIFIER_DETAILS_FAILURE');
+export const getModifierDetailsSuccess = createAction('GET_MODIFIER_DETAILS_SUCCESS');
+
+export const getModifierDetails = (modifierId) => async (dispatch) => {
+  dispatch(getModifierDetailsRequest());
+  try {
+    const response = await httpClient.get(api.modifierDetails(modifierId));
+    dispatch(getModifierDetailsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getModifierDetailsFailure());
+  }
+};
+
+
 export const getProductsRequest = createAction('GET_PRODUCTS_REQUEST');
 export const getProductsFailure = createAction('GET_PRODUCTS_FAILURE');
 export const getProductsSuccess = createAction('GET_PRODUCTS_SUCCESS');
