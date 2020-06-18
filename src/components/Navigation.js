@@ -119,11 +119,13 @@ const Navigation = () => {
 
         {availablePages.map((page) => menuItemsMap[page])}
       </Menu>
-      <div className="ant-layout-sider-trigger" style={{width: '200px'}}
-           onClick={()=>dispatch(actions.logout())}>
+      {availablePages.length &&
+      <div className="ant-layout-sider-trigger"
+           style={{width: '200px'}}
+           onClick={() => dispatch(actions.logout())}>
         <Icon type="logout"/>
         <span> Выход</span>
-      </div>
+      </div>}
     </Sider>
   )
 };
