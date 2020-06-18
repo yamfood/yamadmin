@@ -803,10 +803,12 @@ const auth = handleActions({
       ...state,
       status: 'failure',
       token: null,
+      payload: {
+        permissions: [],
+      }
     }
   },
   [actions.loginSuccess](state, { payload: { data } }) {
-    console.log(data);
     return {
       ...state,
       status: 'success',

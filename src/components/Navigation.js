@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Menu, Icon } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { title } from '../utils'
+import * as actions from '../actions';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -10,6 +11,7 @@ const { SubMenu } = Menu;
 const Navigation = () => {
   const menu = useSelector((state) => state.menu);
   const auth = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const availablePages = auth.payload.permissions;
 
@@ -117,6 +119,11 @@ const Navigation = () => {
 
         {availablePages.map((page) => menuItemsMap[page])}
       </Menu>
+      <div className="ant-layout-sider-trigger" style={{width: '200px'}}
+           onClick={()=>dispatch(actions.logout())}>
+        <Icon type="logout"/>
+        <span> Выход</span>
+      </div>
     </Sider>
   )
 };

@@ -45,7 +45,7 @@ const ParamsList = () => {
 
   useEffect(() => {
     dispatch(actions.getParams());
-    dispatch(actions.setMenuActive(11));
+    dispatch(actions.setMenuActive(12));
   }, []);
 
   const loading = [

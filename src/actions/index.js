@@ -5,6 +5,11 @@ import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
 
+export const logout = () => async (dispatch) => {
+  dispatch(loginFailure());
+  localStorage.removeItem('token');
+};
+
 export const loginRequest = createAction('LOGIN_REQUEST');
 export const loginFailure = createAction('LOGIN_FAILURE');
 export const loginSuccess = createAction('LOGIN_SUCCESS');
