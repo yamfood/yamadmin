@@ -34,8 +34,8 @@ import CategoryCreate from './CategoryCreate';
 import CategoryEdit from './CategoryEdit';
 import * as actions from '../actions';
 import OrderLogs from './OrderLogs';
-import ProductModifiers from "./ProductModifiers";
-import ProductModifierEdit from "./ProductModifierEdit";
+import ProductModifiers from './ProductModifiers';
+import ProductModifierEdit from './ProductModifierEdit';
 
 
 const App = () => {

@@ -8,10 +8,7 @@ import {
   Input,
   Cascader,
 } from 'antd';
-import {
-  DeleteOutlined,
-  EditOutlined,
-} from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useHistory, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import Title from './shared/Title';
@@ -68,13 +65,13 @@ const Products = () => {
       label: 'Все',
     },
     {
-      label: "Незавершённые",
-      value: null
-    }
+      label: 'Незавершённые',
+      value: null,
+    },
   ];
 
 
-  const nameSearch = ({target}) => {
+  const nameSearch = ({ target }) => {
     if (target.value) {
       setNameFilter(
         () => (product) => product.name.toLowerCase().includes(target.value.toLowerCase()),
@@ -92,13 +89,11 @@ const Products = () => {
       setProductStateFilter(() => (product) => product);
       return
     }
-
     if (state === null) {
-      setProductStateFilter(() => (product) =>
-        product.category_id == null || !product.thumbnail || !product.photo);
-      return;
+      setProductStateFilter(() => (product) => product.category_id == null
+        || !product.thumbnail
+        || !product.photo);
     }
-
   };
 
 
@@ -221,8 +216,8 @@ const Products = () => {
                 Создать продукт
               </Button>
               <Button
-                  style={{ marginLeft: 10 }}
-                  onClick={() => dispatch(actions.syncProducts())}
+                style={{ marginLeft: 10 }}
+                onClick={() => dispatch(actions.syncProducts())}
               >
                 Синхронизировать
               </Button>

@@ -611,7 +611,7 @@ const terminals = handleActions({
       status: 'failure',
     };
   },
-  [actions.getTerminalsSuccess](state, {payload: {data}}) {
+  [actions.getTerminalsSuccess](state, { payload: { data } }) {
     return {
       ...state,
       status: 'success',
@@ -805,7 +805,7 @@ const auth = handleActions({
       token: null,
       payload: {
         permissions: [],
-      }
+      },
     }
   },
   [actions.loginSuccess](state, { payload: { data } }) {
@@ -1412,5 +1412,5 @@ export default combineReducers({
   params,
   category,
   terminals,
-  modifiers
+  modifiers,
 });
