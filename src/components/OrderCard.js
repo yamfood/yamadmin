@@ -115,6 +115,7 @@ const OrderCard = ({ order }) => {
         </div>
       )}
       {order.rider_phone === null ? null : `📱 ${order.rider_phone}`}
+      <br />
       {order.kitchen === null ? null : `🏠 ${order.kitchen}`}
       {order.comment === null ? null : (
         <p>
