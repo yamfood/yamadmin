@@ -115,14 +115,6 @@ const OrderCard = ({ order }) => {
         </div>
       )}
       {order.rider_phone === null ? null : `📱 ${order.rider_phone}`}
-      {order.total_sum === null ? null : (
-        <div>
-          <br />
-          💰
-          {order.total_sum.toLocaleString('ru')}
-          сум
-        </div>
-      )}
       {order.kitchen === null ? null : `🏠 ${order.kitchen}`}
       {order.comment === null ? null : (
         <p>
