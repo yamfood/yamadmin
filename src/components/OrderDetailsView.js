@@ -1,11 +1,11 @@
 import {
-  Button, Descriptions, Input, Table, Tag,
+  Button, Col, Descriptions, Divider, Icon, Input, Row, Table, Tag,
 } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  DeleteOutlined,
+  DeleteOutlined, EditOutlined,
 } from '@ant-design/icons';
 import moment from 'moment';
 import * as actions from '../actions';
@@ -180,6 +180,103 @@ const OrderDetailsView = (props) => {
       </>
     )
   };
+  const expandedModifierGroup = (product) => {
+    // const { groupModifiers } = product;
+    const groupModifiers = [
+      { name: 'Терияки', price: 2000, selected: true },
+      { name: 'Пикнтный', price: 12000, selected: false },
+      { name: 'Чили', price: 22000, selected: false },
+      { name: 'Без соуса', price: 33000, selected: true },
+      { name: 'Кунг Пао', price: 4400, selected: false },
+      { name: 'Якитори', price: 4400, selected: true },
+    ];
+    const modifierGroupColumns = [
+      {
+        title: 'Груп ID',
+        dataIndex: 'id',
+        key: 'id',
+      },
+      { title: 'Обязательное', dataIndex: 'required', key: 'required' },
+    ];
+
+    // const expandedModifier = (group) => {
+    //   const { modifiers } = group;
+    //   const modifierColumns = [
+    //     { title: 'Название', dataIndex: 'name', key: 'name' },
+    //     {
+    //       title: 'Цена',
+    //       dataIndex: 'price',
+    //       key: 'price',
+    //       render: (text) => `${text.toLocaleString('ru')} сум`,
+    //     },
+    //     {
+    //       title: 'Изменить',
+    //       dataIndex: 'edit',
+    //       key: 'edit',
+    //       align: 'right',
+    //       render: (id, record) => (
+    //         <span>
+    //           <Link
+    //             onClick={(e) => {
+    //               e.stopPropagation();
+    //             }}
+    //             to={`modifiers/${record.id}/edit`}
+    //           >
+    //             <EditOutlined />
+    //           </Link>
+    //         </span>
+    //       ),
+    //     },
+    //   ];
+    //   return (
+    //     <Table
+    //       key={`${group.id}_table`}
+    //       pagination={false}
+    //       columns={modifierColumns}
+    //       dataSource={modifiers.map((m) => ({ ...m, key: m.id }))}
+    //     />
+    //   )
+    // }
+
+    return (
+      <>
+        <Row gutter={8}>
+          {groupModifiers.map((gm) => (
+            <Col span={8}>
+
+              <Button
+                className="modifier-btn"
+                size="large"
+                type={gm.selected ? 'primary' : 'default'}
+                block
+                icon={gm.selected ? 'check-circle' : null}
+
+              >
+                {gm.name}
+              </Button>
+            </Col>
+          ))}
+        </Row>
+        <Divider />
+        <Row gutter={8}>
+          {groupModifiers.map((gm) => (
+            <Col span={8}>
+
+              <Button
+                className="modifier-btn"
+                size="large"
+                type={gm.selected ? 'primary' : 'default'}
+                block
+                icon={gm.selected ? 'check-circle' : null}
+              >
+                {gm.name}
+              </Button>
+            </Col>
+          ))}
+        </Row>
+      </>
+    )
+  };
 
   return (
     <div>
@@ -249,7 +346,7 @@ const OrderDetailsView = (props) => {
                 form.getFieldDecorator(('delivery_cost'), {
                   initialValue: order.delivery_cost,
                 })(
-                  <Input style={{ width: '100%' }} type="number" disabled={order.payment !== 'cash'}/>,
+                  <Input style={{ width: '100%' }} type="number" disabled={order.payment !== 'cash'} />,
                 )
               ) : order.delivery_cost
           }
@@ -270,6 +367,8 @@ const OrderDetailsView = (props) => {
           ...item,
           key: item.id,
         }))}
+        expandedRowRender={expandedModifierGroup}
+
         columns={order.status === 'new' && order.payment === 'cash' ? [...columns, deleteColumn] : columns}
         size="small"
         pagination={false}

@@ -31,3 +31,7 @@ html, body {
 .order-detail {
     display: flex;
 }
+
+.modifier-btn {
+    margin-bottom: 8px;
+}
