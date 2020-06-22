@@ -27,7 +27,7 @@ const Clients = () => {
 
   useEffect(() => {
     dispatch(getClients({ page: clients.page }));
-    dispatch(actions.setMenuActive(6));
+    dispatch(actions.setMenuActive(5));
   }, []);
 
   const columns = [

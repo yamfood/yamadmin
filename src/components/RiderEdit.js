@@ -26,7 +26,7 @@ const RidersForm = (props) => {
   useEffect(() => {
     const riderID = match.params.id;
     dispatch(actions.getRiderDetails(riderID));
-    dispatch(actions.setMenuActive(7));
+    dispatch(actions.setMenuActive(6));
   }, []);
 
   const { getFieldDecorator } = form;

@@ -41,28 +41,24 @@ const Navigation = () => {
           Продукты
           <Link to="/products/" />
         </Menu.Item>
-        <Menu.Item key="5">
-          Модификаторы
-          <Link to="/products/modifiers" />
-        </Menu.Item>
       </SubMenu>
     ),
     Клиенты: (
-      <Menu.Item key="6">
+      <Menu.Item key="5">
         <Icon type="smile" />
         <span>Клиенты</span>
         <Link to="/clients/" />
       </Menu.Item>
     ),
     Курьеры: (
-      <Menu.Item key="7">
+      <Menu.Item key="6">
         <Icon type="car" />
         <span>Курьеры</span>
         <Link to="/riders/" />
       </Menu.Item>
     ),
     Объявления: (
-      <Menu.Item key="8">
+      <Menu.Item key="7">
         <Icon type="sound" />
         <span>Объявления</span>
         <Link to="/announcements/" />
@@ -78,25 +74,25 @@ const Navigation = () => {
           </span>
         )}
       >
-        <Menu.Item key="9">
+        <Menu.Item key="8">
           Активные
           <Link to="/orders/active/" />
         </Menu.Item>
-        <Menu.Item key="10">
+        <Menu.Item key="9">
           Завершенные
           <Link to="/orders/finished/" />
         </Menu.Item>
       </SubMenu>
     ),
     Администраторы: (
-      <Menu.Item key="11">
+      <Menu.Item key="10">
         <Icon type="user" />
         <span>Администраторы</span>
         <Link to="/admins/" />
       </Menu.Item>
     ),
     Настройки: (
-      <Menu.Item key="12">
+      <Menu.Item key="11">
         <Icon type="setting" />
         <span>Настройки</span>
         <Link to="/params/" />

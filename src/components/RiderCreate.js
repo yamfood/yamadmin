@@ -18,7 +18,7 @@ const CreateRider = (props) => {
   const createStatus = useSelector((state) => state.riders.createRiderStatus);
 
   useEffect(() => {
-    dispatch(actions.setMenuActive(7));
+    dispatch(actions.setMenuActive(6));
   }, [])
 
   const { form } = props;

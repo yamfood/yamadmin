@@ -64,7 +64,7 @@ const AdminsList = () => {
 
   useEffect(() => {
     dispatch(actions.getAdmins());
-    dispatch(actions.setMenuActive(11));
+    dispatch(actions.setMenuActive(10));
   }, []);
 
   const loading = admins.status === 'request' || admins.deleteAdminStatus === 'request';

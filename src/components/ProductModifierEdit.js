@@ -25,7 +25,7 @@ const ProductModifierEdit = (props) => {
   useEffect(() => {
     const productId = match.params.id;
     dispatch(actions.getModifierDetails(productId));
-    dispatch(actions.setMenuActive(5));
+    dispatch(actions.setMenuActive(4));
   }, [])
 
   const { getFieldDecorator } = form;
