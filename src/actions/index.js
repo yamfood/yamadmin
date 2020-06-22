@@ -75,7 +75,6 @@ export const getKitchens = () => async (dispatch) => {
 };
 
 
-
 export const editModifierRequest = createAction('EDIT_MODIFIER_REQUEST');
 export const editModifierFailure = createAction('EDIT_MODIFIER_FAILURE');
 export const editModifierSuccess = createAction('EDIT_MODIFIER_SUCCESS');
@@ -83,7 +82,6 @@ export const editModifierSuccess = createAction('EDIT_MODIFIER_SUCCESS');
 export const editModifier = (params, modifierId) => async (dispatch) => {
   dispatch(editModifierRequest());
   try {
-
     await httpClient.patch(api.modifierDetails(modifierId), {
       name: {
         ru: params.name_ru,
@@ -94,7 +92,7 @@ export const editModifier = (params, modifierId) => async (dispatch) => {
     });
     dispatch(editModifierSuccess());
     message.success('Модификатор успешно изменен', 3);
-    history.push('/products/modifiers');
+    history.push('/products');
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {
@@ -103,27 +101,6 @@ export const editModifier = (params, modifierId) => async (dispatch) => {
     }
     dispatch(editModifierFailure());
     message.error('Ошибка при изменении продукта', 3);
-  }
-};
-
-
-
-export const getModifiersRequest = createAction('GET_MODIFIERS_REQUEST');
-export const getModifiersFailure = createAction('GET_MODIFIERS_FAILURE');
-export const getModifiersSuccess = createAction('GET_MODIFIERS_SUCCESS');
-
-export const getModifiers = () => async (dispatch) => {
-  dispatch(getModifiersRequest());
-  try {
-    const response = await httpClient.get(api.productModifiers());
-    dispatch(getModifiersSuccess({ data: response.data }));
-  } catch (error) {
-    console.log(error);
-    if (error.response.status === 403 || error.response.status === 401) {
-      localStorage.removeItem('token');
-      dispatch(loginFailure());
-    }
-    dispatch(getModifiersFailure());
   }
 };
 
@@ -771,7 +748,7 @@ export const getTerminals = () => async (dispatch) => {
   dispatch(getTerminalsRequest());
   try {
     const response = await httpClient.get(api.terminals());
-    dispatch(getTerminalsSuccess({data: response.data}));
+    dispatch(getTerminalsSuccess({ data: response.data }));
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {

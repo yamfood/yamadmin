@@ -98,7 +98,7 @@ const Products = () => {
       return
     }
     if (state === null) {
-      setProductStateFilter(() => (product) => product.category_id == null
+      setProductStateFilter(() => (product) => product.category?.id == null
         || !product.thumbnail
         || !product.photo);
     }
@@ -115,11 +115,11 @@ const Products = () => {
     }
 
     if (categoryID === 0) {
-      setCategoryFilter(() => (product) => product.bot_id === botID);
+      setCategoryFilter(() => (product) => product.category?.bot_id === botID);
       return;
     }
 
-    setCategoryFilter(() => (product) => product.category_id === categoryID);
+    setCategoryFilter(() => (product) => product.category?.id === categoryID);
   };
 
 
@@ -161,9 +161,9 @@ const Products = () => {
       title: 'Категория',
       dataIndex: 'category',
       key: 'category',
-      render: (category, product) => {
+      render: (category) => {
         if (category) {
-          return `${product.emoji} ${category}`;
+          return `${category.emoji || ''} ${category.name || ''}`;
         }
         return null;
       },

@@ -209,25 +209,6 @@ const riders = handleActions({
 
 
 const modifiers = handleActions({
-  [actions.getModifiersRequest](state) {
-    return {
-      ...state,
-      status: 'request',
-    };
-  },
-  [actions.getModifiersFailure](state) {
-    return {
-      ...state,
-      status: 'failure',
-    }
-  },
-  [actions.getModifiersSuccess](state, { payload: { data } }) {
-    return {
-      ...state,
-      status: 'success',
-      list: data,
-    }
-  },
   [actions.getModifierDetailsRequest](state) {
     return {
       ...state,
@@ -265,43 +246,6 @@ const modifiers = handleActions({
       editModifierStatus: 'success',
     };
   },
-  // [actions.createModifierRequest](state) {
-  //   return {
-  //     ...state,
-  //     productCreateStatus: 'request',
-  //   };
-  // },
-  // [actions.createModifierFailure](state) {
-  //   return {
-  //     ...state,
-  //     productCreateStatus: 'failure',
-  //   };
-  // },
-  // [actions.createModifierSuccess](state) {
-  //   return {
-  //     ...state,
-  //     productCreateStatus: 'success',
-  //   };
-  // },
-  // [actions.deleteModifierRequest](state) {
-  //   return {
-  //     ...state,
-  //     deleteStatus: 'request',
-  //   };
-  // },
-  // [actions.deleteModifierFailure](state) {
-  //   return {
-  //     ...state,
-  //     deleteStatus: 'failure',
-  //   };
-  // },
-  // [actions.deleteModifierSuccess](state) {
-  //   return {
-  //     ...state,
-  //     deleteStatus: 'success',
-  //   };
-  // },
-
 }, {
   list: [],
   status: null,
