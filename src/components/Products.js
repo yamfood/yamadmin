@@ -74,7 +74,15 @@ const Products = () => {
   const nameSearch = ({ target }) => {
     if (target.value) {
       setNameFilter(
-        () => (product) => product.name.toLowerCase().includes(target.value.toLowerCase()),
+        () => (product) => product
+          .name
+          .toLowerCase()
+          .includes(target.value.toLowerCase())
+          || product
+            .groupModifiers
+            .reduce((acc, group) => [...acc, ...group.modifiers
+              .map((m) => m.name.toLowerCase())], [])
+            .includes(target.value.toLowerCase()),
       );
       return
     }
@@ -132,6 +140,7 @@ const Products = () => {
       title: 'Фото',
       dataIndex: 'thumbnail',
       key: 'thumbnail',
+      width: 100,
       render: (thumbnail) => <img alt={thumbnail} style={{ width: 100 }} src={thumbnail} />,
     },
     { title: 'ID', dataIndex: 'id', key: 'id' },
@@ -195,6 +204,88 @@ const Products = () => {
     },
   ];
 
+  const expandIcon = (props) => {
+    const {
+      expanded, record, onExpand, prefixCls,
+    } = props;
+    const cls = expanded ? 'ant-table-row-expanded' : 'ant-table-row-collapsed';
+
+    if (record.groupModifiers.length > 0) {
+      return (
+        <button
+          tabIndex={0}
+          type="button"
+          onClick={onExpand}
+          className={`${prefixCls} ant-table-row-expand-icon ${cls}`}
+        />
+      )
+    }
+    return []
+  }
+
+
+  const expandedModifierGroup = (product) => {
+    const { groupModifiers } = product;
+
+    const modifierGroupColumns = [
+      {
+        title: 'Груп ID',
+        dataIndex: 'id',
+        key: 'id',
+      },
+      { title: 'Обязательное', dataIndex: 'required', key: 'required' },
+    ];
+
+    const expandedModifier = (group) => {
+      const { modifiers } = group;
+      const modifierColumns = [
+        { title: 'Название', dataIndex: 'name', key: 'name' },
+        {
+          title: 'Цена',
+          dataIndex: 'price',
+          key: 'price',
+          render: (text) => `${text.toLocaleString('ru')} сум`,
+        },
+        {
+          title: 'Изменить',
+          dataIndex: 'edit',
+          key: 'edit',
+          align: 'right',
+          render: (id, record) => (
+            <span>
+              <Link
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                to={`modifiers/${record.id}/edit`}
+              >
+                <EditOutlined />
+              </Link>
+            </span>
+          ),
+        },
+      ];
+      return (
+        <Table
+          key={`${group.id}_table`}
+          pagination={false}
+          columns={modifierColumns}
+          dataSource={modifiers.map((m) => ({ ...m, key: m.id }))}
+        />
+      )
+    }
+
+    return (
+      <Table
+        key={`${product.id}_table`}
+        pagination={false}
+        columns={modifierGroupColumns}
+        expandedRowRender={expandedModifier}
+        dataSource={groupModifiers.map((gm) => ({ ...gm, key: gm.id }))}
+      />
+    )
+  };
+
   const loading = productsState.status === 'request';
 
   return (
@@ -207,7 +298,11 @@ const Products = () => {
           <h1 style={{ fontSize: 30, textAlign: 'center' }}>Продукты</h1>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex' }}>
-              <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getProducts())}><Icon type="reload" /></Button>
+              <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getProducts())}>
+                <Icon
+                  type="reload"
+                />
+              </Button>
               <Button
                 type="primary"
                 style={{ marginLeft: 10 }}
@@ -256,6 +351,9 @@ const Products = () => {
             size="small"
             columns={columns}
             loading={loading}
+            defaultExpandAllRows
+            expandedRowRender={expandedModifierGroup}
+            expandIcon={expandIcon}
             dataSource={products.map((product) => ({ ...product, key: `${product.id}` }))}
           />
         </Content>
