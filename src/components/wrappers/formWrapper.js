@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { dissoc } from '../../utils'
 import {
   setOrderStateChanged,
   patchOrderDetails,
@@ -23,7 +23,15 @@ const formWrap = (Component) => {
             ...values,
             delivery_cost: Number(values.delivery_cost),
             products: values.products.map((product) => ({
-              ...product,
+              ...(dissoc(product, 'groupModifiers') || {}),
+              payload: {
+                ...product.payload,
+                modifiers: product.groupModifiers
+                    && Object.keys(product.groupModifiers).reduce(
+                      (acc, gmId) => [...acc, ...product.groupModifiers[gmId]
+                        .map((m) => m.key)], [],
+                    ),
+              },
               product_id: Number(product.product_id),
               count: Number(product.count),
             })),
