@@ -44,7 +44,7 @@ const OrderLogs = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(actions.setMenuActive(7));
+    dispatch(actions.setMenuActive(8));
     dispatch(actions.getOrderLogs(id));
 
     const socket = openViewSocket(id);

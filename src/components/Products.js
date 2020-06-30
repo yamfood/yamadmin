@@ -8,10 +8,7 @@ import {
   Input,
   Cascader,
 } from 'antd';
-import {
-  DeleteOutlined,
-  EditOutlined,
-} from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useHistory, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux';
 import Title from './shared/Title';
@@ -27,11 +24,12 @@ const Products = () => {
   const { list } = productsState;
 
   const [categoryFilter, setCategoryFilter] = useState(() => (product) => product);
+  const [productStateFilter, setProductStateFilter] = useState(() => (product) => product);
   const [nameFilter, setNameFilter] = useState(() => (product) => product);
 
   const [products, setProducts] = useState([]);
 
-  const filterChoices = () => [
+  const filterBotChoices = () => [
     {
       value: 0,
       label: 'Все',
@@ -60,16 +58,52 @@ const Products = () => {
     })),
   ];
 
+
+  const productStateChoices = [
+    {
+      value: 0,
+      label: 'Все',
+    },
+    {
+      label: 'Незавершённые',
+      value: null,
+    },
+  ];
+
+
   const nameSearch = ({ target }) => {
     if (target.value) {
       setNameFilter(
-        () => (product) => product.name.toLowerCase().includes(target.value.toLowerCase()),
+        () => (product) => product
+          .name
+          .toLowerCase()
+          .includes(target.value.toLowerCase())
+          || product
+            .groupModifiers
+            .reduce((acc, group) => [...acc, ...group.modifiers
+              .map((m) => m.name.toLowerCase())], [])
+            .includes(target.value.toLowerCase()),
       );
       return
     }
 
     setNameFilter(() => (product) => product);
   };
+
+  const productStateSearch = (selected) => {
+    const state = selected[0];
+
+    if (state === 0) {
+      setProductStateFilter(() => (product) => product);
+      return
+    }
+    if (state === null) {
+      setProductStateFilter(() => (product) => product.category?.id == null
+        || !product.thumbnail
+        || !product.photo);
+    }
+  };
+
 
   const categorySearch = (selected) => {
     const botID = selected[0];
@@ -81,11 +115,11 @@ const Products = () => {
     }
 
     if (categoryID === 0) {
-      setCategoryFilter(() => (product) => product.bot_id === botID);
+      setCategoryFilter(() => (product) => product.category?.bot_id === botID);
       return;
     }
 
-    setCategoryFilter(() => (product) => product.category_id === categoryID);
+    setCategoryFilter(() => (product) => product.category?.id === categoryID);
   };
 
 
@@ -98,14 +132,15 @@ const Products = () => {
 
 
   useEffect(() => {
-    setProducts(list.filter(nameFilter).filter(categoryFilter))
-  }, [list, nameFilter, categoryFilter]);
+    setProducts(list.filter(nameFilter).filter(categoryFilter).filter(productStateFilter))
+  }, [list, nameFilter, categoryFilter, productStateFilter]);
 
   const columns = [
     {
       title: 'Фото',
       dataIndex: 'thumbnail',
       key: 'thumbnail',
+      width: 100,
       render: (thumbnail) => <img alt={thumbnail} style={{ width: 100 }} src={thumbnail} />,
     },
     { title: 'ID', dataIndex: 'id', key: 'id' },
@@ -126,9 +161,9 @@ const Products = () => {
       title: 'Категория',
       dataIndex: 'category',
       key: 'category',
-      render: (category, product) => {
+      render: (category) => {
         if (category) {
-          return `${product.emoji} ${category}`;
+          return `${category.emoji || ''} ${category.name || ''}`;
         }
         return null;
       },
@@ -169,6 +204,88 @@ const Products = () => {
     },
   ];
 
+  const expandIcon = (props) => {
+    const {
+      expanded, record, onExpand, prefixCls,
+    } = props;
+    const cls = expanded ? 'ant-table-row-expanded' : 'ant-table-row-collapsed';
+
+    if (record.groupModifiers.length > 0) {
+      return (
+        <button
+          tabIndex={0}
+          type="button"
+          onClick={onExpand}
+          className={`${prefixCls} ant-table-row-expand-icon ${cls}`}
+        />
+      )
+    }
+    return []
+  }
+
+
+  const expandedModifierGroup = (product) => {
+    const { groupModifiers } = product;
+
+    const modifierGroupColumns = [
+      {
+        title: 'Груп ID',
+        dataIndex: 'id',
+        key: 'id',
+      },
+      { title: 'Обязательное', dataIndex: 'required', key: 'required' },
+    ];
+
+    const expandedModifier = (group) => {
+      const { modifiers } = group;
+      const modifierColumns = [
+        { title: 'Название', dataIndex: 'name', key: 'name' },
+        {
+          title: 'Цена',
+          dataIndex: 'price',
+          key: 'price',
+          render: (text) => `${text.toLocaleString('ru')} сум`,
+        },
+        {
+          title: 'Изменить',
+          dataIndex: 'edit',
+          key: 'edit',
+          align: 'right',
+          render: (id, record) => (
+            <span>
+              <Link
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                to={`modifiers/${record.id}/edit`}
+              >
+                <EditOutlined />
+              </Link>
+            </span>
+          ),
+        },
+      ];
+      return (
+        <Table
+          key={`${group.id}_table`}
+          pagination={false}
+          columns={modifierColumns}
+          dataSource={modifiers.map((m) => ({ ...m, key: m.id }))}
+        />
+      )
+    }
+
+    return (
+      <Table
+        key={`${product.id}_table`}
+        pagination={false}
+        columns={modifierGroupColumns}
+        expandedRowRender={expandedModifier}
+        dataSource={groupModifiers.map((gm) => ({ ...gm, key: gm.id }))}
+      />
+    )
+  };
+
   const loading = productsState.status === 'request';
 
   return (
@@ -181,7 +298,11 @@ const Products = () => {
           <h1 style={{ fontSize: 30, textAlign: 'center' }}>Продукты</h1>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex' }}>
-              <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getProducts())}><Icon type="reload" /></Button>
+              <Button style={{ marginBottom: 20 }} onClick={() => dispatch(actions.getProducts())}>
+                <Icon
+                  type="reload"
+                />
+              </Button>
               <Button
                 type="primary"
                 style={{ marginLeft: 10 }}
@@ -190,8 +311,8 @@ const Products = () => {
                 Создать продукт
               </Button>
               <Button
-                  style={{ marginLeft: 10 }}
-                  onClick={() => dispatch(actions.syncProducts())}
+                style={{ marginLeft: 10 }}
+                onClick={() => dispatch(actions.syncProducts())}
               >
                 Синхронизировать
               </Button>
@@ -213,9 +334,16 @@ const Products = () => {
             />
             <Cascader
               style={{ marginLeft: 10, width: 250 }}
-              options={filterChoices()}
+              options={filterBotChoices()}
               onChange={categorySearch}
-              defaultValue={['all']}
+              defaultValue={[0]}
+              allowClear={false}
+            />
+            <Cascader
+              style={{ marginLeft: 10, width: 150 }}
+              options={productStateChoices}
+              onChange={productStateSearch}
+              defaultValue={[0]}
               allowClear={false}
             />
           </div>
@@ -223,6 +351,9 @@ const Products = () => {
             size="small"
             columns={columns}
             loading={loading}
+            defaultExpandAllRows
+            expandedRowRender={expandedModifierGroup}
+            expandIcon={expandIcon}
             dataSource={products.map((product) => ({ ...product, key: `${product.id}` }))}
           />
         </Content>

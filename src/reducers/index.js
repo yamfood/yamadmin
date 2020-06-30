@@ -208,6 +208,51 @@ const riders = handleActions({
 });
 
 
+const modifiers = handleActions({
+  [actions.getModifierDetailsRequest](state) {
+    return {
+      ...state,
+      modifierDetailsStatus: 'request',
+    };
+  },
+  [actions.getModifierDetailsFailure](state) {
+    return {
+      ...state,
+      modifierDetailsStatus: 'failure',
+    };
+  },
+  [actions.getModifierDetailsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      modifierDetailsStatus: 'success',
+      modifierDetails: data,
+    };
+  },
+  [actions.editModifierRequest](state) {
+    return {
+      ...state,
+      editModifierStatus: 'request',
+    };
+  },
+  [actions.editModifierFailure](state) {
+    return {
+      ...state,
+      editModifierStatus: 'failure',
+    };
+  },
+  [actions.editModifierSuccess](state) {
+    return {
+      ...state,
+      editModifierStatus: 'success',
+    };
+  },
+}, {
+  list: [],
+  status: null,
+  modifierDetails: [],
+});
+
+
 const products = handleActions({
   [actions.getProductsRequest](state) {
     return {
@@ -510,7 +555,7 @@ const terminals = handleActions({
       status: 'failure',
     };
   },
-  [actions.getTerminalsSuccess](state, {payload: {data}}) {
+  [actions.getTerminalsSuccess](state, { payload: { data } }) {
     return {
       ...state,
       status: 'success',
@@ -702,10 +747,12 @@ const auth = handleActions({
       ...state,
       status: 'failure',
       token: null,
+      payload: {
+        permissions: [],
+      },
     }
   },
   [actions.loginSuccess](state, { payload: { data } }) {
-    console.log(data);
     return {
       ...state,
       status: 'success',
@@ -1308,5 +1355,6 @@ export default combineReducers({
   menu,
   params,
   category,
-  terminals
+  terminals,
+  modifiers,
 });

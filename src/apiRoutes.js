@@ -11,6 +11,8 @@ export default {
   products: () => [host, 'products/'].join('/'),
   syncProducts: () => [host, 'products/sync'].join('/'),
   product: (id) => [host, `products/${id}/`].join('/'),
+  modifierDetails: (id) => [host, `products/modifiers/${id}/`].join('/'),
+  productModifiers: () => [host, 'products/modifiers/'].join('/'),
   categoryDetails: (id) => [host, `products/categories/${id}/`].join('/'),
   productsCategory: () => [host, 'products/categories/'].join('/'),
   riders: () => [host, 'riders/'].join('/'),
