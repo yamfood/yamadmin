@@ -13,9 +13,9 @@ import textInModal from '../assets/style';
 
 const OrderAvailableModal = ({ orderId }) => {
   const [isVisible, setModalVisible] = useState(false);
-  const [addedProductsId, addProductId] = useState([]);
   const dispatch = useDispatch();
   const availableProductsList = useSelector((state) => state.orderDetails.availableList);
+  const selectedProducts = useSelector((state) => state.orderDetails[orderId].products);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -77,16 +77,15 @@ const OrderAvailableModal = ({ orderId }) => {
                 <div style={{ display: 'flex' }}>
                   <div style={{ marginRight: 20, marginTop: 5 }}>
                     {item.price}
-                     сум
+                    сум
                   </div>
                   <Button
                     type="primary"
                     onClick={() => {
                       dispatch(setOrderStateChanged());
-                      addProductId([...addedProductsId, item.id])
                       dispatch(addOrderProduct({ item, orderId }));
                     }}
-                    disabled={addedProductsId.includes(item.id)}
+                    disabled={selectedProducts?.some((sp) => sp.id == item.id)}
                     style={{ marginRight: 20 }}
                   >
                     Добавить
