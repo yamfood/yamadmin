@@ -1,7 +1,7 @@
 import {
   Button, Descriptions, Input, Table, Tag,
 } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -40,18 +40,23 @@ const OrderDetailsView = (props) => {
     const { price, stock_price: stockPrice } = product;
     if (availableProducts && product) {
       const gms = availableProducts[product.id]?.groupModifiers;
-      return (stockPrice || price) + gms.reduce((acc, gm) => acc
-        + (form.getFieldValue(`products[${index}].groupModifiers[${gm.id}]`)
-          ?.map((modifier) => gm.modifiers[modifier.key].price)
-          ?.reduce((sum, n) => sum + n, 0) || 0), 0)
+      return (stockPrice || price)
+        + gms.reduce(
+          (acc, gm) => acc + (
+            (form.getFieldValue(`products[${index}].groupModifiers[${gm.id}]`)
+              || product.payload.modifiers?.filter((mId) => gm.modifiers[mId])
+                ?.map((mId) => ({ key: mId, label: gm.modifiers[mId] })))
+              ?.map((modifier) => gm.modifiers[modifier.key]?.price)
+              ?.reduce((sum, n) => sum + n, 0) || 0), 0,
+        )
     }
     return 0
   }
 
 
   const totalPrice = !loading && order.products.reduce(
-    (acc, product, index) => acc + calculateProductPrice(product, index)
-      * form.getFieldValue(`products[${index}].count`), 0,
+    (acc, product, index) => acc + (calculateProductPrice(product, index) || 0)
+      * (form.getFieldValue(`products[${index}].count`) || 1), 0,
   );
 
   const handleCancel = (values) => {
@@ -69,9 +74,8 @@ const OrderDetailsView = (props) => {
           return (
             <>
               {form.getFieldDecorator(`products[${index}].comment`, { initialValue: value })(<Input />)}
-              {form.getFieldDecorator(`products[${index}].payload`, { initialValue: product.payload ? p.payload : {}})(<Input type="hidden" />)}
+              {form.getFieldDecorator(`products[${index}].payload`, { initialValue: product.payload ? product.payload : {} })(<Input type="hidden" />)}
               {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: product.id })(<Input type="hidden" />)}
-              />)}
             </>
           )
         }

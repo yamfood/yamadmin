@@ -25,6 +25,7 @@ const formWrap = (Component) => {
             products: values.products.map((product) => ({
               ...(dissoc(product, 'groupModifiers') || {}),
               payload: {
+                ...product.payload,
                 modifiers: product.groupModifiers
                     && Object.keys(product.groupModifiers).reduce(
                       (acc, gmId) => [...acc, ...product.groupModifiers[gmId]
@@ -32,8 +33,7 @@ const formWrap = (Component) => {
                     ),
               },
               product_id: Number(product.product_id),
-              count:
-          Number(product.count),
+              count: Number(product.count),
             })),
           };
           dispatch(patchOrderDetails(values.orderId, preparedValues));
