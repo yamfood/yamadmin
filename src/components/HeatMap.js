@@ -1,62 +1,46 @@
 /* eslint-disable */
-import React from "react";
-import DeckGL from '@deck.gl/react';
-import {HexagonLayer} from '@deck.gl/aggregation-layers';
-import {StaticMap} from 'react-map-gl';
-import {mapBoxToken} from "../utils";
+import React, {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {getRegions} from "../actions";
 
-
-const HeatMap = (props) => {
-    const {data} = props;
-    const mapStyle = 'mapbox://styles/kensay/ck52ch6ji00o41ctc1n49mnc8';
-    const colorRange = [
-        [160, 200, 220],
-        [113, 178, 206],
-        [73, 146, 193],
-        [39, 115, 180],
-        [15, 72, 148]
-    ];
-
-    function _renderLayers() {
-        return [
-            new HexagonLayer({
-                id: 'heatmap',
-                colorRange,
-                data,
-                opacity: 0.5,
-                getPosition: d => [d.longitude, d.latitude],
-                radius: 500
+const HeatMap = () => {
+    const dispatch = useDispatch();
+    const regions = useSelector(state => state.regions)
+    useEffect(() => {
+        dispatch(getRegions())
+    }, [])
+    useEffect(() => {
+        if(regions){
+            mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g';
+            let map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/kensay/ck52ch6ji00o41ctc1n49mnc8',
+                center: [69.2401, 41.2995],
+                zoom: 12
+            });
+            map.on('load', function () {
+                for (let i in regions) {
+                    map.addLayer({
+                        'id': i,
+                        'type': 'fill',
+                        'source': {
+                            'type': 'geojson',
+                            'data': regions[i].polygon
+                        },
+                        'layout': {},
+                        'paint': {
+                            'fill-color': '#d97e7e',
+                            'fill-opacity': 0.35
+                        }
+                    });
+                }
             })
-        ];
-    }
 
-    const INITIAL_VIEW_STATE = {
-        longitude: 69.2401,
-        latitude: 41.2995,
-        zoom: 11,
-    };
-
-    return (
-        <div style={{
-            position: 'relative',
-            height: 500
-        }}>
-            <DeckGL
-                fullscreen={false}
-                layers={_renderLayers()}
-                initialViewState={INITIAL_VIEW_STATE}
-                controller={true}
-            >
-                <StaticMap
-                    reuseMaps
-                    width={400}
-                    height={400}
-                    mapStyle={mapStyle}
-                    mapboxApiAccessToken={mapBoxToken}
-                />
-            </DeckGL>
-        </div>
-    )
+        } else {
+            console.error("Something wrong with regions data")
+        }
+    }, [regions]);
+    return <div id='map' style={{width: '100%', height: '100%'}}/>
 };
 
 export default HeatMap;
