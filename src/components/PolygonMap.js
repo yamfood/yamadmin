@@ -1,14 +1,9 @@
 /* eslint-disable */
 import React, {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {getRegions} from "../actions";
 
-const HeatMap = () => {
-    const dispatch = useDispatch();
-    const regions = useSelector(state => state.regions)
-    useEffect(() => {
-        dispatch(getRegions())
-    }, [])
+const PolygonMap = (props) => {
+    const {regions} = props;
+
     useEffect(() => {
         if(regions){
             mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g';
@@ -16,7 +11,7 @@ const HeatMap = () => {
                 container: 'map',
                 style: 'mapbox://styles/kensay/ck52ch6ji00o41ctc1n49mnc8',
                 center: [69.2401, 41.2995],
-                zoom: 12
+                zoom: 11
             });
             map.on('load', function () {
                 for (let i in regions) {
@@ -43,4 +38,4 @@ const HeatMap = () => {
     return <div id='map' style={{width: '100%', height: '100%'}}/>
 };
 
-export default HeatMap;
+export default PolygonMap;

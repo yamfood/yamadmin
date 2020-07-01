@@ -10,6 +10,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import * as actions from '../actions';
+import MarkerMap from './MarkerMap';
 
 const { TextArea } = Input;
 const format = 'HH:mm';
@@ -21,19 +22,21 @@ const KitchenEditForm = ({ form, id, history }) => {
   const { details } = kitchen;
   const { getFieldDecorator } = form;
   const dispatch = useDispatch();
+  const regions = useSelector((state) => state.regions)
 
   useEffect(() => {
     dispatch(actions.getKitchenDetails(id));
     dispatch(actions.setMenuActive(2));
     dispatch(actions.getBotsId());
     dispatch(actions.getTerminals());
+    dispatch(actions.getRegions())
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     form.validateFields((err, values) => {
-      let payload = details.payload;
+      let { payload } = details;
       payload = JSON.stringify({
         ...payload,
         deliveryTerminalId: values.deliveryTerminalId,
@@ -57,6 +60,14 @@ const KitchenEditForm = ({ form, id, history }) => {
         })(
           <Input disabled={kitchen.detailStatus === 'request'} />,
         )}
+      </Form.Item>
+      <Form.Item label="Позиция">
+        <MarkerMap
+          lat={form.getFieldValue('latitude') || details.location?.latitude}
+          lng={form.getFieldValue('longitude') || details.location?.longitude}
+          regions={regions}
+          onChange={({ lat, lng }) => form.setFieldsValue({ latitude: lat, longitude: lng })}
+        />
       </Form.Item>
       <Form.Item label="Долгота (longtitude)">
         {getFieldDecorator('longitude', {

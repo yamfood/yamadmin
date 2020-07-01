@@ -732,7 +732,6 @@ export const getRegions = () => async (dispatch) => {
   dispatch(getRegionsRequest());
   try {
     const response = await httpClient.get(api.regions());
-    console.warn(response)
     dispatch(getRegionsSuccess({ data: response.data }));
   } catch (error) {
     console.log(error);
