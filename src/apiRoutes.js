@@ -1,6 +1,8 @@
+const root = `${process.env.REACT_APP_API_HOST}`;
 const host = `${process.env.REACT_APP_API_HOST}/api/admin`;
 
 export default {
+  regions: () => [root, 'api/regions'].join('/'),
   login: () => [host, 'auth/login/'].join('/'),
   clients: () => [host, 'clients/'].join('/'),
   kitchens: () => [host, 'kitchens/'].join('/'),

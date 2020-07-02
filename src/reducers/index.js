@@ -1341,6 +1341,15 @@ const category = handleActions({
   list: [],
   botsList: [],
 });
+
+
+const regions = handleActions({
+  [actions.getRegionsSuccess](state, { payload: { data } }) {
+    return data
+  },
+}, null);
+
+
 export default combineReducers({
   clients,
   riders,
@@ -1357,4 +1366,5 @@ export default combineReducers({
   category,
   terminals,
   modifiers,
+  regions,
 });

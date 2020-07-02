@@ -5,10 +5,6 @@ import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
 
-export const logout = () => async (dispatch) => {
-  dispatch(loginFailure());
-  localStorage.removeItem('token');
-};
 
 export const loginRequest = createAction('LOGIN_REQUEST');
 export const loginFailure = createAction('LOGIN_FAILURE');
@@ -28,6 +24,12 @@ export const login = (username, password) => async (dispatch) => {
     dispatch(loginFailure());
     message.error('Логин/Пароль введен неправильно');
   }
+};
+
+
+export const logout = () => async (dispatch) => {
+  dispatch(loginFailure());
+  localStorage.removeItem('token');
 };
 
 
@@ -719,6 +721,27 @@ export const editProduct = (params, productId) => async (dispatch) => {
     message.error('Ошибка при изменении продукта', 3);
   }
 };
+
+
+export const getRegionsRequest = createAction('REGIONS_REQUEST');
+export const getRegionsFailure = createAction('REGIONS_FAILURE');
+export const getRegionsSuccess = createAction('REGIONS_SUCCESS');
+
+
+export const getRegions = () => async (dispatch) => {
+  dispatch(getRegionsRequest());
+  try {
+    const response = await httpClient.get(api.regions());
+    dispatch(getRegionsSuccess({ data: response.data }));
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getRegionsFailure());
+  }
+}
 
 
 export const getKitchenDetailsRequest = createAction('GET_KITCHEN_DETAILS_REQUEST');
