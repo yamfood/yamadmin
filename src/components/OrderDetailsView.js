@@ -39,7 +39,7 @@ const OrderDetailsView = (props) => {
   const calculateProductPrice = (product, index) => {
     const { price, stock_price: stockPrice } = product;
     if (availableProducts && product) {
-      const gms = availableProducts[product.id]?.groupModifiers;
+      const gms = availableProducts[product.id]?.groupModifiers || [];
       return (stockPrice || price)
         + gms.reduce(
           (acc, gm) => acc + (
