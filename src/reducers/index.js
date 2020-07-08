@@ -1350,6 +1350,13 @@ const regions = handleActions({
 }, null);
 
 
+const notifications = handleActions({
+  [actions.addNotification](state, { payload: notification }) {
+    return { ...state, [notification.key]: { ...notification } }
+  },
+}, { });
+
+
 export default combineReducers({
   clients,
   riders,
@@ -1367,4 +1374,5 @@ export default combineReducers({
   terminals,
   modifiers,
   regions,
+  notifications,
 });

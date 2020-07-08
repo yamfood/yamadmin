@@ -1,9 +1,37 @@
-import { message } from 'antd';
+import {
+  Button, Icon, message, notification,
+} from 'antd';
 import { createAction } from 'redux-actions';
 import axios from 'axios';
+import React from 'react';
 import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
+
+
+export const addNotification = createAction('ADD_NOTIFICATION');
+
+export const showNotification = (key, message, btn, icon, type) => async (dispatch) => {
+  const styles = <style>{'.ant-notification-bottomRight { right: 150px !important; }'}</style>
+  notification[type || 'warn']({
+    key,
+    icon: <Icon type={icon} style={{ color: '#108ee9' }} />,
+    message,
+    // description,
+    placement: 'bottomRight',
+    closeIcon: <Button type="link" shape="circle" icon="minus" onClick={(e) => e.stopPropagation()}>{styles}</Button>,
+    btn,
+    style: {
+      width: 'max-content',
+      paddingTop: 32,
+      paddingRight: 48,
+      paddingBottom: 32,
+    },
+  })
+  dispatch(addNotification({
+    key, message, btn, icon,
+  }))
+};
 
 
 export const loginRequest = createAction('LOGIN_REQUEST');

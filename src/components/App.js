@@ -1,8 +1,10 @@
 import '../App.css';
 import React, { useEffect } from 'react';
 import { Router, Switch, Route } from 'react-router-dom';
-import { Layout } from 'antd';
-import { useDispatch } from 'react-redux';
+import {
+  Button, Layout, notification,
+} from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import Navigation from './Navigation';
 import Products from './Products';
 import Home from './Home';
@@ -40,6 +42,11 @@ import ProductModifierEdit from './ProductModifierEdit';
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
+    dispatch(actions.showNotification(
+      '123',
+      <h3>Входищий звонок +998 (90) 955-58-20</h3>,
+      <Button size="large" style={{ marginTop: 16, float: 'right' }}>Узнать больше</Button>, 'phone',
+    ))
     dispatch(actions.getMe());
   }, [dispatch]);
 
