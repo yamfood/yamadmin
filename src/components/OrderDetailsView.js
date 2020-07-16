@@ -136,7 +136,7 @@ const OrderDetailsView = (props) => {
   const statusTag = ({ status }) => {
     switch (status) {
       case 'pending':
-        return <Tag color="#108ee9">Незаконченный</Tag>;
+        return <Tag color="#108ee9">В процессе</Tag>;
       case 'new':
         return <Tag color="#108ee9">Новый</Tag>;
       case 'onWay':
