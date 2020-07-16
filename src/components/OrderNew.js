@@ -99,11 +99,12 @@ const OrderNew = (props) => {
   const dispatch = useDispatch();
   const { form } = props;
   const clients = useSelector((state) => state.clients);
+  const { status } = useSelector((state) => state.pendingOrderCreation);
   const client = clients?.detailsData[clientId]
   const regions = useSelector((state) => state.regions)
   const [toGisAddressLoading, setToGisAddressLoading] = useState(false);
   const [toGisLocationLoading, setToGisLocationLoading] = useState(false);
-  const loading = !client || !regions;
+  const loading = !client || !regions || status === 'request';
 
   useEffect(() => {
     dispatch(actions.setMenuActive(8));

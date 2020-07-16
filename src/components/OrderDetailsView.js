@@ -197,7 +197,8 @@ const OrderDetailsView = (props) => {
               type="primary"
               onClick={() => dispatch(actions.acceptOrder(order.id, '/orders/active/'))}
               loading={activeOrders.acceptStatus === 'request'}
-              disabled={activeOrders.cancelStatus === 'request'}
+              disabled={activeOrders.cancelStatus === 'request'
+              || order.products?.length < 1}
             >
               Принять
             </Button>
@@ -249,126 +250,127 @@ const OrderDetailsView = (props) => {
     <div>
       <Link to={`/orders/${order.id}/logs/`}>Журнал</Link>
       {form.getFieldDecorator('orderId', { initialValue: order.id })(<Input type="hidden" />)}
-      <Descriptions
-        title={`Заказ # ${order.id}`}
-        size="small"
-        column={4}
-        layout="vertical"
-        bordered
-      >
-        <Descriptions.Item label="Локация" span={2}>
-          <div id="map" style={{ width: '100%', height: 250 }} />
-        </Descriptions.Item>
-        <Descriptions.Item label="Адрес" span={2}>
-          {allowEdit
-            ? (
-              form.getFieldDecorator(('address'), {
-                initialValue: order.address,
-              })(
-                <Input.TextArea style={{ width: '100%', height: 250 }} />,
-              )
-            ) : order.address}
-        </Descriptions.Item>
-        <Descriptions.Item label="Комментарий" span={2}>
-          {order.comment ? order.comment : 'Пусто...'}
-        </Descriptions.Item>
-        <Descriptions.Item label="Кухня" span={2}>{order.kitchen}</Descriptions.Item>
-        <Descriptions.Item label="Клиент" span={1}>{order.name}</Descriptions.Item>
-        <Descriptions.Item label="Телефон" span={1}>{order.phone}</Descriptions.Item>
-        <Descriptions.Item label="Курьер" span={1}>
-          {order.rider_name ? order.rider_name : 'Нет курьера'}
-        </Descriptions.Item>
-        <Descriptions.Item label="Телефон" span={1}>
-          {order.rider_phone ? order.rider_phone : 'Нет курьера'}
-        </Descriptions.Item>
-        <Descriptions.Item label="Сумма" span={1}>
-          {order.total_sum?.toLocaleString('ru')}
-          &nbsp;сум
-        </Descriptions.Item>
-        <Descriptions.Item label="Статус" span={1}>
-          {statusTag(order)}
-        </Descriptions.Item>
-        <Descriptions.Item label="Тип оплаты" span={1}>
-          {order.status === 'pending'
-            ? (
-              form.getFieldDecorator(('payment'), {
-                initialValue: order.payment,
-              })(
-                <Radio.Group size="small" buttonStyle="solid">
-                  <Radio.Button value="card">Картой</Radio.Button>
-                  <Radio.Button value="cash">Наличными</Radio.Button>
-                </Radio.Group>,
-              )
-            )
-            : paymentDescription}
-        </Descriptions.Item>
-        <Descriptions.Item label="Создан в">
-          {moment(order.created_at).format('DD.MM.YYYY HH:mm')}
-        </Descriptions.Item>
-        <Descriptions.Item label="Заметки" span={2}>
-          {
-            allowEdit
+      <div>
+        <Descriptions
+          title={`Заказ # ${order.id}`}
+          size="small"
+          column={4}
+          layout="vertical"
+          bordered
+        >
+          <Descriptions.Item label="Локация" span={2}>
+            <div id="map" style={{ width: '100%', height: 250 }} />
+          </Descriptions.Item>
+          <Descriptions.Item label="Адрес" span={2}>
+            {allowEdit
               ? (
-                form.getFieldDecorator(('notes'), {
-                  initialValue: order.notes,
+                form.getFieldDecorator(('address'), {
+                  initialValue: order.address,
                 })(
-                  <Input.TextArea style={{ width: '100%', height: 50 }} />,
+                  <Input.TextArea style={{ width: '100%', height: 250 }} />,
                 )
-              ) : order.notes
-          }
-        </Descriptions.Item>
-        <Descriptions.Item label="Доставка">
-          {
-            allowEdit
-              ? (
-                form.getFieldDecorator(('delivery_cost'), {
-                  initialValue: order.delivery_cost,
-                })(
-                  <Input style={{ width: '100%' }} type="number" disabled={order.payment !== 'cash'} />,
-                )
-              ) : order.delivery_cost
-          }
-        </Descriptions.Item>
-      </Descriptions>
-
-      <br />
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h3><strong>Продукты</strong></h3>
-        {
-          allowEdit
-            ? <OrderAvailableModal orderId={order.id} />
-            : ''
-        }
-      </div>
-      <Table
-        // TODO allow collapse expandable row
-        expandedRowKeys={
-          order.products.filter(
-            (product) => (availableProducts
-              && Object.keys(availableProducts[product.id]?.modifiers || {})?.length > 0),
-          ).map((product) => product.id)
-        }
-        expandIcon={expandIcon}
-        dataSource={order.products.map((item) => ({
-          ...item,
-          key: item.id,
-        }))}
-        expandedRowRender={expandedModifierGroup}
-        loading={loading}
-        columns={allowEdit ? [...columns, deleteColumn] : columns}
-        size="small"
-        pagination={false}
-        footer={() => (
-          <div style={{ textAlign: 'right', paddingRight: 10 }}>
-            Итого:&nbsp;
-            {totalPrice}
+              ) : order.address}
+          </Descriptions.Item>
+          <Descriptions.Item label="Комментарий" span={2}>
+            {order.comment ? order.comment : 'Пусто...'}
+          </Descriptions.Item>
+          <Descriptions.Item label="Кухня" span={2}>{order.kitchen}</Descriptions.Item>
+          <Descriptions.Item label="Клиент" span={1}>{order.name}</Descriptions.Item>
+          <Descriptions.Item label="Телефон" span={1}>{order.phone}</Descriptions.Item>
+          <Descriptions.Item label="Курьер" span={1}>
+            {order.rider_name ? order.rider_name : 'Нет курьера'}
+          </Descriptions.Item>
+          <Descriptions.Item label="Телефон" span={1}>
+            {order.rider_phone ? order.rider_phone : 'Нет курьера'}
+          </Descriptions.Item>
+          <Descriptions.Item label="Сумма" span={1}>
+            {order.total_sum?.toLocaleString('ru')}
             &nbsp;сум
-          </div>
-        )}
-        bordered
-      />
-      <div className="order-details-buttons" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 30 }}>
-        {displayButtons()}
+          </Descriptions.Item>
+          <Descriptions.Item label="Статус" span={1}>
+            {statusTag(order)}
+          </Descriptions.Item>
+          <Descriptions.Item label="Тип оплаты" span={1}>
+            {order.status === 'pending'
+              ? (
+                form.getFieldDecorator(('payment'), {
+                  initialValue: order.payment,
+                })(
+                  <Radio.Group size="small" buttonStyle="solid">
+                    <Radio.Button value="card">Картой</Radio.Button>
+                    <Radio.Button value="cash">Наличными</Radio.Button>
+                  </Radio.Group>,
+                )
+              )
+              : paymentDescription}
+          </Descriptions.Item>
+          <Descriptions.Item label="Создан в">
+            {moment(order.created_at).format('DD.MM.YYYY HH:mm')}
+          </Descriptions.Item>
+          <Descriptions.Item label="Заметки" span={2}>
+            {
+              allowEdit
+                ? (
+                  form.getFieldDecorator(('notes'), {
+                    initialValue: order.notes,
+                  })(
+                    <Input.TextArea style={{ width: '100%', height: 50 }} />,
+                  )
+                ) : order.notes
+            }
+          </Descriptions.Item>
+          <Descriptions.Item label="Доставка">
+            {
+              allowEdit
+                ? (
+                  form.getFieldDecorator(('delivery_cost'), {
+                    initialValue: order.delivery_cost,
+                  })(
+                    <Input style={{ width: '100%' }} type="number" disabled={!allowEdit} />,
+                  )
+                ) : order.delivery_cost
+            }
+          </Descriptions.Item>
+        </Descriptions>
+
+        <br />
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <h3><strong>Продукты</strong></h3>
+          {
+            allowEdit
+              ? <OrderAvailableModal orderId={order.id} />
+              : ''
+          }
+        </div>
+        <Table
+          // TODO allow collapse expandable row
+          expandedRowKeys={
+            order.products.filter(
+              (product) => (availableProducts
+                && Object.keys(availableProducts[product.id]?.modifiers || {})?.length > 0),
+            ).map((product) => product.id)
+          }
+          expandIcon={expandIcon}
+          dataSource={order.products.map((item) => ({
+            ...item,
+            key: item.id,
+          }))}
+          expandedRowRender={expandedModifierGroup}
+          columns={allowEdit ? [...columns, deleteColumn] : columns}
+          size="small"
+          pagination={false}
+          footer={() => (
+            <div style={{ textAlign: 'right', paddingRight: 10 }}>
+              Итого:&nbsp;
+              {totalPrice}
+              &nbsp;сум
+            </div>
+          )}
+          bordered
+        />
+        <div className="order-details-buttons" style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 30 }}>
+          {displayButtons()}
+        </div>
       </div>
     </div>
   )

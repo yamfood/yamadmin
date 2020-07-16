@@ -1367,6 +1367,28 @@ const notifications = handleActions({
 }, {});
 
 
+const pendingOrderCreation = handleActions({
+  [actions.createOrderRequest](state) {
+    return {
+      ...state,
+      status: 'request',
+    }
+  },
+  [actions.createOrderFailure](state) {
+    return {
+      ...state,
+      status: 'failure',
+    }
+  },
+  [actions.createOrderSuccess](state) {
+    return {
+      ...state,
+      status: 'success',
+    }
+  },
+}, { status: null })
+
+
 export default combineReducers({
   clients,
   riders,
@@ -1385,4 +1407,5 @@ export default combineReducers({
   modifiers,
   regions,
   notifications,
+  pendingOrderCreation,
 });

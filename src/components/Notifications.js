@@ -20,6 +20,36 @@ const floatingStyle = () => (
 
 const Notifications = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+  window.onPhoneCallClose = ({ clientId }) => {
+    notification.close(clientId)
+  }
+  window.onPhoneCall = ({ clientId, phone }) => {
+    dispatch(actions.addNotification({
+      key: clientId,
+      message: (
+        <h4 style={{ marginTop: 4, marginRight: 10 }}>
+          Входищий звонок
+          {' '}
+          {phone}
+        </h4>
+      ),
+      btn: (
+        <Button
+          style={{ marginTop: 8, float: 'right' }}
+          onClick={() => {
+            dispatch(actions.toggleNotification(clientId))
+            history.push(`/clients/${clientId}`);
+          }}
+        >
+          Узнать больше
+        </Button>),
+      icon: 'phone',
+      isShown: true,
+      hidenIcon: 'phone',
+    }))
+  }
+
   const notifications = useSelector((state) => state.notifications);
   const [notificationIcons, setNotificationIcons] = useState([])
   useEffect(() => {
@@ -64,32 +94,6 @@ const Notifications = () => {
         })
     }
   }, [notifications]);
-  const history = useHistory();
-
-  useEffect(() => {
-    console.log('WTFF')
-    dispatch(actions.addNotification({
-      key: '123',
-      message: (
-        <h4 style={{ marginTop: 4, marginRight: 10 }}>
-          Входищий звонок +998 (90) 955-58-20
-        </h4>
-      ),
-      btn: (
-        <Button
-          style={{ marginTop: 8, float: 'right' }}
-          onClick={() => {
-            dispatch(actions.toggleNotification('123'))
-            history.push('/clients/3');
-          }}
-        >
-          Узнать больше
-        </Button>),
-      icon: 'phone',
-      isShown: false,
-      hidenIcon: 'phone',
-    }))
-  }, [dispatch]);
   return notificationIcons;
 };
 

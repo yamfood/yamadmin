@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Layout,
   Descriptions,
   Form,
   Input,
   Switch,
-  Button, Spin,
+  Button, Spin, Tooltip,
 } from 'antd';
 import { useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,11 +22,18 @@ const ClientDetails = ({ form }) => {
   const clients = useSelector((state) => state.clients);
   const { detailsData } = clients;
   const { getFieldDecorator } = form;
-
+  const [formChangeState, setFormChangeState] = useState(false);
+  const [tooltipHover, setTooltipHover] = useState(false);
   useEffect(() => {
     dispatch(actions.getClientDetails(id));
     dispatch(actions.setMenuActive(5));
   }, []);
+
+  useEffect(() => {
+    if (detailsData) {
+      setFormChangeState(false)
+    }
+  }, [detailsData])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,7 +44,6 @@ const ClientDetails = ({ form }) => {
     });
   };
 
-
   return (
     <Layout>
       <Content
@@ -45,6 +51,9 @@ const ClientDetails = ({ form }) => {
       >
         <Spin spinning={clients.detailsStatus === 'request'}>
           <Form
+            onChange={() => {
+              setFormChangeState(true);
+            }}
             onSubmit={handleSubmit}
           >
             <Descriptions
@@ -78,6 +87,7 @@ const ClientDetails = ({ form }) => {
               <Descriptions.Item label="Блокирован">
                 <Form.Item>
                   {getFieldDecorator('is_blocked', {
+                    onChange: () => setFormChangeState(true),
                     initialValue: detailsData[id] ? detailsData[id].is_blocked : null,
                     valuePropName: 'checked',
                   })(
@@ -106,15 +116,26 @@ const ClientDetails = ({ form }) => {
             </Descriptions>
             <Form.Item>
               <div style={clientEditButtonsStyle}>
-                <Button
-                  onClick={() => history.push(`/orders/new?client_id=${id}`)}
-                  style={{ marginRight: 'auto' }}
-                  htmlType="submit"
-                  type="primary"
-                  loading={clients.editStatus === 'request'}
-                >
-                  Создать новый заказ
-                </Button>
+                <div style={{ marginRight: 'auto' }}>
+                  <Tooltip
+                    visible={tooltipHover && formChangeState}
+                    title="Сначала сохраните изменения"
+                  >
+                    <div
+                      onMouseEnter={() => setTooltipHover(true)}
+                      onMouseLeave={() => setTooltipHover(false)}
+                    >
+                      <Button
+                        onClick={() => history.push(`/orders/new?client_id=${id}`)}
+                        htmlType="submit"
+                        type="primary"
+                        disabled={formChangeState}
+                      >
+                        Создать новый заказ
+                      </Button>
+                    </div>
+                  </Tooltip>
+                </div>
                 <Button
                   onClick={() => history.push('/clients/')}
                   style={{ marginRight: 10 }}

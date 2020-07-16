@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  Layout
+  Layout, Spin,
 } from 'antd';
 import { withRouter, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -77,24 +77,28 @@ const OrderDetails = (props) => {
 
   return (
     <Layout>
-      <Content
-        style={{
-          margin: '24px 16px',
-          padding: 24,
-          background: '#fff',
-          height: '95vh',
-          overflow: 'auto',
-        }}
-      >
-        {order !== null ? (
-          <OrderDetailsView
-            order={order}
-            editStatus={editStatus}
-            editedState={editedState}
-            form={form}
-          />
-        ) : <h1>Loading...</h1>}
-      </Content>
+      <Spin spinning={order === null} tip="Загружаем заказ">
+        <Content
+          style={{
+            margin: '24px 16px',
+            padding: 24,
+            background: '#fff',
+            height: '95vh',
+            overflow: 'auto',
+          }}
+        >
+          {order && (
+            <OrderDetailsView
+              order={order}
+              editStatus={editStatus}
+              editedState={editedState}
+              form={form}
+            />
+          )}
+
+        </Content>
+      </Spin>
+
     </Layout>
   )
 };
@@ -105,7 +109,7 @@ export default withRouter(formWrap(OrderDetails,
     const preparedValues = {
       ...values,
       delivery_cost: Number(values.delivery_cost),
-      products: values.products.map((product) => ({
+      products: values.products?.map((product) => ({
         ...(dissoc(product, 'groupModifiers') || {}),
         payload: {
           ...product.payload,
