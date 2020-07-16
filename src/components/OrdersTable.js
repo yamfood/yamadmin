@@ -7,7 +7,7 @@ const OrdersTable = ({ orders, loading }) => (
   <div className="OrdersTable">
     {loading
       ? [1, 2, 3, 4].map((i) => <OrderCardSkeleton key={i} />)
-      : orders.map((order) => <OrderCard key={order.id} order={order} />)}
+      : orders?.map((order) => <OrderCard key={order.id} order={order} />)}
   </div>
 );
 

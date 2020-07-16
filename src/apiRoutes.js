@@ -19,6 +19,7 @@ export default {
   productsCategory: () => [host, 'products/categories/'].join('/'),
   riders: () => [host, 'riders/'].join('/'),
   orderDetails: (id) => [host, `orders/${id}/`].join('/'),
+  createOrder: () => [host, 'orders/create/'].join('/'),
   orderLogs: (id) => [host, `orders/${id}/logs/`].join('/'),
   clientDetails: (id) => [host, `clients/${id}/`].join('/'),
   orders: () => [host, 'orders/active/'].join('/'),

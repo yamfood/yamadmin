@@ -56,20 +56,17 @@ const MarkerMap = (props) => {
             }
           }
         })
-
       }
     }
 
   }, [lat, lng, map, regions])
 
   useEffect(() => {
-      if (location) {
-          console.log("location", location)
-      } else {
-          console.error("Something wrong with regions data")
-      }
+    if (!location) {
+      console.error("Something wrong with regions data")
+    }
   }, [regions, lat, lng, ]);
-  return <div id='map' style={{width: '100%', height: '100%', minHeight: '40vh'}}/>
+  return <div id='map' style={{width: '100%', height: '100%', ...props.style}}/>
 };
 
 export default MarkerMap;

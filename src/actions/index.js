@@ -1,6 +1,4 @@
-import {
-  Button, Icon, message, notification,
-} from 'antd';
+import { message } from 'antd';
 import { createAction } from 'redux-actions';
 import axios from 'axios';
 import React from 'react';
@@ -10,28 +8,7 @@ import history from '../history';
 
 
 export const addNotification = createAction('ADD_NOTIFICATION');
-
-export const showNotification = (key, message, btn, icon, type) => async (dispatch) => {
-  const styles = <style>{'.ant-notification-bottomRight { right: 150px !important; }'}</style>
-  notification[type || 'warn']({
-    key,
-    icon: <Icon type={icon} style={{ color: '#108ee9' }} />,
-    message,
-    // description,
-    placement: 'bottomRight',
-    closeIcon: <Button type="link" shape="circle" icon="minus" onClick={(e) => e.stopPropagation()}>{styles}</Button>,
-    btn,
-    style: {
-      width: 'max-content',
-      paddingTop: 32,
-      paddingRight: 48,
-      paddingBottom: 32,
-    },
-  })
-  dispatch(addNotification({
-    key, message, btn, icon,
-  }))
-};
+export const toggleNotification = createAction('TOGGLE_NOTIFICATION');
 
 
 export const loginRequest = createAction('LOGIN_REQUEST');
@@ -274,6 +251,26 @@ export const getOrderLogs = (id) => async (dispatch) => {
       dispatch(loginFailure());
     }
     dispatch(getOrderLogsFailure());
+  }
+};
+
+
+export const createOrderRequest = createAction('CREATE_ORDER_DETAILS_REQUEST');
+
+export const createOrder = (body) => async (dispatch) => {
+  dispatch(createOrderRequest());
+  try {
+    const response = await httpClient.post(api.createOrder(), body);
+
+    message.success('Заказ успешно изменен', 3);
+    history.push(`/orders/${response.data.id}`);
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    message.error('Ошибка при создании заказа', 3);
   }
 };
 

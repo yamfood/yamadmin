@@ -1,5 +1,5 @@
 import {
-  Button, Descriptions, Input, Table, Tag,
+  Button, Descriptions, Input, Table, Tag, Radio,
 } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -52,8 +52,7 @@ const OrderDetailsView = (props) => {
     }
     return 0
   }
-
-
+  const allowEdit = (order.status === 'new' && order.payment === 'cash') || order.status === 'pending';
   const totalPrice = !loading && order.products.reduce(
     (acc, product, index) => acc + (calculateProductPrice(product, index) || 0)
       * (form.getFieldValue(`products[${index}].count`) || 1), 0,
@@ -70,12 +69,16 @@ const OrderDetailsView = (props) => {
       dataIndex: 'comment',
       key: 'comment',
       render: (value, product, index) => {
-        if (order.status === 'new') {
+        if (allowEdit) {
           return (
             <>
               {form.getFieldDecorator(`products[${index}].comment`, { initialValue: value })(<Input />)}
-              {form.getFieldDecorator(`products[${index}].payload`, { initialValue: product.payload ? product.payload : {} })(<Input type="hidden" />)}
-              {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: product.id })(<Input type="hidden" />)}
+              {form.getFieldDecorator(`products[${index}].payload`, { initialValue: product.payload ? product.payload : {} })(
+                <Input type="hidden" />,
+              )}
+              {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: product.id })(<Input
+                type="hidden"
+              />)}
             </>
           )
         }
@@ -88,11 +91,11 @@ const OrderDetailsView = (props) => {
       key: 'count',
       width: '100px',
       render: (value, product, index) => {
-        if (order.status === 'new') {
+        if (allowEdit) {
           return form.getFieldDecorator(
             `products[${index}].count`,
             { initialValue: value || 1 },
-          )(<Input type="number" disabled={order.payment !== 'cash'} />)
+          )(<Input type="number" disabled={!allowEdit} />)
         }
         return value;
       },
@@ -107,8 +110,8 @@ const OrderDetailsView = (props) => {
       title: 'Итого',
       dataIndex: 'total',
       key: 'total',
-      render: (total, product, index) => calculateProductPrice(product, index)
-        * form.getFieldValue(`products[${index}].count`),
+      render: (total, product, index) => (calculateProductPrice(product, index) || 0)
+        * (form.getFieldValue(`products[${index}].count`) || 1),
     },
   ];
 
@@ -132,6 +135,8 @@ const OrderDetailsView = (props) => {
 
   const statusTag = ({ status }) => {
     switch (status) {
+      case 'pending':
+        return <Tag color="#108ee9">Незаконченный</Tag>;
       case 'new':
         return <Tag color="#108ee9">Новый</Tag>;
       case 'onWay':
@@ -175,7 +180,7 @@ const OrderDetailsView = (props) => {
     return (
       <>
         {
-          ['new', 'onKitchen', 'onWay'].includes(order.status) ? (
+          ['pending', 'new', 'onKitchen', 'onWay'].includes(order.status) ? (
             <CancelOrderButton
               btnType="danger"
               loading={activeOrders.cancelStatus === 'request'}
@@ -187,7 +192,7 @@ const OrderDetailsView = (props) => {
           ) : null
         }
         {
-          order.status === 'new' ? (
+          ['pending', 'new'].includes(order.status) ? (
             <Button
               type="primary"
               onClick={() => dispatch(actions.acceptOrder(order.id, '/orders/active/'))}
@@ -212,7 +217,7 @@ const OrderDetailsView = (props) => {
             product={product}
             form={form}
             index={index}
-            disabled={order.status !== 'new'}
+            disabled={!allowEdit}
             allGroupModifiers={allGroupModifiers}
           />
         )
@@ -239,6 +244,7 @@ const OrderDetailsView = (props) => {
     }
     return null
   }
+  const paymentDescription = order.payment === 'cash' ? 'Наличными' : 'Картой';
   return (
     <div>
       <Link to={`/orders/${order.id}/logs/`}>Журнал</Link>
@@ -254,7 +260,7 @@ const OrderDetailsView = (props) => {
           <div id="map" style={{ width: '100%', height: 250 }} />
         </Descriptions.Item>
         <Descriptions.Item label="Адрес" span={2}>
-          {order.status === 'new'
+          {allowEdit
             ? (
               form.getFieldDecorator(('address'), {
                 initialValue: order.address,
@@ -276,21 +282,32 @@ const OrderDetailsView = (props) => {
           {order.rider_phone ? order.rider_phone : 'Нет курьера'}
         </Descriptions.Item>
         <Descriptions.Item label="Сумма" span={1}>
-          {order.total_sum.toLocaleString('ru')}
+          {order.total_sum?.toLocaleString('ru')}
           &nbsp;сум
         </Descriptions.Item>
         <Descriptions.Item label="Статус" span={1}>
           {statusTag(order)}
         </Descriptions.Item>
         <Descriptions.Item label="Тип оплаты" span={1}>
-          {order.payment === 'cash' ? 'Наличными' : 'Картой'}
+          {order.status === 'pending'
+            ? (
+              form.getFieldDecorator(('payment'), {
+                initialValue: order.payment,
+              })(
+                <Radio.Group size="small" buttonStyle="solid">
+                  <Radio.Button value="card">Картой</Radio.Button>
+                  <Radio.Button value="cash">Наличными</Radio.Button>
+                </Radio.Group>,
+              )
+            )
+            : paymentDescription}
         </Descriptions.Item>
         <Descriptions.Item label="Создан в">
           {moment(order.created_at).format('DD.MM.YYYY HH:mm')}
         </Descriptions.Item>
         <Descriptions.Item label="Заметки" span={2}>
           {
-            order.status === 'new'
+            allowEdit
               ? (
                 form.getFieldDecorator(('notes'), {
                   initialValue: order.notes,
@@ -302,7 +319,7 @@ const OrderDetailsView = (props) => {
         </Descriptions.Item>
         <Descriptions.Item label="Доставка">
           {
-            order.status === 'new'
+            allowEdit
               ? (
                 form.getFieldDecorator(('delivery_cost'), {
                   initialValue: order.delivery_cost,
@@ -318,7 +335,7 @@ const OrderDetailsView = (props) => {
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <h3><strong>Продукты</strong></h3>
         {
-          order.status === 'new' && order.payment === 'cash'
+          allowEdit
             ? <OrderAvailableModal orderId={order.id} />
             : ''
         }
@@ -338,7 +355,7 @@ const OrderDetailsView = (props) => {
         }))}
         expandedRowRender={expandedModifierGroup}
         loading={loading}
-        columns={order.status === 'new' && order.payment === 'cash' ? [...columns, deleteColumn] : columns}
+        columns={allowEdit ? [...columns, deleteColumn] : columns}
         size="small"
         pagination={false}
         footer={() => (

@@ -2,6 +2,7 @@ import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
 
 import * as actions from '../actions';
+import { update } from '../utils';
 
 
 const clients = handleActions({
@@ -851,6 +852,9 @@ const activeOrders = handleActions({
   ready: {
     list: [],
   },
+  pending: {
+    list: [],
+  },
   onWay: {
     list: [],
   },
@@ -929,7 +933,7 @@ const orderDetails = handleActions({
         ...state[orderId],
         products: [
           ...state[orderId].products,
-          item,
+          { ...item, count: 1 },
         ],
       },
     }
@@ -1354,7 +1358,13 @@ const notifications = handleActions({
   [actions.addNotification](state, { payload: notification }) {
     return { ...state, [notification.key]: { ...notification } }
   },
-}, { });
+  [actions.toggleNotification](state, { payload: key }) {
+    return update(state, key, (notification) => ({
+      ...notification,
+      isShown: !notification?.isShown,
+    }))
+  },
+}, {});
 
 
 export default combineReducers({
