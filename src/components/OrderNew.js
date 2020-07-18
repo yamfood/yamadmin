@@ -22,7 +22,7 @@ import {
 const { Content } = Layout;
 
 function toGisSearchLocation(q, callback, errorCallback) {
-  axios.get('http://catalog.api.2gis.ru/3.0/items', {
+  axios.get('https://catalog.api.2gis.ru/3.0/items', {
     params: {
       key: 'rupgcl3079',
       q,
@@ -55,7 +55,7 @@ function filteredJoin(arr, delim) {
 }
 
 function toGisSearchAddress(lat, lon, callback, errorCallback) {
-  axios.get('http://catalog.api.2gis.ru/3.0/items', {
+  axios.get('https://catalog.api.2gis.ru/3.0/items', {
     params: {
       key: 'rupgcl3079',
       fields: 'items.address',
@@ -157,53 +157,49 @@ const OrderNew = (props) => {
               layout="vertical"
               bordered
             >
-              <Descriptions.Item label="Локация">
+              <Descriptions.Item label="Локация" span={3}>
                 <MarkerMap
                   regions={regions}
-                  style={{ minWidth: 200, width: '100%', height: '33vh' }}
+                  style={{ minWidth: 200, width: '100%', height: '50vh' }}
                   lat={form.getFieldValue('latitude')}
                   lng={form.getFieldValue('longitude')}
-                  onChange={({ lat, lng }) => form.setFieldsValue(
-                    { latitude: lat, longitude: lng },
-                  )}
+                  onChange={({ lat, lng }) => {
+                    form.setFieldsValue({ latitude: lat, longitude: lng });
+                  }}
                 />
-                <Row type="flex" justify="center" gutter={8} style={{ marginTop: 8 }}>
-                  <Col span={6}>
-                    <Form.Item>
-                      {form.getFieldDecorator(('latitude'), {
-                        rules: [{
-                          required: true,
-                          message: 'Это обязательное поле',
-                        }],
-                      })(
-                        <Input style={{ width: '100%' }} />,
-                      )}
-                    </Form.Item>
-                  </Col>
-                  <Col span={6}>
-                    <Form.Item>
-                      {form.getFieldDecorator(('longitude'), {
-                        rules: [{
-                          required: true,
-                          message: 'Это обязательное поле',
-                        }],
-                      })(
-                        <Input style={{ width: '100%' }} />,
-                      )}
-                    </Form.Item>
-                  </Col>
+                <Form.Item>
+                  {form.getFieldDecorator(('latitude'), {
+                    rules: [{
+                      required: true,
+                      message: 'Это обязательное поле',
+                    }],
+                  })(
+                    <Input hidden />,
+                  )}
+                </Form.Item>
+                <Form.Item>
+                  {form.getFieldDecorator(('longitude'), {
+                    rules: [{
+                      required: true,
+                      message: 'Это обязательное поле',
+                    }],
+                  })(
+                    <Input hidden />,
+                  )}
+                </Form.Item>
+                <Row type="flex" justify="center">
                   <Col span={6}>
                     <Button
                       loading={toGisAddressLoading && { delay: 500 }}
                       style={{ marginTop: 4 }}
                       onClick={onGetAddressFromMap}
                     >
-                      Узнать адрес
+                      Определить адрес
                     </Button>
                   </Col>
                 </Row>
               </Descriptions.Item>
-              <Descriptions.Item label="Адрес" span={2}>
+              <Descriptions.Item label="Адрес" span={1}>
                 <Form.Item>
                   {form.getFieldDecorator(('address'), {
                     rules: [{
@@ -223,10 +219,10 @@ const OrderNew = (props) => {
                   карте
                 </Button>
               </Descriptions.Item>
-              <Descriptions.Item label="Предыдущие заказы">
+              <Descriptions.Item label="Предыдущие заказы" span={4}>
                 <List
                   style={{
-                    width: '100%', maxHeight: '38vh', height: '100%', overflowY: 'scroll',
+                    width: '100%', maxHeight: '15vh', height: '100%', overflowY: 'scroll',
                   }}
                   bordered
                   dataSource={client?.last_orders}
@@ -255,18 +251,18 @@ const OrderNew = (props) => {
                   )}
                 />
               </Descriptions.Item>
-              <Descriptions.Item label="Заметки">
-                {form.getFieldDecorator(('notes'), {})(
-                  (<Input.TextArea style={{ width: '100%', height: 50 }} />),
-                )}
-              </Descriptions.Item>
-              <Descriptions.Item label="Клиент">
+              <Descriptions.Item label="Клиент" span={2}>
                 {client?.name}
                 {form.getFieldDecorator('client_id', { initialValue: clientId })(<Input
                   type="hidden"
                 />)}
               </Descriptions.Item>
-              <Descriptions.Item label="Телефон">{client?.phone}</Descriptions.Item>
+              <Descriptions.Item label="Телефон" span={2}>{client?.phone}</Descriptions.Item>
+              <Descriptions.Item label="Заметки" span={4}>
+                {form.getFieldDecorator(('notes'), {})(
+                  (<Input.TextArea style={{ width: '100%', height: 50 }} />),
+                )}
+              </Descriptions.Item>
             </Descriptions>
             <br />
             <div
