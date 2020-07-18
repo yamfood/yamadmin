@@ -28,7 +28,10 @@ const OrdersActive = () => {
       <Content
         style={contentStyle}
       >
-        <Tabs onChange={(key) => dispatch(actions.activeOrderTab(key))}>
+        <Tabs defaultActiveKey="1" onChange={(key) => dispatch(actions.activeOrderTab(key))}>
+          <TabPane tab={`В процессе (${orders.pending.list.length})`} key="4">
+            <OrdersTable orders={orders.pending.list} loading={orders.loading} />
+          </TabPane>
           <TabPane tab={`Новые (${orders.new.list.length})`} key="1">
             <OrdersTable orders={orders.new.list} loading={orders.loading} />
           </TabPane>

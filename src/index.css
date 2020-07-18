@@ -28,3 +28,8 @@ code {
 .custom-upload-list a img {
   width: 100%;
 }
+
+.ant-notification-bottomRight {
+  right: 64px !important;
+  bottom: 16px !important;
+}

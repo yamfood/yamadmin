@@ -1,8 +1,11 @@
 import '../App.css';
 import React, { useEffect } from 'react';
 import { Router, Switch, Route } from 'react-router-dom';
-import { Layout } from 'antd';
+import {
+  Layout,
+} from 'antd';
 import { useDispatch } from 'react-redux';
+import { QueryParamProvider } from 'use-query-params';
 import Navigation from './Navigation';
 import Products from './Products';
 import Home from './Home';
@@ -35,7 +38,8 @@ import CategoryEdit from './CategoryEdit';
 import * as actions from '../actions';
 import OrderLogs from './OrderLogs';
 import ProductModifierEdit from './ProductModifierEdit';
-
+import Notifications from './Notifications';
+import OrderNew from './OrderNew';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -46,37 +50,41 @@ const App = () => {
   return (
     <Layout className="App">
       <Router history={history}>
-        <Navigation />
-        <Switch>
-          <Route path="/login/" component={Login} />
-          <PrivateRoute exact path="/products/create/" component={ProductCreate} />
-          <PrivateRoute exact path="/products" component={Products} />
-          <PrivateRoute exact path="/products/modifiers/:id/edit/" component={ProductModifierEdit} />
-          <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
-          <PrivateRoute exact path="/products/categories/" component={ProductCategories} />
-          <PrivateRoute exact path="/products/categories/create/" component={CategoryCreate} />
-          <PrivateRoute exact path="/products/categories/:id/edit/" component={CategoryEdit} />
-          <PrivateRoute exact path="/kitchens/create/" component={KitchenCreate} />
-          <PrivateRoute exact path="/kitchens" component={KitchensList} />
-          <PrivateRoute exact path="/kitchens/:id/edit/" component={KitchenEdit} />
-          <PrivateRoute exact path="/clients/" component={Clients} />
-          <PrivateRoute exact path="/clients/:id/" component={TestDetails} />
-          <PrivateRoute exact path="/admins/" component={AdminsList} />
-          <PrivateRoute exact path="/admins/:id/edit/" component={AdminEdit} />
-          <PrivateRoute exact path="/admins/create/" component={AdminCreate} />
-          <PrivateRoute exact path="/riders" component={RidersList} />
-          <PrivateRoute exact path="/riders/:id/edit/" component={RiderEdit} />
-          <PrivateRoute exact path="/orders/active/" component={OrdersActive} />
-          <PrivateRoute exact path="/riders/create/" component={RiderCreate} />
-          <PrivateRoute exact path="/orders/finished/" component={OrdersFinished} />
-          <PrivateRoute exact path="/orders/:id/" component={OrderDetails} />
-          <PrivateRoute exact path="/orders/:id/logs/" component={OrderLogs} />
-          <PrivateRoute exact path="/announcements/" component={Announcements} />
-          <PrivateRoute exact path="/announcements/create/" component={AnnouncementCreate} />
-          <PrivateRoute exact path="/announcements/:id/edit/" component={AnnouncementEdit} />
-          <PrivateRoute exact path="/params/" component={ParamsList} />
-          <PrivateRoute path="/" component={Home} />
-        </Switch>
+        <QueryParamProvider ReactRouterRoute={Route}>
+          <Notifications />
+          <Navigation />
+          <Switch>
+            <Route path="/login/" component={Login} />
+            <PrivateRoute exact path="/products/create/" component={ProductCreate} />
+            <PrivateRoute exact path="/products" component={Products} />
+            <PrivateRoute exact path="/products/modifiers/:id/edit/" component={ProductModifierEdit} />
+            <PrivateRoute exact path="/products/:id/edit/" component={ProductEdit} />
+            <PrivateRoute exact path="/products/categories/" component={ProductCategories} />
+            <PrivateRoute exact path="/products/categories/create/" component={CategoryCreate} />
+            <PrivateRoute exact path="/products/categories/:id/edit/" component={CategoryEdit} />
+            <PrivateRoute exact path="/kitchens/create/" component={KitchenCreate} />
+            <PrivateRoute exact path="/kitchens" component={KitchensList} />
+            <PrivateRoute exact path="/kitchens/:id/edit/" component={KitchenEdit} />
+            <PrivateRoute exact path="/clients/" component={Clients} />
+            <PrivateRoute exact path="/clients/:id/" component={TestDetails} />
+            <PrivateRoute exact path="/admins/" component={AdminsList} />
+            <PrivateRoute exact path="/admins/:id/edit/" component={AdminEdit} />
+            <PrivateRoute exact path="/admins/create/" component={AdminCreate} />
+            <PrivateRoute exact path="/riders" component={RidersList} />
+            <PrivateRoute exact path="/riders/:id/edit/" component={RiderEdit} />
+            <PrivateRoute exact path="/orders/active/" component={OrdersActive} />
+            <PrivateRoute exact path="/riders/create/" component={RiderCreate} />
+            <PrivateRoute exact path="/orders/finished/" component={OrdersFinished} />
+            <PrivateRoute exact path="/orders/new/" component={OrderNew} />
+            <PrivateRoute exact path="/orders/:id/" component={OrderDetails} />
+            <PrivateRoute exact path="/orders/:id/logs/" component={OrderLogs} />
+            <PrivateRoute exact path="/announcements/" component={Announcements} />
+            <PrivateRoute exact path="/announcements/create/" component={AnnouncementCreate} />
+            <PrivateRoute exact path="/announcements/:id/edit/" component={AnnouncementEdit} />
+            <PrivateRoute exact path="/params/" component={ParamsList} />
+            <PrivateRoute path="/" component={Home} />
+          </Switch>
+        </QueryParamProvider>
       </Router>
     </Layout>
   )

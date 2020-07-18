@@ -31,8 +31,6 @@ const PolygonMap = (props) => {
                 }
             })
 
-        } else {
-            console.error("Something wrong with regions data")
         }
     }, [regions]);
     return <div id='map' style={{width: '100%', height: '100%'}}/>

@@ -22,10 +22,12 @@
     "react-scripts": "3.3.1",
     "redux": "^4.0.5",
     "redux-actions": "^2.6.5",
-    "redux-thunk": "^2.3.0"
+    "redux-devtools-extension": "^2.13.8",
+    "redux-thunk": "^2.3.0",
+    "use-query-params": "^1.1.5"
   },
   "scripts": {
-    "start": "react-scripts --max_old_space_size=2560 start",
+    "start": "set PORT=3003 && react-scripts --max_old_space_size=2560 start",
     "build": "react-scripts --max_old_space_size=2560 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
