@@ -1,14 +1,20 @@
+const root = `${process.env.REACT_APP_API_HOST}`;
 const host = `${process.env.REACT_APP_API_HOST}/api/admin`;
 
 export default {
+  regions: () => [root, 'api/regions'].join('/'),
   login: () => [host, 'auth/login/'].join('/'),
   clients: () => [host, 'clients/'].join('/'),
   kitchens: () => [host, 'kitchens/'].join('/'),
   kitchenDetails: (id) => [host, `kitchens/${id}/`].join('/'),
+  terminals: () => [host, 'terminals'].join('/'),
   kitchenProducts: (id) => [host, `kitchens/${id}/products/`].join('/'),
   kitchenDisabledAction: (kitchenId, productId) => [host, `kitchens/${kitchenId}/disabled/${productId}/`].join('/'),
   products: () => [host, 'products/'].join('/'),
+  syncProducts: () => [host, 'products/sync'].join('/'),
   product: (id) => [host, `products/${id}/`].join('/'),
+  modifierDetails: (id) => [host, `products/modifiers/${id}/`].join('/'),
+  productModifiers: () => [host, 'products/modifiers/'].join('/'),
   categoryDetails: (id) => [host, `products/categories/${id}/`].join('/'),
   productsCategory: () => [host, 'products/categories/'].join('/'),
   riders: () => [host, 'riders/'].join('/'),

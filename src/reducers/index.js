@@ -208,6 +208,51 @@ const riders = handleActions({
 });
 
 
+const modifiers = handleActions({
+  [actions.getModifierDetailsRequest](state) {
+    return {
+      ...state,
+      modifierDetailsStatus: 'request',
+    };
+  },
+  [actions.getModifierDetailsFailure](state) {
+    return {
+      ...state,
+      modifierDetailsStatus: 'failure',
+    };
+  },
+  [actions.getModifierDetailsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      modifierDetailsStatus: 'success',
+      modifierDetails: data,
+    };
+  },
+  [actions.editModifierRequest](state) {
+    return {
+      ...state,
+      editModifierStatus: 'request',
+    };
+  },
+  [actions.editModifierFailure](state) {
+    return {
+      ...state,
+      editModifierStatus: 'failure',
+    };
+  },
+  [actions.editModifierSuccess](state) {
+    return {
+      ...state,
+      editModifierStatus: 'success',
+    };
+  },
+}, {
+  list: [],
+  status: null,
+  modifierDetails: [],
+});
+
+
 const products = handleActions({
   [actions.getProductsRequest](state) {
     return {
@@ -497,6 +542,30 @@ const admins = handleActions({
   permissions: [],
 });
 
+const terminals = handleActions({
+  [actions.getTerminalsRequest](state) {
+    return {
+      ...state,
+      status: 'request',
+    };
+  },
+  [actions.getTerminalsFailure](state) {
+    return {
+      ...state,
+      status: 'failure',
+    };
+  },
+  [actions.getTerminalsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      status: 'success',
+      list: data,
+    };
+  },
+}, {
+  list: [],
+  status: null,
+})
 
 const kitchens = handleActions({
   [actions.getKitchensRequest](state) {
@@ -678,10 +747,12 @@ const auth = handleActions({
       ...state,
       status: 'failure',
       token: null,
+      payload: {
+        permissions: [],
+      },
     }
   },
   [actions.loginSuccess](state, { payload: { data } }) {
-    console.log(data);
     return {
       ...state,
       status: 'success',
@@ -1270,6 +1341,15 @@ const category = handleActions({
   list: [],
   botsList: [],
 });
+
+
+const regions = handleActions({
+  [actions.getRegionsSuccess](state, { payload: { data } }) {
+    return data
+  },
+}, null);
+
+
 export default combineReducers({
   clients,
   riders,
@@ -1284,4 +1364,7 @@ export default combineReducers({
   menu,
   params,
   category,
+  terminals,
+  modifiers,
+  regions,
 });

@@ -4,24 +4,60 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  DeleteOutlined,
-} from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import * as actions from '../actions';
 import CancelOrderButton from './CancelOrderButton';
 import OrderAvailableModal from './OrderAvailableModal';
-
+import GroupModifiersSelect from './GroupModifiersSelect';
+import { update, groupByField } from '../utils';
 
 const OrderDetailsView = (props) => {
   const dispatch = useDispatch();
   const activeOrders = useSelector((state) => state.activeOrders);
+  const availableProducts = useSelector(
+    (state) => groupByField(state
+      .orderDetails
+      .availableList?.map(
+        (product) => ({
+          modifiers: groupByField(product.groupModifiers.reduce(
+            (acc, gm) => [...acc, ...gm.modifiers], [],
+          ), 'id'),
+          ...update(product, 'groupModifiers',
+            (groupModifiers) => groupModifiers.map((gm) => update(gm, 'modifiers',
+              (modifiers) => groupByField(modifiers, 'id')))),
+        })), 'id'),
+  );
+
   const {
     order,
     form,
     editedState,
     editStatus,
   } = props;
+  const loading = (editStatus === 'request') || !availableProducts;
+  const calculateProductPrice = (product, index) => {
+    const { price, stock_price: stockPrice } = product;
+    if (availableProducts && product) {
+      const gms = availableProducts[product.id]?.groupModifiers || [];
+      return (stockPrice || price)
+        + gms.reduce(
+          (acc, gm) => acc + (
+            (form.getFieldValue(`products[${index}].groupModifiers[${gm.id}]`)
+              || product.payload.modifiers?.filter((mId) => gm.modifiers[mId])
+                ?.map((mId) => ({ key: mId, label: gm.modifiers[mId] })))
+              ?.map((modifier) => gm.modifiers[modifier.key]?.price)
+              ?.reduce((sum, n) => sum + n, 0) || 0), 0,
+        )
+    }
+    return 0
+  }
+
+
+  const totalPrice = !loading && order.products.reduce(
+    (acc, product, index) => acc + (calculateProductPrice(product, index) || 0)
+      * (form.getFieldValue(`products[${index}].count`) || 1), 0,
+  );
 
   const handleCancel = (values) => {
     dispatch(actions.cancelOrder(order.id, values, '/orders/active/'));
@@ -33,12 +69,13 @@ const OrderDetailsView = (props) => {
       title: 'Комментарий',
       dataIndex: 'comment',
       key: 'comment',
-      render: (value, p, index) => {
+      render: (value, product, index) => {
         if (order.status === 'new') {
           return (
             <>
               {form.getFieldDecorator(`products[${index}].comment`, { initialValue: value })(<Input />)}
-              {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: p.id })(<Input type="hidden" />)}
+              {form.getFieldDecorator(`products[${index}].payload`, { initialValue: product.payload ? product.payload : {} })(<Input type="hidden" />)}
+              {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: product.id })(<Input type="hidden" />)}
             </>
           )
         }
@@ -50,7 +87,7 @@ const OrderDetailsView = (props) => {
       dataIndex: 'count',
       key: 'count',
       width: '100px',
-      render: (value, p, index) => {
+      render: (value, product, index) => {
         if (order.status === 'new') {
           return form.getFieldDecorator(
             `products[${index}].count`,
@@ -62,25 +99,16 @@ const OrderDetailsView = (props) => {
     },
     {
       title: 'Цена',
-      dataIndex: 'price',
-      key: 'price',
-      render: (price) => {
-        if (price) {
-          return price.toLocaleString('ru');
-        }
-        return null;
-      },
+      dataIndex: 'stock_price',
+      key: 'stock_price',
+      render: (_, product, index) => calculateProductPrice(product, index),
     },
     {
       title: 'Итого',
       dataIndex: 'total',
       key: 'total',
-      render: (price) => {
-        if (price) {
-          return price.toLocaleString('ru');
-        }
-        return null;
-      },
+      render: (total, product, index) => calculateProductPrice(product, index)
+        * form.getFieldValue(`products[${index}].count`),
     },
   ];
 
@@ -137,7 +165,7 @@ const OrderDetailsView = (props) => {
           <Button
             htmlType="submit"
             type="primary"
-            loading={editStatus === 'request'}
+            loading={loading}
           >
             Сохранить
           </Button>
@@ -174,6 +202,43 @@ const OrderDetailsView = (props) => {
     )
   };
 
+  const expandedModifierGroup = (product, index) => {
+    if (product && availableProducts) {
+      const { groupModifiers: allGroupModifiers } = availableProducts[product.id];
+      if (allGroupModifiers?.length > 0) {
+        return (
+          <GroupModifiersSelect
+            key={product.id}
+            product={product}
+            form={form}
+            index={index}
+            disabled={order.status !== 'new'}
+            allGroupModifiers={allGroupModifiers}
+          />
+        )
+      }
+    }
+    return null;
+  }
+
+  const expandIcon = (_props) => {
+    const {
+      expanded, record: product, onExpand, prefixCls,
+    } = _props;
+    const cls = expanded ? 'ant-table-row-expanded' : 'ant-table-row-collapsed';
+    if (availableProducts
+      && Object.keys(availableProducts[product.id]?.modifiers || {})?.length > 0) {
+      return (
+        <button
+          tabIndex={0}
+          type="button"
+          onClick={onExpand}
+          className={`${prefixCls} ant-table-row-expand-icon ${cls}`}
+        />
+      )
+    }
+    return null
+  }
   return (
     <div>
       <Link to={`/orders/${order.id}/logs/`}>Журнал</Link>
@@ -242,7 +307,7 @@ const OrderDetailsView = (props) => {
                 form.getFieldDecorator(('delivery_cost'), {
                   initialValue: order.delivery_cost,
                 })(
-                  <Input style={{ width: '100%' }} type="number" disabled={order.payment !== 'cash'}/>,
+                  <Input style={{ width: '100%' }} type="number" disabled={order.payment !== 'cash'} />,
                 )
               ) : order.delivery_cost
           }
@@ -259,18 +324,27 @@ const OrderDetailsView = (props) => {
         }
       </div>
       <Table
+        // TODO allow collapse expandable row
+        expandedRowKeys={
+          order.products.filter(
+            (product) => (availableProducts
+              && Object.keys(availableProducts[product.id]?.modifiers || {})?.length > 0),
+          ).map((product) => product.id)
+        }
+        expandIcon={expandIcon}
         dataSource={order.products.map((item) => ({
           ...item,
           key: item.id,
         }))}
+        expandedRowRender={expandedModifierGroup}
+        loading={loading}
         columns={order.status === 'new' && order.payment === 'cash' ? [...columns, deleteColumn] : columns}
         size="small"
         pagination={false}
-        loading={editStatus === 'request'}
         footer={() => (
           <div style={{ textAlign: 'right', paddingRight: 10 }}>
             Итого:&nbsp;
-            {order.total_sum.toLocaleString('ru')}
+            {totalPrice}
             &nbsp;сум
           </div>
         )}

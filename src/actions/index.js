@@ -5,6 +5,7 @@ import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
 
+
 export const loginRequest = createAction('LOGIN_REQUEST');
 export const loginFailure = createAction('LOGIN_FAILURE');
 export const loginSuccess = createAction('LOGIN_SUCCESS');
@@ -23,6 +24,12 @@ export const login = (username, password) => async (dispatch) => {
     dispatch(loginFailure());
     message.error('Логин/Пароль введен неправильно');
   }
+};
+
+
+export const logout = () => async (dispatch) => {
+  dispatch(loginFailure());
+  localStorage.removeItem('token');
 };
 
 
@@ -70,6 +77,56 @@ export const getKitchens = () => async (dispatch) => {
 };
 
 
+export const editModifierRequest = createAction('EDIT_MODIFIER_REQUEST');
+export const editModifierFailure = createAction('EDIT_MODIFIER_FAILURE');
+export const editModifierSuccess = createAction('EDIT_MODIFIER_SUCCESS');
+
+export const editModifier = (params, modifierId) => async (dispatch) => {
+  dispatch(editModifierRequest());
+  try {
+    await httpClient.patch(api.modifierDetails(modifierId), {
+      name: {
+        ru: params.name_ru,
+        uz: params.name_uz,
+        en: params.name_en,
+      },
+      price: parseInt(params.price, 10),
+    });
+    dispatch(editModifierSuccess());
+    message.success('Модификатор успешно изменен', 3);
+    history.push('/products');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(editModifierFailure());
+    message.error('Ошибка при изменении продукта', 3);
+  }
+};
+
+
+export const getModifierDetailsRequest = createAction('GET_MODIFIER_DETAILS_REQUEST');
+export const getModifierDetailsFailure = createAction('GET_MODIFIER_DETAILS_FAILURE');
+export const getModifierDetailsSuccess = createAction('GET_MODIFIER_DETAILS_SUCCESS');
+
+export const getModifierDetails = (modifierId) => async (dispatch) => {
+  dispatch(getModifierDetailsRequest());
+  try {
+    const response = await httpClient.get(api.modifierDetails(modifierId));
+    dispatch(getModifierDetailsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getModifierDetailsFailure());
+  }
+};
+
+
 export const getProductsRequest = createAction('GET_PRODUCTS_REQUEST');
 export const getProductsFailure = createAction('GET_PRODUCTS_FAILURE');
 export const getProductsSuccess = createAction('GET_PRODUCTS_SUCCESS');
@@ -86,6 +143,24 @@ export const getProducts = () => async (dispatch) => {
       dispatch(loginFailure());
     }
     dispatch(getProductsFailure());
+  }
+};
+
+
+export const syncProducts = () => async (dispatch) => {
+  dispatch(getProductsRequest());
+  try {
+    await httpClient.get(api.syncProducts());
+    message.success('Продукты синхронизированны', 3);
+    dispatch(getProducts());
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getProductsFailure());
+    message.error('Ошибка синхронизации', 3);
   }
 };
 
@@ -648,6 +723,27 @@ export const editProduct = (params, productId) => async (dispatch) => {
 };
 
 
+export const getRegionsRequest = createAction('REGIONS_REQUEST');
+export const getRegionsFailure = createAction('REGIONS_FAILURE');
+export const getRegionsSuccess = createAction('REGIONS_SUCCESS');
+
+
+export const getRegions = () => async (dispatch) => {
+  dispatch(getRegionsRequest());
+  try {
+    const response = await httpClient.get(api.regions());
+    dispatch(getRegionsSuccess({ data: response.data }));
+  } catch (error) {
+    console.log(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getRegionsFailure());
+  }
+}
+
+
 export const getKitchenDetailsRequest = createAction('GET_KITCHEN_DETAILS_REQUEST');
 export const getKitchenDetailsFailure = createAction('GET_KITCHEN_DETAILS_FAILURE');
 export const getKitchenDetailsSuccess = createAction('GET_KITCHEN_DETAILS_SUCCESS');
@@ -664,6 +760,25 @@ export const getKitchenDetails = (kitchenId) => async (dispatch) => {
       dispatch(loginFailure());
     }
     dispatch(getKitchenDetailsFailure());
+  }
+};
+
+export const getTerminalsRequest = createAction('GET_TERMINALS_REQUEST');
+export const getTerminalsFailure = createAction('GET_TERMINALS_FAILURE');
+export const getTerminalsSuccess = createAction('GET_TERMINALS_SUCCESS');
+
+export const getTerminals = () => async (dispatch) => {
+  dispatch(getTerminalsRequest());
+  try {
+    const response = await httpClient.get(api.terminals());
+    dispatch(getTerminalsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getTerminalsFailure());
   }
 };
 
