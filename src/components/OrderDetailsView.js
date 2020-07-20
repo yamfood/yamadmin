@@ -53,6 +53,7 @@ const OrderDetailsView = (props) => {
     return 0
   }
   const allowEdit = (order.status === 'new' && order.payment === 'cash') || order.status === 'pending';
+  const allowLiteEdit = (order.status === 'new') || order.status === 'pending';
   const totalPrice = order.products.reduce(
     (acc, product, index) => acc + (calculateProductPrice(product, index) || 0)
       * (form.getFieldValue(`products[${index}].count`) || 1), 0,
@@ -262,7 +263,7 @@ const OrderDetailsView = (props) => {
             <div id="map" style={{ width: '100%', height: 250 }} />
           </Descriptions.Item>
           <Descriptions.Item label="Адрес" span={2}>
-            {allowEdit
+            {allowLiteEdit
               ? (
                 form.getFieldDecorator(('address'), {
                   initialValue: order.address,
@@ -309,7 +310,7 @@ const OrderDetailsView = (props) => {
           </Descriptions.Item>
           <Descriptions.Item label="Заметки" span={2}>
             {
-              allowEdit
+              allowLiteEdit
                 ? (
                   form.getFieldDecorator(('notes'), {
                     initialValue: order.notes,
