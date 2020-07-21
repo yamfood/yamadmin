@@ -57,6 +57,9 @@ const openCallsSocket = () => {
       const data = JSON.parse(m.data);
       window.onPhoneCall({ clientId: data.client_id, phone: data.phone })
     };
+    socket.onclose = () => {
+      openCallsSocket();
+    };
     return socket;
   } catch (error) {
     console.error(error);
