@@ -53,7 +53,7 @@ const OrderDetailsView = (props) => {
     return 0
   }
   const allowEdit = (order.status === 'new' && order.payment === 'cash') || order.status === 'pending';
-  const totalPrice = !loading && order.products.reduce(
+  const totalPrice = order.products.reduce(
     (acc, product, index) => acc + (calculateProductPrice(product, index) || 0)
       * (form.getFieldValue(`products[${index}].count`) || 1), 0,
   );
@@ -297,8 +297,8 @@ const OrderDetailsView = (props) => {
                   initialValue: order.payment,
                 })(
                   <Radio.Group size="small" buttonStyle="solid">
-                    <Radio.Button value="card">Картой</Radio.Button>
                     <Radio.Button value="cash">Наличными</Radio.Button>
+                    <Radio.Button value="card">Картой</Radio.Button>
                   </Radio.Group>,
                 )
               )

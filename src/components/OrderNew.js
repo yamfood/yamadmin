@@ -5,7 +5,7 @@ import {
   Descriptions,
   Input,
   Typography,
-  Layout, Row, message, List, Tooltip, Form, Spin,
+  Layout, Row, message, List, Form, Spin,
 } from 'antd';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -167,28 +167,24 @@ const OrderNew = (props) => {
                     form.setFieldsValue({ latitude: lat, longitude: lng });
                   }}
                 />
-                <Form.Item>
-                  {form.getFieldDecorator(('latitude'), {
-                    rules: [{
-                      required: true,
-                      message: 'Это обязательное поле',
-                    }],
-                  })(
-                    <Input hidden />,
-                  )}
-                </Form.Item>
-                <Form.Item>
-                  {form.getFieldDecorator(('longitude'), {
-                    rules: [{
-                      required: true,
-                      message: 'Это обязательное поле',
-                    }],
-                  })(
-                    <Input hidden />,
-                  )}
-                </Form.Item>
+                {form.getFieldDecorator(('latitude'), {
+                  rules: [{
+                    required: true,
+                    message: 'Это обязательное поле',
+                  }],
+                })(
+                  <Input hidden />,
+                )}
+                {form.getFieldDecorator(('longitude'), {
+                  rules: [{
+                    required: true,
+                    message: 'Это обязательное поле',
+                  }],
+                })(
+                  <Input hidden />,
+                )}
                 <Row type="flex" justify="center">
-                  <Col span={6}>
+                  <Col>
                     <Button
                       loading={toGisAddressLoading && { delay: 500 }}
                       style={{ marginTop: 4 }}
@@ -200,7 +196,7 @@ const OrderNew = (props) => {
                 </Row>
               </Descriptions.Item>
               <Descriptions.Item label="Адрес" span={1}>
-                <Form.Item>
+                <Form.Item style={{ width: '100%' }}>
                   {form.getFieldDecorator(('address'), {
                     rules: [{
                       required: true,
@@ -222,31 +218,24 @@ const OrderNew = (props) => {
               <Descriptions.Item label="Предыдущие заказы" span={4}>
                 <List
                   style={{
-                    width: '100%', maxHeight: '15vh', height: '100%', overflowY: 'scroll',
+                    width: '100%', maxHeight: '20vh', height: '100%', overflowY: 'scroll',
                   }}
                   bordered
                   dataSource={client?.last_orders}
                   renderItem={({
-                    id, location, address, total_sum: totalSum,
+                    id, location, address,
                   }) => (
                     <List.Item
                       key={id}
+                      className="hoverable"
                       onClick={() => form.setFieldsValue({ ...location, address })}
-                      extra={(
-                        <Tooltip title="Использовать локацию">
-                          <Button style={{ color: 'initial' }} type="link" icon="compass" />
-                        </Tooltip>
-                      )}
                     >
-                      Заказ
-                      {' '}
-                      {' '}
-                      <Tooltip title={address}>
-                        <Typography.Text code>
-                          {`#${id}`}
+                      {address
+                      && (
+                        <Typography.Text>
+                          {address}
                         </Typography.Text>
-                      </Tooltip>
-                      {`  ${totalSum} сум`}
+                      )}
                     </List.Item>
                   )}
                 />

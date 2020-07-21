@@ -33,3 +33,8 @@ code {
   right: 64px !important;
   bottom: 16px !important;
 }
+
+.hoverable:hover {
+  background-color: ghostwhite;
+  cursor: pointer;
+}
