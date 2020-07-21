@@ -78,6 +78,14 @@ const AdminEdit = (props) => {
               <Input />,
             )}
           </Form.Item>
+          <Form.Item label="Номер">
+            {getFieldDecorator('number', {
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+              initialValue: editingAdminDetails ? editingAdminDetails.number : null,
+            })(
+              <Input />,
+            )}
+          </Form.Item>
           <Form.Item label="Доступ">
             {getFieldDecorator('payload', {
               initialValue: editingAdminDetails.payload.permissions
