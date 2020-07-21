@@ -63,6 +63,7 @@ const KitchenEditForm = ({ form, id, history }) => {
       </Form.Item>
       <Form.Item label="Позиция">
         <MarkerMap
+          style={{ minHeight: '40vh' }}
           lat={form.getFieldValue('latitude') || details.location?.latitude}
           lng={form.getFieldValue('longitude') || details.location?.longitude}
           regions={regions}

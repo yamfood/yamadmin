@@ -1,9 +1,14 @@
 import { message } from 'antd';
 import { createAction } from 'redux-actions';
 import axios from 'axios';
+import React from 'react';
 import { httpClient } from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
+
+
+export const addNotification = createAction('ADD_NOTIFICATION');
+export const toggleNotification = createAction('TOGGLE_NOTIFICATION');
 
 
 export const loginRequest = createAction('LOGIN_REQUEST');
@@ -246,6 +251,35 @@ export const getOrderLogs = (id) => async (dispatch) => {
       dispatch(loginFailure());
     }
     dispatch(getOrderLogsFailure());
+  }
+};
+
+
+export const createOrderRequest = createAction('CREATE_ORDER_REQUEST');
+export const createOrderSuccess = createAction('CREATE_ORDER_SUCCESS');
+export const createOrderFailure = createAction('CREATE_ORDER_FAILURE');
+
+export const createOrder = (body) => async (dispatch) => {
+  dispatch(createOrderRequest());
+  try {
+    const response = await httpClient.post(api.createOrder(), body);
+    message.success('Заказ успешно создан', 3);
+    dispatch(createOrderSuccess())
+    history.push(`/orders/${response.data.id}`);
+  } catch (error) {
+    console.error(error)
+    if (error.response?.status === 403 || error.response?.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    // eslint-disable-next-line camelcase
+    if (error.response?.data.error?.kitchen_id) {
+      message.error('Ближайшие кухни недоступны', 5);
+    } else {
+      message.error('Ошибка при создании заказа', 3)
+    }
+
+    dispatch(createOrderFailure())
   }
 };
 
@@ -578,8 +612,12 @@ export const acceptOrder = (orderId, successURL) => async (dispatch) => {
       localStorage.removeItem('token');
       dispatch(loginFailure());
     }
+    if (error.response?.data.error?.products) {
+      message.error('Нельзя принять заказ без продуктов', 5);
+    } else {
+      message.error('Ошибка при принятии заказа', 3);
+    }
     dispatch(acceptOrderFailure());
-    message.error('Ошибка при принятии заказа', 3);
   }
 };
 
@@ -1178,7 +1216,7 @@ export const editClientDetails = (clientId, body) => async (dispatch) => {
     await httpClient.patch(api.clientDetails(clientId), body);
     dispatch(editClientDetailsSuccess());
     message.success('Клиент успешно изменен', 3);
-    history.push('/clients/');
+    dispatch(getClientDetails(clientId));
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {

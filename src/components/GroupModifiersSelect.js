@@ -24,6 +24,7 @@ function GroupModifiersSelect(props) {
           onChange: (_) => dispatch(setOrderStateChanged()),
         })(
           <Select
+            placeholder="Выберите модификаторы"
             labelInValue
             mode="multiple"
             disabled={disabled}

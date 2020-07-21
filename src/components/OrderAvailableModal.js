@@ -56,7 +56,7 @@ const OrderAvailableModal = ({ orderId }) => {
         width="720px"
       >
         <div style={{ height: '60vh', overflow: 'auto' }}>
-          <Input type="text" onChange={(e) => search(e.target.value)} placeholder="Название продукта" />
+          <Input autoFocus type="text" onChange={(e) => search(e.target.value)} placeholder="Название продукта" />
           <List
             itemLayout="horizontal"
             dataSource={products}

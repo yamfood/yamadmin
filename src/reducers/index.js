@@ -2,6 +2,7 @@ import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
 
 import * as actions from '../actions';
+import { update } from '../utils';
 
 
 const clients = handleActions({
@@ -851,6 +852,9 @@ const activeOrders = handleActions({
   ready: {
     list: [],
   },
+  pending: {
+    list: [],
+  },
   onWay: {
     list: [],
   },
@@ -929,7 +933,7 @@ const orderDetails = handleActions({
         ...state[orderId],
         products: [
           ...state[orderId].products,
-          item,
+          { ...item, count: 1 },
         ],
       },
     }
@@ -1350,6 +1354,41 @@ const regions = handleActions({
 }, null);
 
 
+const notifications = handleActions({
+  [actions.addNotification](state, { payload: notification }) {
+    return { ...state, [notification.key]: { ...notification } }
+  },
+  [actions.toggleNotification](state, { payload: key }) {
+    return update(state, key, (notification) => ({
+      ...notification,
+      isShown: !notification?.isShown,
+    }))
+  },
+}, {});
+
+
+const pendingOrderCreation = handleActions({
+  [actions.createOrderRequest](state) {
+    return {
+      ...state,
+      status: 'request',
+    }
+  },
+  [actions.createOrderFailure](state) {
+    return {
+      ...state,
+      status: 'failure',
+    }
+  },
+  [actions.createOrderSuccess](state) {
+    return {
+      ...state,
+      status: 'success',
+    }
+  },
+}, { status: null })
+
+
 export default combineReducers({
   clients,
   riders,
@@ -1367,4 +1406,6 @@ export default combineReducers({
   terminals,
   modifiers,
   regions,
+  notifications,
+  pendingOrderCreation,
 });
