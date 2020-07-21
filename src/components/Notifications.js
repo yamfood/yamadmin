@@ -1,7 +1,7 @@
 import '../App.css';
 import React, { useEffect, useState } from 'react';
 import {
-  Router, useHistory,
+  useHistory,
 } from 'react-router-dom';
 import {
   Button, Icon, notification,
@@ -23,7 +23,7 @@ const Notifications = () => {
   const history = useHistory();
   window.onPhoneCallClose = ({ clientId }) => {
     notification.close(clientId)
-  }
+  };
   window.onPhoneCall = ({ clientId, phone }) => {
     dispatch(actions.addNotification({
       key: clientId,
@@ -48,7 +48,7 @@ const Notifications = () => {
       isShown: true,
       hidenIcon: 'phone',
     }))
-  }
+  };
 
   const notifications = useSelector((state) => state.notifications);
   const [notificationIcons, setNotificationIcons] = useState([])

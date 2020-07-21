@@ -36,6 +36,7 @@ export default {
   params: () => [host, 'params/'].join('/'),
   announcementDetails: (id) => [host, `announcements/${id}/`].join('/'),
   viewOrderSocket: () => [host, 'ws/order/'].join('/'),
+  callsSocket: () => [host, 'ws/calls/'].join('/'),
   getSignedURL: () => [host, 'sign-s3'].join('/'),
   availableProducts: (id) => [host, `orders/${id}/products/`].join('/'),
   editParam: (id) => [host, `params/${id}/`].join('/'),

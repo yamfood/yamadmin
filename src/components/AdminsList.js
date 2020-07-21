@@ -26,6 +26,7 @@ const AdminsList = () => {
     { title: 'ID', dataIndex: 'id', key: 'id' },
     { title: 'Имя', dataIndex: 'name', key: 'name' },
     { title: 'Логин', dataIndex: 'login', key: 'login' },
+    { title: 'Номер', dataIndex: 'number', key: 'number' },
     { title: 'Токен', dataIndex: 'token', key: 'token' },
     {
       title: 'Изменить',

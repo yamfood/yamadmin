@@ -40,11 +40,36 @@ import OrderLogs from './OrderLogs';
 import ProductModifierEdit from './ProductModifierEdit';
 import Notifications from './Notifications';
 import OrderNew from './OrderNew';
+import api from '../apiRoutes';
+
+
+const openCallsSocket = () => {
+  try {
+    const url = api.callsSocket().replace('http', 'ws');
+    const socket = new WebSocket(url);
+    socket.onopen = () => {
+      const data = JSON.stringify({
+        token: localStorage.getItem('token'),
+      });
+      socket.send(data);
+    };
+    socket.onmessage = (m) => {
+      const data = JSON.parse(m.data);
+      window.onPhoneCall({ clientId: data.client_id, phone: data.phone })
+    };
+    return socket;
+  } catch (error) {
+    console.error(error);
+  }
+  return null;
+};
+
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(actions.getMe());
+    openCallsSocket();
   }, [dispatch]);
 
   return (
