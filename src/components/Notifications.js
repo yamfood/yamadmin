@@ -65,7 +65,7 @@ const Notifications = () => {
           shape="circle"
           icon={notifications[key].hidenIcon || 'notification'}
         />
-      )))
+      )));
 
       Object.keys(notifications)
         .forEach((key) => {
@@ -77,13 +77,6 @@ const Notifications = () => {
               bottom: 0,
               duration: null,
               icon: <Icon type={notifications[key].icon} style={{ color: '#108ee9' }} />,
-              closeIcon: (
-                <Button
-                  type="link"
-                  icon="close"
-                  onClick={(e) => e.stopPropagation() || dispatch(actions.toggleNotification(key))}
-                />
-              ),
               message: notifications[key].message,
               btn: notifications[key].btn,
               description: notifications[key].description,
