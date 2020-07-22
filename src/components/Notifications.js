@@ -29,7 +29,7 @@ const Notifications = () => {
       key: clientId,
       message: (
         <h4 style={{ marginTop: 4, marginRight: 10 }}>
-          Входищий звонок
+          Входящий звонок
           {' '}
           {phone}
         </h4>
@@ -42,7 +42,7 @@ const Notifications = () => {
             history.push(`/clients/${clientId}`);
           }}
         >
-          Узнать больше
+          Открыть
         </Button>),
       icon: 'phone',
       isShown: true,
