@@ -10,8 +10,8 @@ import {
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQueryParam, NumberParam } from 'use-query-params';
-import axios from 'axios'
 import * as actions from '../actions'
+import { httpClient } from '../http-client';
 
 import formWrap from './wrappers/formWrapper';
 import MarkerMap from './MarkerMap';
@@ -22,74 +22,40 @@ import {
 const { Content } = Layout;
 
 function toGisSearchLocation(q, callback, errorCallback) {
-  axios.get('https://catalog.api.2gis.ru/3.0/items', {
+  httpClient.get('/api/admin/location', {
     params: {
-      key: 'rupgcl3079',
       q,
-      fields: 'items.point',
-      region_id: 208,
     },
   }).then(({ data }) => {
-    if (data?.result?.items[0]) {
-      callback({
-        longitude: data.result.items[0].point?.lon,
-        latitude: data.result.items[0].point?.lat,
-      })
+    if (data) {
+      callback(data)
     } else {
       if (errorCallback) errorCallback()
-      message.error('Ненайдена локация по заданному адресу');
+      message.error('Не найдена локация по заданному адресу');
     }
+  }).catch(() => {
+    if (errorCallback) errorCallback()
+    message.error('Не найдена локация по заданному адресу')
   });
 }
 
-const suffix = {
-  district: 'район',
-}
-
-const prefix = {
-  street: 'улица',
-}
-
-function filteredJoin(arr, delim) {
-  return arr.filter((m) => m).join(delim || ', ')
-}
 
 function toGisSearchAddress(lat, lon, callback, errorCallback) {
-  axios.get('https://catalog.api.2gis.ru/3.0/items', {
+  httpClient.get('/api/admin/address', {
     params: {
-      key: 'rupgcl3079',
-      fields: 'items.address',
-      region_id: 208,
       lat,
       lon,
     },
   }).then(({ data }) => {
-    if (data?.result?.items) {
-      const addressObj = data?.result?.items.reduce((acc, v) => {
-        const name = v.building_name || v.address_name || v.name;
-        if (name) {
-          return {
-            ...acc,
-            [v.subtype || v.type]: filteredJoin(
-              [prefix[v.subtype || v.type],
-                name,
-                suffix[v.subtype || v.type]], ' ',
-            ),
-          }
-        }
-        return acc;
-      },
-        {}
-      );
-      const {
-        region, district, living_area: livingArea, street, place, building,
-      } = addressObj;
-      const address = filteredJoin([region, district, livingArea?.replace('ж/м', 'массив'), street || place, building]);
-      callback({ address })
+    if (data) {
+      callback(data)
     } else {
       if (errorCallback) errorCallback()
-      message.error('Ненайдена локация по заданному адресу');
+      message.error('Не найден адрес по заданной локации');
     }
+  }).catch(() => {
+    if (errorCallback) errorCallback()
+    message.error('Не найден адрес по заданной локации')
   });
 }
 
@@ -124,7 +90,10 @@ const OrderNew = (props) => {
     toGisSearchLocation(form.getFieldValue('address'),
       (v) => {
         setToGisLocationLoading(false);
-        form.setFieldsValue(v)
+        form.setFieldsValue({
+          latitude: v.lat,
+          longitude: v.lon,
+        })
       }, () => setToGisLocationLoading(false))
   }
 
