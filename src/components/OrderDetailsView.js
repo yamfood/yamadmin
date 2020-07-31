@@ -52,12 +52,7 @@ const OrderDetailsView = (props) => {
     }
     return 0
   }
-  const allowEdit = ((order.status === 'new' && order.payment === 'cash')
-    || order.status === 'pending')
-    && !loading;
-  const allowLiteEdit = ((order.status === 'new')
-    || order.status === 'pending')
-    && !loading;
+  const allowEdit = (order.status === 'new' && order.payment === 'cash') || order.status === 'pending';
   const totalPrice = order.products.reduce(
     (acc, product, index) => acc + (calculateProductPrice(product, index) || 0)
       * (form.getFieldValue(`products[${index}].count`) || 1), 0,
@@ -73,30 +68,37 @@ const OrderDetailsView = (props) => {
       title: 'Комментарий',
       dataIndex: 'comment',
       key: 'comment',
-      render: (value, product, index) => (
-        <>
-          {form.getFieldDecorator(`products[${index}].comment`, { initialValue: value })(<Input
-            disabled={!allowLiteEdit}
-          />)}
-          {form.getFieldDecorator(`products[${index}].payload`, { initialValue: product.payload ? product.payload : {} })(
-            <Input type="hidden" />,
-          )}
-          {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: product.id })(<Input
-            type="hidden"
-          />)}
-        </>
-      ),
+      render: (value, product, index) => {
+        if (allowEdit) {
+          return (
+            <>
+              {form.getFieldDecorator(`products[${index}].comment`, { initialValue: value })(<Input />)}
+              {form.getFieldDecorator(`products[${index}].payload`, { initialValue: product.payload ? product.payload : {} })(
+                <Input type="hidden" />,
+              )}
+              {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: product.id })(<Input
+                type="hidden"
+              />)}
+            </>
+          )
+        }
+        return value;
+      },
     },
     {
       title: 'Количество',
       dataIndex: 'count',
       key: 'count',
       width: '100px',
-      render: (value, product, index) => form.getFieldDecorator(
-        `products[${index}].count`,
-        { initialValue: value || 1 },
-      )(<Input type="number" disabled={!allowEdit} />)
-      ,
+      render: (value, product, index) => {
+        if (allowEdit) {
+          return form.getFieldDecorator(
+            `products[${index}].count`,
+            { initialValue: value || 1 },
+          )(<Input type="number" disabled={!allowEdit} />)
+        }
+        return value;
+      },
     },
     {
       title: 'Цена',
@@ -260,11 +262,14 @@ const OrderDetailsView = (props) => {
             <div id="map" style={{ width: '100%', height: 250 }} />
           </Descriptions.Item>
           <Descriptions.Item label="Адрес" span={2}>
-            {form.getFieldDecorator(('address'), {
-              initialValue: order.address,
-            })(
-              <Input.TextArea disabled={!allowLiteEdit} style={{ width: '100%', height: 250 }} />,
-            )}
+            {allowEdit
+              ? (
+                form.getFieldDecorator(('address'), {
+                  initialValue: order.address,
+                })(
+                  <Input.TextArea style={{ width: '100%', height: 250 }} />,
+                )
+              ) : order.address}
           </Descriptions.Item>
           <Descriptions.Item label="Комментарий" span={2}>
             {order.comment ? order.comment : 'Пусто...'}
@@ -291,7 +296,7 @@ const OrderDetailsView = (props) => {
                 form.getFieldDecorator(('payment'), {
                   initialValue: order.payment,
                 })(
-                  <Radio.Group size="small" buttonStyle="solid" disabled={loading}>
+                  <Radio.Group size="small" buttonStyle="solid">
                     <Radio.Button value="cash">Наличными</Radio.Button>
                     <Radio.Button value="card">Картой</Radio.Button>
                   </Radio.Group>,
@@ -303,18 +308,28 @@ const OrderDetailsView = (props) => {
             {moment(order.created_at).format('DD.MM.YYYY HH:mm')}
           </Descriptions.Item>
           <Descriptions.Item label="Заметки" span={2}>
-            {form.getFieldDecorator(('notes'), {
-              initialValue: order.notes,
-            })(
-              <Input.TextArea disabled={!allowLiteEdit} style={{ width: '100%', height: 50 }} />,
-            )}
+            {
+              allowEdit
+                ? (
+                  form.getFieldDecorator(('notes'), {
+                    initialValue: order.notes,
+                  })(
+                    <Input.TextArea style={{ width: '100%', height: 50 }} />,
+                  )
+                ) : order.notes
+            }
           </Descriptions.Item>
           <Descriptions.Item label="Доставка">
-            {form.getFieldDecorator(('delivery_cost'), {
-              initialValue: order.delivery_cost,
-            })(
-              <Input style={{ width: '100%' }} type="number" disabled={!allowEdit} />,
-            )}
+            {
+              allowEdit
+                ? (
+                  form.getFieldDecorator(('delivery_cost'), {
+                    initialValue: order.delivery_cost,
+                  })(
+                    <Input style={{ width: '100%' }} type="number" disabled={!allowEdit} />,
+                  )
+                ) : order.delivery_cost
+            }
           </Descriptions.Item>
         </Descriptions>
 
