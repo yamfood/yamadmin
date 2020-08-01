@@ -1337,6 +1337,7 @@ export const editCategoryDetails = (params, id) => async (dispatch) => {
       position: parseInt(params.position, 10),
       emoji: params.emoji,
       is_delivery_free: params.shipping,
+      rider_delivery_cost: parseInt(params.rider_delivery_cost, 10),
     });
     dispatch(editCategoryDetailsSuccess());
     history.push('/products/categories/');
@@ -1347,7 +1348,7 @@ export const editCategoryDetails = (params, id) => async (dispatch) => {
       localStorage.removeItem('token');
       dispatch(loginFailure());
     }
-    message.success('Ошибка при изменеии категории', 3);
+    message.error('Ошибка при изменеии категории', 3);
     dispatch(editCategoryDetailsFailure());
   }
 };
