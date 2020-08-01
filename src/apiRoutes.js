@@ -30,7 +30,7 @@ export default {
   acceptOrder: (id) => [host, `orders/${id}/accept/`].join('/'),
   adminPermissions: () => [host, 'admins/permissions/'].join('/'),
   riderDetails: (id) => [host, `riders/${id}/`].join('/'),
-  riderDeposit: (id) => [host, `riders/${id}/deposit/`].join('/'),
+  riderWithdraw: (id) => [host, `riders/${id}/withdraw/`].join('/'),
   getFinishedOrder: () => [host, 'orders/finished/'].join('/'),
   announcements: () => [host, 'announcements/'].join('/'),
   params: () => [host, 'params/'].join('/'),

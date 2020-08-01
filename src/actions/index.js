@@ -434,16 +434,16 @@ export const createRider = (params) => async (dispatch) => {
   }
 };
 
-export const editDepositRequest = createAction('EDIT_DEPOSIT_REQUEST');
-export const editDepositFailure = createAction('EDIT_DEPOSIT_FAILURE');
-export const editDepositSuccess = createAction('EDIT_DEPOSIT_SUCCESS');
+export const riderWithdrawRequest = createAction('RIDER_WITHDRAW_REQUEST');
+export const riderWithdrawFailure = createAction('RIDER_WITHDRAW_FAILURE');
+export const riderWithdrawSuccess = createAction('RIDER_WITHDRAW_SUCCESS');
 
-export const editDeposit = (deposit, id) => async (dispatch) => {
-  dispatch(editDepositRequest());
+export const riderWithdraw = (withdraw, id) => async (dispatch) => {
+  dispatch(riderWithdrawRequest());
   try {
-    await httpClient.post(api.riderDeposit(id), deposit);
-    dispatch(editDepositSuccess());
-    message.success('Депозит успешно изменен', 3);
+    await httpClient.post(api.riderWithdraw(id), withdraw);
+    dispatch(riderWithdrawSuccess());
+    message.success('Баланс успешно изменен', 3);
     dispatch(getRiderDetails(id));
   } catch (error) {
     console.error(error);
@@ -451,8 +451,8 @@ export const editDeposit = (deposit, id) => async (dispatch) => {
       localStorage.removeItem('token');
       dispatch(loginFailure());
     }
-    dispatch(editDepositFailure());
-    message.error('Ошибка при изменение депозита', 3);
+    dispatch(riderWithdrawFailure());
+    message.error('Ошибка при изменение баланса', 3);
   }
 };
 

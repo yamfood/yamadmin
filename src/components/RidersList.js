@@ -15,7 +15,7 @@ import * as actions from '../actions';
 import pagination from './pagination';
 import PhoneSearchForm from './PhoneSearchForm';
 import RiderDetails from './DisplayDetails';
-import DepositForm from './RiderDeposit';
+import WithdrawForm from './RiderWithdraw';
 import Title from './shared/Title';
 
 const { Content } = Layout;
@@ -65,7 +65,7 @@ const RidersList = () => {
     riders.status,
     riders.riderDetailsStatus,
     riders.editRiderStatus,
-    riders.depositStatus,
+    riders.withdrawStatus,
   ].includes('request');
 
   return (
@@ -120,9 +120,9 @@ const RidersList = () => {
                 <ul>
                   <RiderDetails dataToDisplay={riders.riderDetails} id={record.id} />
                 </ul>
-                <DepositForm
+                <WithdrawForm
                   id={record.id}
-                  editDeposit={actions.editDeposit}
+                  riderWithdraw={actions.riderWithdraw}
                 />
               </div>
             )}
