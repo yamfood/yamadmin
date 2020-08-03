@@ -5,16 +5,14 @@ const MarkerMap = (props) => {
   const {onChange, regions, lat, lng} = props;
   const [map, setMap] = useState(null)
   const [marker, setMarker] = useState(null)
-
+  const gis = require('2gis-maps');
   useEffect(() => {
     // No map rendered yet, but the location is present
     if (!map && lat && lng) {
-      mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g'
       setMap(
-        new mapboxgl.Map({
+        new gis.Map('map', {
           container: 'map',
-          style: 'mapbox://styles/kensay/ck52ch6ji00o41ctc1n49mnc8',
-          center: [lng, lat],
+          center: [lat, lng],
           zoom: 13
         })
       )
@@ -22,18 +20,17 @@ const MarkerMap = (props) => {
 
     if (map) {
       if (!marker) {
-        setMarker(new mapboxgl.Marker({
+        setMarker(new gis.Marker([lat, lng], {
           draggable: true,
           scale: 1.5,
-        })
-          .setLngLat([lng, lat])
+        }).setLatLng([lat, lng])
           .on('dragend', function (m) {
-            onChange(this.getLngLat())
+            onChange(this.getLatLng())
           })
           .addTo(map))
       } else {
-        marker.setLngLat([lng, lat])
-        map.setCenter([lng, lat])
+        marker.setLatLng([lat, lng])
+        map.flyTo([lat, lng])
       }
 
       if(regions){
