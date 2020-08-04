@@ -10,22 +10,22 @@ import * as actions from '../actions';
 import CancelOrderButton from './CancelOrderButton';
 import OrderAvailableModal from './OrderAvailableModal';
 import GroupModifiersSelect from './GroupModifiersSelect';
-import { update, groupByField } from '../utils';
+import { update, indexBy } from '../utils';
 
 const OrderDetailsView = (props) => {
   const dispatch = useDispatch();
   const activeOrders = useSelector((state) => state.activeOrders);
   const availableProducts = useSelector(
-    (state) => groupByField(state
+    (state) => indexBy(state
       .orderDetails
       .availableList?.map(
         (product) => ({
-          modifiers: groupByField(product.groupModifiers.reduce(
+          modifiers: indexBy(product.groupModifiers.reduce(
             (acc, gm) => [...acc, ...gm.modifiers], [],
           ), 'id'),
           ...update(product, 'groupModifiers',
             (groupModifiers) => groupModifiers.map((gm) => update(gm, 'modifiers',
-              (modifiers) => groupByField(modifiers, 'id')))),
+              (modifiers) => indexBy(modifiers, 'id')))),
         })), 'id'),
   );
 
@@ -36,14 +36,14 @@ const OrderDetailsView = (props) => {
     editStatus,
   } = props;
   const loading = (editStatus === 'request') || !availableProducts;
-  const calculateProductPrice = (product, index) => {
+  const calculateProductPrice = (product) => {
     const { price, stock_price: stockPrice } = product;
     if (availableProducts && product) {
       const gms = availableProducts[product.id]?.groupModifiers || [];
       return (stockPrice || price)
         + gms.reduce(
           (acc, gm) => acc + (
-            (form.getFieldValue(`products[${index}].groupModifiers[${gm.id}]`)
+            (form.getFieldValue(`products.${product.id}[${product.index}].groupModifiers[${gm.id}]`)
               || product.payload.modifiers?.filter((mId) => gm.modifiers[mId])
                 ?.map((mId) => ({ key: mId, label: gm.modifiers[mId] })))
               ?.map((modifier) => gm.modifiers[modifier.key]?.price)
@@ -55,7 +55,7 @@ const OrderDetailsView = (props) => {
   const allowEdit = (order.status === 'new' && order.payment === 'cash') || order.status === 'pending';
   const totalPrice = !loading && order.products.reduce(
     (acc, product, index) => acc + (calculateProductPrice(product, index) || 0)
-      * (form.getFieldValue(`products[${index}].count`) || 1), 0,
+      * (form.getFieldValue(`products.${product.id}[${product.index}].count`) || 1), 0,
   );
 
   const handleCancel = (values) => {
@@ -68,17 +68,19 @@ const OrderDetailsView = (props) => {
       title: 'Комментарий',
       dataIndex: 'comment',
       key: 'comment',
-      render: (value, product, index) => {
+      render: (value, product) => {
         if (allowEdit) {
           return (
             <>
-              {form.getFieldDecorator(`products[${index}].comment`, { initialValue: value })(<Input />)}
-              {form.getFieldDecorator(`products[${index}].payload`, { initialValue: product.payload ? product.payload : {} })(
+              {form.getFieldDecorator(`products.${product.id}[${product.index}].comment`, { initialValue: value })(
+                <Input />,
+              )}
+              {form.getFieldDecorator(`products.${product.id}[${product.index}].payload`, { initialValue: product.payload ? product.payload : {} })(
                 <Input type="hidden" />,
               )}
-              {form.getFieldDecorator(`products[${index}].product_id`, { initialValue: product.id })(<Input
-                type="hidden"
-              />)}
+              {form.getFieldDecorator(`products.${product.id}[${product.index}].product_id`, { initialValue: product.id })(
+                <Input type="hidden" />,
+              )}
             </>
           )
         }
@@ -90,10 +92,10 @@ const OrderDetailsView = (props) => {
       dataIndex: 'count',
       key: 'count',
       width: '100px',
-      render: (value, product, index) => {
+      render: (value, product) => {
         if (allowEdit) {
           return form.getFieldDecorator(
-            `products[${index}].count`,
+            `products.${product.id}[${product.index}].count`,
             { initialValue: value || 1 },
           )(<Input type="number" disabled={!allowEdit} />)
         }
@@ -111,7 +113,7 @@ const OrderDetailsView = (props) => {
       dataIndex: 'total',
       key: 'total',
       render: (total, product, index) => (calculateProductPrice(product, index) || 0)
-        * (form.getFieldValue(`products[${index}].count`) || 1),
+        * (form.getFieldValue(`products.${product.id}[${product.index}].count`) || 1),
     },
   ];
 
@@ -120,17 +122,23 @@ const OrderDetailsView = (props) => {
     dataIndex: 'delete',
     key: 'delete',
     width: '80px',
-    render: (arg, record) => (
-      <Button
-        type="link"
-        onClick={() => {
-          dispatch(actions.setOrderStateChanged());
-          dispatch(actions.removeOrderProduct({ orderId: order.id, productId: record.id }))
-        }}
-      >
-        <DeleteOutlined />
-      </Button>
-    ),
+    render(arg, record) {
+      return (
+        <Button
+          type="link"
+          onClick={() => {
+            dispatch(actions.setOrderStateChanged());
+            dispatch(actions.removeOrderProduct({
+              orderId: order.id,
+              productId: record.id,
+              productIndex: record.index,
+            }))
+          }}
+        >
+          <DeleteOutlined />
+        </Button>
+      );
+    },
   };
 
   const statusTag = ({ status }) => {
@@ -348,12 +356,12 @@ const OrderDetailsView = (props) => {
             order.products.filter(
               (product) => (availableProducts
                 && Object.keys(availableProducts[product.id]?.modifiers || {})?.length > 0),
-            ).map((product) => product.id)
+            ).map((product) => `${product.id}_${product.index}`)
           }
           expandIcon={expandIcon}
           dataSource={order.products.map((item) => ({
             ...item,
-            key: item.id,
+            key: `${item.id}_${item.index}`,
           }))}
           expandedRowRender={expandedModifierGroup}
           columns={allowEdit ? [...columns, deleteColumn] : columns}

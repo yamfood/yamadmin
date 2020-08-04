@@ -18,7 +18,7 @@ function GroupModifiersSelect(props) {
 
     return (
       <Form.Item key={gm.id}>
-        {form.getFieldDecorator(`products[${index}].groupModifiers[${gm.id}]`, {
+        {form.getFieldDecorator(`products.${product.id}[${product.index}].groupModifiers[${gm.id}]`, {
           initialValue: selectedModifiers,
           rules: [{ required: gm.required, message: 'Это обязательное поле' }],
           onChange: (_) => dispatch(setOrderStateChanged()),
@@ -33,7 +33,7 @@ function GroupModifiersSelect(props) {
           >
             {Object.keys(gm.modifiers)
               .filter(
-                (mId) => !(form.getFieldValue(`products[${index}].groupModifiers[${gm.id}]`)
+                (mId) => !(form.getFieldValue(`products.${product.id}[${product.index}].groupModifiers[${gm.id}]`)
                 || selectedModifiers)
                 ?.map((x) => x.key)
                 .includes(mId),

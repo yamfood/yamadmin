@@ -1,8 +1,9 @@
 import { handleActions } from 'redux-actions';
 import { combineReducers } from 'redux';
-
+import {
+  groupBy, indexDuplicates, last, update,
+} from '../utils'
 import * as actions from '../actions';
-import { update } from '../utils';
 
 
 const clients = handleActions({
@@ -878,7 +879,10 @@ const orderDetails = handleActions({
     return {
       ...state,
       status: 'success',
-      [data.id]: data,
+      [data.id]: {
+        ...data,
+        products: indexDuplicates(data.products, 'id', 'index'),
+      },
     }
   },
   [actions.getOrderLogsRequest](state) {
@@ -922,30 +926,40 @@ const orderDetails = handleActions({
     return {
       ...state,
       editStatus: 'success',
-      [data.id]: data,
+      [data.id]: {
+        ...data,
+        products: indexDuplicates(data.products, 'id', 'index'),
+      },
     };
   },
   [actions.addOrderProduct](state, { payload }) {
     const { item, orderId } = payload;
+    let lastIndex = last(groupBy(state[orderId].products, 'id')[item.id])?.index;
+    if (lastIndex == null) {
+      lastIndex = -1;
+    }
     return {
       ...state,
       [orderId]: {
         ...state[orderId],
         products: [
           ...state[orderId].products,
-          { ...item, count: 1 },
+          { ...item, index: lastIndex + 1, count: 1 },
         ],
       },
     }
   },
   [actions.removeOrderProduct](state, { payload }) {
-    const { orderId, productId } = payload;
+    const { orderId, productId, productIndex } = payload;
     return {
       ...state,
       [orderId]: {
         ...state[orderId],
         products: [
-          ...state[orderId].products.filter((product) => productId !== product.id),
+          ...state[orderId]
+            .products
+            .filter((product) => productId !== product.id
+              || productIndex !== product.index),
         ],
       },
     }
