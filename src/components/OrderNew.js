@@ -37,8 +37,11 @@ function toGisSearchLocation(q, callback, errorCallback) {
       })
     } else {
       if (errorCallback) errorCallback()
-      message.error('Ненайдена локация по заданному адресу');
+      message.error('Не найдена локация по заданному адресу');
     }
+  }).catch(() => {
+    if (errorCallback) errorCallback()
+    message.error('Не найдена локация по заданному адресу')
   });
 }
 
@@ -88,8 +91,11 @@ function toGisSearchAddress(lat, lon, callback, errorCallback) {
       callback({ address })
     } else {
       if (errorCallback) errorCallback()
-      message.error('Ненайдена локация по заданному адресу');
+      message.error('Не найден адрес по заданной локации');
     }
+  }).catch(() => {
+    if (errorCallback) errorCallback()
+    message.error('Не найден адрес по заданной локации')
   });
 }
 
