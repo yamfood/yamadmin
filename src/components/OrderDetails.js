@@ -109,19 +109,23 @@ export default withRouter(formWrap(OrderDetails,
     const preparedValues = {
       ...values,
       delivery_cost: Number(values.delivery_cost),
-      products: values.products?.map((product) => ({
-        ...(dissoc(product, 'groupModifiers') || {}),
-        payload: {
-          ...product.payload,
-          modifiers: product.groupModifiers
-            && Object.keys(product.groupModifiers).reduce(
-              (acc, gmId) => [...acc, ...product.groupModifiers[gmId]
-                .map((m) => m.key)], [],
-            ),
-        },
-        product_id: Number(product.product_id),
-        count: Number(product.count),
-      })),
+      products: Object
+        .values(values.products)
+        .reduce((acc, duplicates) => [...acc, ...(duplicates.filter((product) => product))], [])
+        ?.map((product) => ({
+          ...(dissoc(product, 'groupModifiers') || {}),
+          payload: {
+            ...product.payload,
+            modifiers: product.groupModifiers
+              && Object.keys(product.groupModifiers)
+                .reduce(
+                  (acc, gmId) => [...acc, ...product.groupModifiers[gmId]
+                    .map((m) => m.key)], [],
+                ),
+          },
+          product_id: Number(product.product_id),
+          count: Number(product.count),
+        })),
     };
 
     dispatch(patchOrderDetails(values.orderId, preparedValues));
