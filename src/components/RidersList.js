@@ -14,8 +14,6 @@ import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 import pagination from './pagination';
 import PhoneSearchForm from './PhoneSearchForm';
-import RiderDetails from './DisplayDetails';
-import WithdrawForm from './RiderWithdraw';
 import Title from './shared/Title';
 
 const { Content } = Layout;
@@ -115,22 +113,6 @@ const RidersList = () => {
               riders.page,
               dispatch,
             )}
-            expandedRowRender={(record) => (
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <ul>
-                  <RiderDetails dataToDisplay={riders.riderDetails} id={record.id} />
-                </ul>
-                <WithdrawForm
-                  id={record.id}
-                  riderWithdraw={actions.riderWithdraw}
-                />
-              </div>
-            )}
-            onExpand={(expanded, record) => {
-              if (expanded) {
-                dispatch(actions.getRiderDetails(record.id));
-              }
-            }}
           />
         </Content>
       </Layout>

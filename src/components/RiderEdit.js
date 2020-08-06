@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react';
 import {
   Form,
-  Layout,
+  Layout, Tabs
 } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { contentStyle } from '../assets/style';
 import * as actions from '../actions';
 import RiderEditForm from './RiderEditForm';
+import RiderBalance from './RiderBalance';
 
 const { Content } = Layout;
+const { TabPane } = Tabs;
 
 const RidersEdit = (props) => {
   const dispatch = useDispatch();
@@ -46,8 +48,15 @@ const RidersEdit = (props) => {
       <Content
         style={contentStyle}
       >
-        <h1 style={{ textAlign: 'center', fontSize: 30 }}>Изменение курьера</h1>
-        <RiderEditForm riders={riders} handleSubmit={handleSubmit} form={form} />
+        <Tabs type="card" defaultActiveKey="1" animated>
+          <TabPane tab="Редактировать" key="1">
+            <h1 style={{ textAlign: 'center', fontSize: 30 }}>Изменение курьера</h1>
+            <RiderEditForm riders={riders} handleSubmit={handleSubmit} form={form} />
+          </TabPane>
+          <TabPane tab="Баланс" key="2">
+            <RiderBalance match={match} riders={riders} />
+          </TabPane>
+        </Tabs>
       </Content>
     </Layout>
   );
