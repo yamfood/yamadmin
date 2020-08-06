@@ -10,11 +10,10 @@ import api from '../apiRoutes';
 import OrderDetailsView from './OrderDetailsView';
 import formWrap from './wrappers/formWrapper';
 import { dissoc } from '../utils';
-import { getAvailableProducts, patchOrderDetails, setOrderStateChanged } from '../actions';
-
-const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
 const { Content } = Layout;
+const gis = require('2gis-maps');
+
 
 const openViewSocket = (orderID) => {
   try {
@@ -62,17 +61,13 @@ const OrderDetails = (props) => {
       return
     }
 
-    mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g';
-    const map = new mapboxgl.Map({
+    const map = new gis.Map('map', {
       container: 'map',
-      style: 'mapbox://styles/kensay/ck52ch6ji00o41ctc1n49mnc8',
-      center: [69.2401, 41.2995],
+      center: [41.2995, 69.2401],
       zoom: 10,
     });
 
-    new mapboxgl.Marker()
-      .setLngLat([order.location.longitude, order.location.latitude])
-      .addTo(map);
+    new gis.Marker([order.location.latitude, order.location.longitude]).addTo(map);
   }, [order, id, dispatch]);
 
   return (
@@ -128,12 +123,12 @@ export default withRouter(formWrap(OrderDetails,
         })),
     };
 
-    dispatch(patchOrderDetails(values.orderId, preparedValues));
-    dispatch(getAvailableProducts(values.orderId));
+    dispatch(actions.patchOrderDetails(values.orderId, preparedValues));
+    dispatch(actions.getAvailableProducts(values.orderId));
   },
   (e, dispatch, state) => {
     if (state.orderDetails.editedState === 'changed' || e.target.id === 'modalForm_reason') {
       return
     }
-    dispatch(setOrderStateChanged());
+    dispatch(actions.setOrderStateChanged());
   }));

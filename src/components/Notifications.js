@@ -75,7 +75,6 @@ const Notifications = () => {
               key,
               style: { width: 'max-content' },
               bottom: 0,
-              duration: null,
               icon: <Icon type={notifications[key].icon} style={{ color: '#108ee9' }} />,
               message: notifications[key].message,
               btn: notifications[key].btn,
