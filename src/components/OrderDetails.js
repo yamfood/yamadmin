@@ -11,9 +11,9 @@ import OrderDetailsView from './OrderDetailsView';
 import formWrap from './wrappers/formWrapper';
 import { dissoc } from '../utils';
 
-const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
-
 const { Content } = Layout;
+const gis = require('2gis-maps');
+
 
 const openViewSocket = (orderID) => {
   try {
@@ -61,17 +61,13 @@ const OrderDetails = (props) => {
       return
     }
 
-    mapboxgl.accessToken = 'pk.eyJ1Ijoia2Vuc2F5IiwiYSI6ImNrNHprbnVicTBiZG8zbW1xMW9hYjQ5dTkifQ.h--Xl_6OXBRSrJuelEKH8g';
-    const map = new mapboxgl.Map({
+    const map = new gis.Map('map', {
       container: 'map',
-      style: 'mapbox://styles/kensay/ck52ch6ji00o41ctc1n49mnc8',
-      center: [69.2401, 41.2995],
+      center: [41.2995, 69.2401],
       zoom: 10,
     });
 
-    new mapboxgl.Marker()
-      .setLngLat([order.location.longitude, order.location.latitude])
-      .addTo(map);
+    new gis.Marker([order.location.latitude, order.location.longitude]).addTo(map);
   }, [order, id, dispatch]);
 
   return (

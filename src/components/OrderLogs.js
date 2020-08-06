@@ -6,27 +6,9 @@ import { withRouter, useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import * as actions from '../actions'
-import api from '../apiRoutes';
 
 const { Content } = Layout;
 
-const openViewSocket = (orderID) => {
-  try {
-    const url = api.viewOrderSocket().replace('http', 'ws');
-    const socket = new WebSocket(url);
-    socket.onopen = () => {
-      const data = JSON.stringify({
-        token: localStorage.getItem('token'),
-        order: orderID,
-      });
-      socket.send(data)
-    };
-    return socket;
-  } catch (error) {
-    console.error(error);
-  }
-  return null;
-};
 
 const statuses = {
   new: <Tag color="#108ee9">Новый</Tag>,
@@ -46,12 +28,6 @@ const OrderLogs = () => {
   useEffect(() => {
     dispatch(actions.setMenuActive(8));
     dispatch(actions.getOrderLogs(id));
-
-    const socket = openViewSocket(id);
-
-    return () => {
-      socket.close()
-    }
   }, [dispatch]);
 
   const columns = [
