@@ -3,8 +3,8 @@ import React, {useEffect, useState} from "react";
 
 const MarkerMap = (props) => {
   const {onChange, regions, lat, lng} = props;
-  const [map, setMap] = useState(null)
-  const [marker, setMarker] = useState(null)
+  const [map, setMap] = useState(null);
+  const [marker, setMarker] = useState(null);
   const gis = require('2gis-maps');
   useEffect(() => {
     // No map rendered yet, but the location is present

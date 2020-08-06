@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Layout, Spin,
 } from 'antd';
@@ -37,6 +37,8 @@ const openViewSocket = (orderID) => {
 const OrderDetails = (props) => {
   const { id } = useParams();
   const order = useSelector((state) => (state.orderDetails[id] || null));
+  const [map, setMap] = useState(null);
+  const [marker, setMarker] = useState(null);
   const editStatus = useSelector((state) => state.orderDetails.editStatus);
   const editedState = useSelector((state) => state.orderDetails.editedState);
 
@@ -61,14 +63,18 @@ const OrderDetails = (props) => {
       return
     }
 
-    const map = new gis.Map('map', {
-      container: 'map',
-      center: [41.2995, 69.2401],
-      zoom: 10,
-    });
+    if (!map) {
+      setMap(new gis.Map('map', {
+        container: 'map',
+        center: [41.2995, 69.2401],
+        zoom: 10,
+      }));
+    }
 
-    new gis.Marker([order.location.latitude, order.location.longitude]).addTo(map);
-  }, [order, id, dispatch]);
+    if (map && !marker) {
+      setMarker(new gis.Marker([order.location.latitude, order.location.longitude]).addTo(map));
+    }
+  }, [order, id, dispatch, map]);
 
   return (
     <Layout>
