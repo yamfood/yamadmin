@@ -6,12 +6,12 @@ import {
   Input,
 } from 'antd';
 
-const RiderDeposit = (props) => {
+const RiderWithdraw = (props) => {
   const dispatch = useDispatch();
 
   const {
     form,
-    editDeposit,
+    riderWithdraw,
     id,
     status,
   } = props;
@@ -22,7 +22,7 @@ const RiderDeposit = (props) => {
 
     form.validateFields(async (err, values) => {
       if (!err) {
-        await dispatch(editDeposit({ amount: parseInt(values.amount, 10) }, id));
+        await dispatch(riderWithdraw({ amount: parseInt(values.amount, 10) }, id));
         form.resetFields();
       }
     });
@@ -30,10 +30,10 @@ const RiderDeposit = (props) => {
 
   return (
     <Form layout="inline" onSubmit={handleSubmit}>
-      <Form.Item label="Баланс">
+      <Form.Item label="Вывод средств">
         {getFieldDecorator('amount')(
           <Input
-            placeholder="Баланс"
+            placeholder="Сумма вывода"
             type="number"
             disabled={status === 'request'}
           />,
@@ -45,12 +45,12 @@ const RiderDeposit = (props) => {
           htmlType="submit"
           disabled={status === 'request'}
         >
-          Пополнить
+          Вывести
         </Button>
       </Form.Item>
     </Form>
   );
 };
 
-const WrappedForm = Form.create()(RiderDeposit);
+const WrappedForm = Form.create()(RiderWithdraw);
 export default WrappedForm;

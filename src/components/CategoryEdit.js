@@ -107,13 +107,21 @@ const ProductCreate = (props) => {
               <Input />,
             )}
           </Form.Item>
-          <Form.Item label="Доставка">
+          <Form.Item label="Доставка для клиента">
             {getFieldDecorator('shipping', {
               initialValue: details ? details.is_delivery_free : null,
               valuePropName: 'checked',
               rules: [{ required: true, message: 'Это обязательное поле' }],
             })(
               <Checkbox> Бесплатно</Checkbox>,
+            )}
+          </Form.Item>
+          <Form.Item label="Доставка для курьера">
+            {getFieldDecorator('rider_delivery_cost', {
+              initialValue: details ? details.rider_delivery_cost : 0,
+              rules: [{ required: true, message: 'Это обязательное поле' }],
+            })(
+              <Input />,
             )}
           </Form.Item>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>

@@ -176,22 +176,22 @@ const riders = handleActions({
       createRiderStatus: 'success',
     };
   },
-  [actions.editDepositRequest](state) {
+  [actions.riderWithdrawRequest](state) {
     return {
       ...state,
-      depositStatus: 'request',
+      withdrawStatus: 'request',
     };
   },
-  [actions.editDepositFailure](state) {
+  [actions.riderWithdrawFailure](state) {
     return {
       ...state,
-      depositStatus: 'failure',
+      withdrawStatus: 'failure',
     };
   },
-  [actions.editDepositSuccess](state) {
+  [actions.riderWithdrawSuccess](state) {
     return {
       ...state,
-      depositStatus: 'success',
+      withdrawStatus: 'success',
     };
   },
 }, {
