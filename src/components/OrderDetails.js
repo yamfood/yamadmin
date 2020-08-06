@@ -10,7 +10,6 @@ import api from '../apiRoutes';
 import OrderDetailsView from './OrderDetailsView';
 import formWrap from './wrappers/formWrapper';
 import { dissoc } from '../utils';
-import { getAvailableProducts, patchOrderDetails, setOrderStateChanged } from '../actions';
 
 const mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
@@ -128,12 +127,12 @@ export default withRouter(formWrap(OrderDetails,
         })),
     };
 
-    dispatch(patchOrderDetails(values.orderId, preparedValues));
-    dispatch(getAvailableProducts(values.orderId));
+    dispatch(actions.patchOrderDetails(values.orderId, preparedValues));
+    dispatch(actions.getAvailableProducts(values.orderId));
   },
   (e, dispatch, state) => {
     if (state.orderDetails.editedState === 'changed' || e.target.id === 'modalForm_reason') {
       return
     }
-    dispatch(setOrderStateChanged());
+    dispatch(actions.setOrderStateChanged());
   }));
