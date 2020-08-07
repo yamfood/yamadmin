@@ -41,6 +41,7 @@ import ProductModifierEdit from './ProductModifierEdit';
 import Notifications from './Notifications';
 import OrderNew from './OrderNew';
 import api from '../apiRoutes';
+import ClientNew from './ClientNew';
 
 
 const openCallsSocket = () => {
@@ -94,6 +95,7 @@ const App = () => {
             <PrivateRoute exact path="/kitchens" component={KitchensList} />
             <PrivateRoute exact path="/kitchens/:id/edit/" component={KitchenEdit} />
             <PrivateRoute exact path="/clients/" component={Clients} />
+            <PrivateRoute exact path="/clients/new/" component={ClientNew} />
             <PrivateRoute exact path="/clients/:id/" component={TestDetails} />
             <PrivateRoute exact path="/admins/" component={AdminsList} />
             <PrivateRoute exact path="/admins/:id/edit/" component={AdminEdit} />

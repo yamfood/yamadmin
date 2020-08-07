@@ -6,7 +6,59 @@ import {
 import * as actions from '../actions';
 
 
+const bots = handleActions({
+  [actions.getBotsRequest](state) {
+    return {
+      ...state,
+      status: 'request',
+    };
+  },
+  [actions.getBotsFailure](state) {
+    return {
+      ...state,
+      status: 'failure',
+    };
+  },
+  [actions.getBotsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      status: 'success',
+      list: data,
+      total: data.length,
+    }
+  },
+}, {
+  list: [],
+  status: null,
+  total: 0,
+});
+
+
 const clients = handleActions({
+  [actions.createClientRequest](state) {
+    return {
+      ...state,
+      status: 'request',
+    };
+  },
+  [actions.createClientFailure](state, { payload }) {
+    console.log('ERRROR', payload)
+    return {
+      ...state,
+      status: 'failure',
+      createErrors: payload?.error,
+      // eslint-disable-next-line camelcase
+      conflictingClientId: payload?.conflicting_client_id,
+    };
+  },
+  [actions.createClientSuccess](state) {
+    return {
+      ...state,
+      status: 'success',
+      createErrors: {},
+      conflictingClientId: null,
+    };
+  },
   [actions.getClientsRequest](state) {
     return {
       ...state,
@@ -92,6 +144,7 @@ const clients = handleActions({
   status: null,
   page: 1,
   detailsData: {},
+  createErrors: {},
 });
 
 const riders = handleActions({
@@ -1405,6 +1458,7 @@ const pendingOrderCreation = handleActions({
 
 export default combineReducers({
   clients,
+  bots,
   riders,
   kitchens,
   products,

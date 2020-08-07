@@ -77,6 +77,7 @@ const Clients = () => {
             <div style={{ display: 'flex' }}>
               <Button style={{ marginBottom: 20, marginTop: '1%' }} onClick={() => dispatch(getClients({ page: 1 }))}><Icon type="reload" /></Button>
               <PhoneSearchForm onSubmit={getClients} />
+              <Button style={{ marginBottom: 20, marginTop: '1%' }} href="/clients/new"><Icon type="plus" /></Button>
             </div>
             <p style={{ marginRight: '1%', fontSize: 14, marginTop: '1%' }}>
               <b>Кол-во:</b>
