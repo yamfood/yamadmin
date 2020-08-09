@@ -38,6 +38,25 @@ export const logout = () => async (dispatch) => {
 };
 
 
+export const getBotsSuccess = createAction('GET_BOTS_REQUEST');
+export const getBotsFailure = createAction('GET_BOTS_FAILURE');
+export const getBotsRequest = createAction('GET_BOTS_SUCCESS');
+
+export const getBots = () => async (dispatch) => {
+  dispatch(getBotsRequest());
+  try {
+    const response = await httpClient.get(api.bots(), {});
+    dispatch(getBotsSuccess({ data: response.data }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+  }
+};
+
+
 export const getClientsRequest = createAction('GET_CLIENTS_REQUEST');
 export const getClientsFailure = createAction('GET_CLIENTS_FAILURE');
 export const getClientsSuccess = createAction('GET_CLIENTS_SUCCESS');
@@ -1203,6 +1222,30 @@ export const getBotsId = () => async (dispatch) => {
       dispatch(loginFailure());
     }
     dispatch(getBotsIdFailure());
+  }
+};
+
+
+export const createClientRequest = createAction('CREATE_CLIENT_REQUEST');
+export const createClientFailure = createAction('CREATE_CLIENT_FAILURE');
+export const createClientSuccess = createAction('CREATE_CLIENT_SUCCESS');
+
+export const createClient = (body) => async (dispatch) => {
+  dispatch(createClientRequest());
+  try {
+    const response = await httpClient.post(api.createClient(), body);
+    dispatch(createClientSuccess());
+    message.success('Клиент успешно создан', 3);
+    // dispatch(getClient(clientId));
+    history.push(`/clients/${response.data.id}`);
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(createClientFailure(error?.response?.data));
+    message.error('Ошибка при создании клиента', 3);
   }
 };
 
