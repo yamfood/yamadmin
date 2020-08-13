@@ -15,25 +15,43 @@ import * as actions from '../actions'
 
 import formWrap from './wrappers/formWrapper';
 import MarkerMap from './MarkerMap';
-import {
-  createOrder,
-} from '../actions';
 
 const { Content } = Layout;
 
-function toGisSearchLocation(q, callback, errorCallback) {
-  axios.get('https://catalog.api.2gis.ru/3.0/items', {
+// function searchLocationBy2GIS(q, callback, errorCallback) {
+//   axios.get('https://catalog.api.2gis.ru/3.0/items', {
+//     params: {
+//       key: 'rupgcl3079',
+//       q,
+//       fields: 'items.point',
+//       region_id: 208,
+//     },
+//   }).then(({ data }) => {
+//     if (data?.result?.items[0]) {
+//       callback({
+//         longitude: data.result.items[0].point?.lon,
+//         latitude: data.result.items[0].point?.lat,
+//       })
+//     } else {
+//       if (errorCallback) errorCallback()
+//       message.error('Ненайдена локация по заданному адресу');
+//     }
+//   });
+// }
+
+function searchLocationByYandex(q, callback, errorCallback) {
+  axios.get('https://geocode-maps.yandex.ru/1.x', {
     params: {
-      key: 'rupgcl3079',
-      q,
-      fields: 'items.point',
-      region_id: 208,
+      apikey: '8dbe3f68-3173-479f-ad7c-c05cad82197e',
+      format: 'json',
+      geocode: `Ташкент, ${q}`,
     },
   }).then(({ data }) => {
-    if (data?.result?.items[0]) {
+    const result = data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos;
+    if (result) {
       callback({
-        longitude: data.result.items[0].point?.lon,
-        latitude: data.result.items[0].point?.lat,
+        longitude: result.split(' ')[0],
+        latitude: result.split(' ')[1],
       })
     } else {
       if (errorCallback) errorCallback()
@@ -57,38 +75,58 @@ function filteredJoin(arr, delim) {
   return arr.filter((m) => m).join(delim || ', ')
 }
 
-function toGisSearchAddress(lat, lon, callback, errorCallback) {
-  axios.get('https://catalog.api.2gis.ru/3.0/items', {
+// function searchAddressBy2GIS(lat, lon, callback, errorCallback) {
+//   axios.get('https://catalog.api.2gis.ru/3.0/items', {
+//     params: {
+//       key: 'rupgcl3079',
+//       fields: 'items.address',
+//       region_id: 208,
+//       lat,
+//       lon,
+//     },
+//   }).then(({ data }) => {
+//     if (data?.result?.items) {
+//       const addressObj = data?.result?.items.reduce((acc, v) => {
+//         const name = v.building_name || v.address_name || v.name;
+//         if (name) {
+//           return {
+//             ...acc,
+//             [v.subtype || v.type]: filteredJoin(
+//               [prefix[v.subtype || v.type],
+//                 name,
+//                 suffix[v.subtype || v.type]], ' ',
+//             ),
+//           }
+//         }
+//         return acc;
+//       },
+//         {}
+//       );
+//       const {
+//         region, district, living_area: livingArea, street, place, building,
+//       } = addressObj;
+//       const address = filteredJoin([region, district, livingArea?.replace('ж/м', 'массив'), street || place, building]);
+//       callback({ address })
+//     } else {
+//       if (errorCallback) errorCallback()
+//       message.error('Ненайдена локация по заданному адресу');
+//     }
+//   });
+// }
+
+
+function searchAddressByYandex(lat, lon, callback, errorCallback) {
+  axios.get('https://geocode-maps.yandex.ru/1.x', {
     params: {
-      key: 'rupgcl3079',
-      fields: 'items.address',
-      region_id: 208,
-      lat,
-      lon,
+      apikey: '8dbe3f68-3173-479f-ad7c-c05cad82197e',
+      format: 'json',
+      geocode: `${lon},${lat}`,
     },
   }).then(({ data }) => {
-    if (data?.result?.items) {
-      const addressObj = data?.result?.items.reduce((acc, v) => {
-        const name = v.building_name || v.address_name || v.name;
-        if (name) {
-          return {
-            ...acc,
-            [v.subtype || v.type]: filteredJoin(
-              [prefix[v.subtype || v.type],
-                name,
-                suffix[v.subtype || v.type]], ' ',
-            ),
-          }
-        }
-        return acc;
-      },
-        {}
-      );
-      const {
-        region, district, living_area: livingArea, street, place, building,
-      } = addressObj;
-      const address = filteredJoin([region, district, livingArea?.replace('ж/м', 'массив'), street || place, building]);
-      callback({ address })
+    console.log(data);
+    const result = data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.Address?.formatted;
+    if (result) {
+      callback({ address: result })
     } else {
       if (errorCallback) errorCallback()
       message.error('Не найден адрес по заданной локации');
@@ -108,8 +146,8 @@ const OrderNew = (props) => {
   const { status } = useSelector((state) => state.pendingOrderCreation);
   const client = clients?.detailsData[clientId]
   const regions = useSelector((state) => state.regions)
-  const [toGisAddressLoading, setToGisAddressLoading] = useState(false);
-  const [toGisLocationLoading, setToGisLocationLoading] = useState(false);
+  const [addressLoading, setAddressLoading] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false);
   const loading = !client || !regions || status === 'request';
 
   useEffect(() => {
@@ -126,21 +164,21 @@ const OrderNew = (props) => {
   }, [form, client])
 
   const onShowAddressInMap = () => {
-    setToGisLocationLoading(true);
-    toGisSearchLocation(form.getFieldValue('address'),
+    setLocationLoading(true);
+    searchLocationByYandex(form.getFieldValue('address'),
       (v) => {
-        setToGisLocationLoading(false);
+        setLocationLoading(false);
         form.setFieldsValue(v)
-      }, () => setToGisLocationLoading(false))
+      }, () => setLocationLoading(false))
   }
 
   const onGetAddressFromMap = () => {
-    setToGisAddressLoading(true);
-    toGisSearchAddress(form.getFieldValue('latitude'), form.getFieldValue('longitude'),
+    setAddressLoading(true);
+    searchAddressByYandex(form.getFieldValue('latitude'), form.getFieldValue('longitude'),
       (v) => {
-        setToGisAddressLoading(false);
+        setAddressLoading(false);
         form.setFieldsValue(v)
-      }, () => setToGisAddressLoading(false))
+      }, () => setAddressLoading(false))
   }
 
   return (
@@ -192,7 +230,7 @@ const OrderNew = (props) => {
                 <Row type="flex" justify="center">
                   <Col>
                     <Button
-                      loading={toGisAddressLoading && { delay: 500 }}
+                      loading={addressLoading && { delay: 500 }}
                       style={{ marginTop: 4 }}
                       onClick={onGetAddressFromMap}
                     >
@@ -213,7 +251,7 @@ const OrderNew = (props) => {
                   )}
                 </Form.Item>
                 <Button
-                  loading={toGisLocationLoading && { delay: 500 }}
+                  loading={locationLoading && { delay: 500 }}
                   style={{ width: '100%' }}
                   onClick={onShowAddressInMap}
                 >
@@ -282,5 +320,5 @@ const OrderNew = (props) => {
 
 export default withRouter(formWrap(OrderNew,
   (values, dispatch) => {
-    dispatch(createOrder(values));
+    dispatch(actions.createOrder(values));
   }));
