@@ -11,7 +11,6 @@ const MarkerMap = (props) => {
                  options={{ draggable: true }}
                  onDragEnd={(e) => {
                      const coords = e.originalEvent.target.geometry._coordinates;
-                     alert(coords);
                      onChange({lat: coords[0], lng: coords[1]})
                  }}/>
     </Map>
