@@ -50,8 +50,8 @@ function searchLocationByYandex(q, callback, errorCallback) {
     const result = data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos;
     if (result) {
       callback({
-        longitude: result.split(' ')[0],
-        latitude: result.split(' ')[1],
+        longitude: parseFloat(result.split(' ')[0]),
+        latitude: parseFloat(result.split(' ')[1]),
       })
     } else {
       if (errorCallback) errorCallback()
