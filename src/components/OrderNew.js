@@ -18,50 +18,50 @@ import MarkerMap from './MarkerMap';
 
 const { Content } = Layout;
 
-// function searchLocationBy2GIS(q, callback, errorCallback) {
-//   axios.get('https://catalog.api.2gis.ru/3.0/items', {
-//     params: {
-//       key: 'rupgcl3079',
-//       q,
-//       fields: 'items.point',
-//       region_id: 208,
-//     },
-//   }).then(({ data }) => {
-//     if (data?.result?.items[0]) {
-//       callback({
-//         longitude: data.result.items[0].point?.lon,
-//         latitude: data.result.items[0].point?.lat,
-//       })
-//     } else {
-//       if (errorCallback) errorCallback()
-//       message.error('Ненайдена локация по заданному адресу');
-//     }
-//   });
-// }
-
-function searchLocationByYandex(q, callback, errorCallback) {
-  axios.get('https://geocode-maps.yandex.ru/1.x', {
+function searchLocationBy2GIS(q, callback, errorCallback) {
+  axios.get('https://catalog.api.2gis.ru/3.0/items', {
     params: {
-      apikey: '8dbe3f68-3173-479f-ad7c-c05cad82197e',
-      format: 'json',
-      geocode: `Ташкент, ${q}`,
+      key: 'rupgcl3079',
+      q,
+      fields: 'items.point',
+      region_id: 208,
     },
   }).then(({ data }) => {
-    const result = data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos;
-    if (result) {
+    if (data?.result?.items[0]) {
       callback({
-        longitude: parseFloat(result.split(' ')[0]),
-        latitude: parseFloat(result.split(' ')[1]),
+        longitude: data.result.items[0].point?.lon,
+        latitude: data.result.items[0].point?.lat,
       })
     } else {
       if (errorCallback) errorCallback()
-      message.error('Не найдена локация по заданному адресу');
+      message.error('Ненайдена локация по заданному адресу');
     }
-  }).catch(() => {
-    if (errorCallback) errorCallback()
-    message.error('Не найдена локация по заданному адресу')
   });
 }
+
+// function searchLocationByYandex(q, callback, errorCallback) {
+//   axios.get('https://geocode-maps.yandex.ru/1.x', {
+//     params: {
+//       apikey: '8dbe3f68-3173-479f-ad7c-c05cad82197e',
+//       format: 'json',
+//       geocode: `Ташкент, ${q}`,
+//     },
+//   }).then(({ data }) => {
+//     const result = data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos;
+//     if (result) {
+//       callback({
+//         longitude: parseFloat(result.split(' ')[0]),
+//         latitude: parseFloat(result.split(' ')[1]),
+//       })
+//     } else {
+//       if (errorCallback) errorCallback()
+//       message.error('Не найдена локация по заданному адресу');
+//     }
+//   }).catch(() => {
+//     if (errorCallback) errorCallback()
+//     message.error('Не найдена локация по заданному адресу')
+//   });
+// }
 
 const suffix = {
   district: 'район',
@@ -75,67 +75,67 @@ function filteredJoin(arr, delim) {
   return arr.filter((m) => m).join(delim || ', ')
 }
 
-// function searchAddressBy2GIS(lat, lon, callback, errorCallback) {
-//   axios.get('https://catalog.api.2gis.ru/3.0/items', {
-//     params: {
-//       key: 'rupgcl3079',
-//       fields: 'items.address',
-//       region_id: 208,
-//       lat,
-//       lon,
-//     },
-//   }).then(({ data }) => {
-//     if (data?.result?.items) {
-//       const addressObj = data?.result?.items.reduce((acc, v) => {
-//         const name = v.building_name || v.address_name || v.name;
-//         if (name) {
-//           return {
-//             ...acc,
-//             [v.subtype || v.type]: filteredJoin(
-//               [prefix[v.subtype || v.type],
-//                 name,
-//                 suffix[v.subtype || v.type]], ' ',
-//             ),
-//           }
-//         }
-//         return acc;
-//       },
-//         {}
-//       );
-//       const {
-//         region, district, living_area: livingArea, street, place, building,
-//       } = addressObj;
-//       const address = filteredJoin([region, district, livingArea?.replace('ж/м', 'массив'), street || place, building]);
-//       callback({ address })
-//     } else {
-//       if (errorCallback) errorCallback()
-//       message.error('Ненайдена локация по заданному адресу');
-//     }
-//   });
-// }
-
-
-function searchAddressByYandex(lat, lon, callback, errorCallback) {
-  axios.get('https://geocode-maps.yandex.ru/1.x', {
+function searchAddressBy2GIS(lat, lon, callback, errorCallback) {
+  axios.get('https://catalog.api.2gis.ru/3.0/items', {
     params: {
-      apikey: '8dbe3f68-3173-479f-ad7c-c05cad82197e',
-      format: 'json',
-      geocode: `${lon},${lat}`,
+      key: 'rupgcl3079',
+      fields: 'items.address',
+      region_id: 208,
+      lat,
+      lon,
     },
   }).then(({ data }) => {
-    console.log(data);
-    const result = data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.Address?.formatted;
-    if (result) {
-      callback({ address: result })
+    if (data?.result?.items) {
+      const addressObj = data?.result?.items.reduce((acc, v) => {
+        const name = v.building_name || v.address_name || v.name;
+        if (name) {
+          return {
+            ...acc,
+            [v.subtype || v.type]: filteredJoin(
+              [prefix[v.subtype || v.type],
+                name,
+                suffix[v.subtype || v.type]], ' ',
+            ),
+          }
+        }
+        return acc;
+      },
+        {}
+      );
+      const {
+        region, district, living_area: livingArea, street, place, building,
+      } = addressObj;
+      const address = filteredJoin([region, district, livingArea?.replace('ж/м', 'массив'), street || place, building]);
+      callback({ address })
     } else {
       if (errorCallback) errorCallback()
-      message.error('Не найден адрес по заданной локации');
+      message.error('Ненайдена локация по заданному адресу');
     }
-  }).catch(() => {
-    if (errorCallback) errorCallback()
-    message.error('Не найден адрес по заданной локации')
   });
 }
+
+
+// function searchAddressByYandex(lat, lon, callback, errorCallback) {
+//   axios.get('https://geocode-maps.yandex.ru/1.x', {
+//     params: {
+//       apikey: '8dbe3f68-3173-479f-ad7c-c05cad82197e',
+//       format: 'json',
+//       geocode: `${lon},${lat}`,
+//     },
+//   }).then(({ data }) => {
+//     console.log(data);
+//     const result = data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.Address?.formatted;
+//     if (result) {
+//       callback({ address: result })
+//     } else {
+//       if (errorCallback) errorCallback()
+//       message.error('Не найден адрес по заданной локации');
+//     }
+//   }).catch(() => {
+//     if (errorCallback) errorCallback()
+//     message.error('Не найден адрес по заданной локации')
+//   });
+// }
 
 
 const OrderNew = (props) => {
@@ -165,7 +165,7 @@ const OrderNew = (props) => {
 
   const onShowAddressInMap = () => {
     setLocationLoading(true);
-    searchLocationByYandex(form.getFieldValue('address'),
+    searchLocationBy2GIS(form.getFieldValue('address'),
       (v) => {
         setLocationLoading(false);
         form.setFieldsValue(v)
@@ -174,7 +174,7 @@ const OrderNew = (props) => {
 
   const onGetAddressFromMap = () => {
     setAddressLoading(true);
-    searchAddressByYandex(form.getFieldValue('latitude'), form.getFieldValue('longitude'),
+    searchAddressBy2GIS(form.getFieldValue('latitude'), form.getFieldValue('longitude'),
       (v) => {
         setAddressLoading(false);
         form.setFieldsValue(v)
