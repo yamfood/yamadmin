@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 
 const MarkerMap = (props) => {
   const {onChange, regions, lat, lng} = props;
@@ -9,13 +9,20 @@ const MarkerMap = (props) => {
   useEffect(() => {
     // No map rendered yet, but the location is present
     if (!map && lat && lng) {
-      setMap(
+      const initedMap =
         new gis.Map('map', {
           container: 'map',
           center: [lat, lng],
-          zoom: 13
-        })
-      )
+          zoom: 13,
+          doubleClickZoom: false
+        }).on('click', function ({latlng: {lat, lng}}) {
+          onChange({lat, lng})
+        });
+      // This fixes Point Of Interest(POI) click event ignorance
+      initedMap.poi.getMetaLayer().on('click', function ({latlng: {lat, lng}}) {
+        onChange({lat, lng})
+      })
+      setMap(initedMap)
     }
 
     if (map) {
