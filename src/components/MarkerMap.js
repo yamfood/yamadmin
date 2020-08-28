@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 const MarkerMap = (props) => {
   const {onChange, regions, lat, lng} = props;
