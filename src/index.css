@@ -38,3 +38,7 @@ code {
   background-color: ghostwhite;
   cursor: pointer;
 }
+
+#root {
+  overflow: hidden;
+}
