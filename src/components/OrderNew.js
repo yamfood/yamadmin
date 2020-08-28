@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Button,
-  Col,
-  Descriptions,
-  Input,
-  Typography,
-  Layout, Row, message, List, Form, Spin,
+  Button, Col, Descriptions, Form, Input, Layout, List, message, Row, Spin, Typography,
 } from 'antd';
+import stringSimilarity from 'string-similarity'
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useQueryParam, NumberParam } from 'use-query-params';
+import { NumberParam, useQueryParam } from 'use-query-params';
 import axios from 'axios'
 import * as actions from '../actions'
 
@@ -17,125 +13,134 @@ import formWrap from './wrappers/formWrapper';
 import MarkerMap from './MarkerMap';
 
 const { Content } = Layout;
+const TWO_GIS_TOKEN = 'rupgcl3079';
 
-function searchLocationBy2GIS(q, callback, errorCallback) {
-  axios.get('https://catalog.api.2gis.ru/3.0/items', {
+const typeNames = {
+  station: {
+    root: 'остановка',
+    metro: 'станция метро',
+    stop: 'остановка',
+    railway: 'жд вокзал',
+    river_transport: 'пори',
+    trolleybus: 'остановка',
+    tram: 'остановка',
+    funicular_railway: 'фуникулёр',
+    monorail: 'монорельс',
+    cable_car: 'канатная дорога',
+    light_rail: 'скоростной трамвай',
+    premetro: 'метротрам',
+    light_metro: 'лёгкое метро',
+
+  },
+  street: 'улица',
+  building: 'здание',
+  parking: 'парковка;',
+  attraction: 'достопримечательность',
+  crossroad: 'перекрёсток',
+  gate: 'проход/проезд',
+  road: 'дорога',
+  route: 'маршрут',
+  adm_div: {
+    city: 'город',
+    country: 'страна',
+    district_area: 'район области',
+    district: 'район',
+    division: 'округ',
+    living_area: 'микрорайон',
+    place: 'место',
+    region: 'регион',
+    settlement: 'населённый пункт',
+  },
+}
+
+async function searchLocationBy2GIS(q) {
+  if (!q) return null;
+
+  const { data } = await axios.get('https://catalog.api.2gis.ru/3.0/items', {
     params: {
-      key: 'rupgcl3079',
+      key: TWO_GIS_TOKEN,
       q,
       fields: 'items.point',
       region_id: 208,
     },
-  }).then(({ data }) => {
-    if (data?.result?.items[0]) {
-      callback({
-        longitude: data.result.items[0].point?.lon,
-        latitude: data.result.items[0].point?.lat,
-      })
-    } else {
-      if (errorCallback) errorCallback()
-      message.error('Ненайдена локация по заданному адресу');
-    }
   });
-}
+  const similarAddresses = data?.result?.items;
+  if (similarAddresses?.length > 0) {
+    return similarAddresses.map((item) => {
+      let address = item.address_name || item.full_name
+      let { name } = item;
+      let type = '';
+      if (item.purpose_name) {
+        type = item.purpose_name;
+      } else if ((typeNames[item.type] instanceof Object) && item.subtype) {
+        type = typeNames[item.type][item.subtype]
+      } else if (typeNames[item.type] instanceof Object) {
+        type = typeNames[item.type].root
+      }
+      const isAddressInName = stringSimilarity.compareTwoStrings(
+        name.replace('Ташкент', ''),
+        address.replace('Ташкент', ''),
+      ) > 0.5;
 
-// function searchLocationByYandex(q, callback, errorCallback) {
-//   axios.get('https://geocode-maps.yandex.ru/1.x', {
-//     params: {
-//       apikey: '8dbe3f68-3173-479f-ad7c-c05cad82197e',
-//       format: 'json',
-//       geocode: `Ташкент, ${q}`,
-//     },
-//   }).then(({ data }) => {
-//     const result = data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos;
-//     if (result) {
-//       callback({
-//         longitude: parseFloat(result.split(' ')[0]),
-//         latitude: parseFloat(result.split(' ')[1]),
-//       })
-//     } else {
-//       if (errorCallback) errorCallback()
-//       message.error('Не найдена локация по заданному адресу');
-//     }
-//   }).catch(() => {
-//     if (errorCallback) errorCallback()
-//     message.error('Не найдена локация по заданному адресу')
-//   });
-// }
-
-const suffix = {
-  district: 'район',
-}
-
-const prefix = {
-  street: 'улица',
+      type = type ? `${type}, ` : ''
+      name = name ? `${name} ` : ''
+      if (isAddressInName) {
+        address = `${type}${address}`
+      } else {
+        address = `${name}${type}${address}`
+      }
+      return ({
+        id: item.id,
+        address,
+        longitude: item.point?.lon,
+        latitude: item.point?.lat,
+      });
+    })
+  }
+  return null
 }
 
 function filteredJoin(arr, delim) {
   return arr.filter((m) => m).join(delim || ', ')
 }
 
-function searchAddressBy2GIS(lat, lon, callback, errorCallback) {
-  axios.get('https://catalog.api.2gis.ru/3.0/items', {
+async function searchAddressBy2GIS(lat, lon) {
+  const { data } = await axios.get('https://catalog.api.2gis.ru/3.0/items', {
     params: {
-      key: 'rupgcl3079',
+      key: TWO_GIS_TOKEN,
       fields: 'items.address',
       region_id: 208,
       lat,
       lon,
     },
-  }).then(({ data }) => {
-    if (data?.result?.items) {
-      const addressObj = data?.result?.items.reduce((acc, v) => {
-        const name = v.building_name || v.address_name || v.name;
-        if (name) {
-          return {
-            ...acc,
-            [v.subtype || v.type]: filteredJoin(
-              [prefix[v.subtype || v.type],
-                name,
-                suffix[v.subtype || v.type]], ' ',
-            ),
-          }
-        }
-        return acc;
-      },
-        {}
-      );
-      const {
-        region, district, living_area: livingArea, street, place, building,
-      } = addressObj;
-      const address = filteredJoin([region, district, livingArea?.replace('ж/м', 'массив'), street || place, building]);
-      callback({ address })
-    } else {
-      if (errorCallback) errorCallback()
-      message.error('Ненайдена локация по заданному адресу');
-    }
   });
+
+  if (data?.result?.items) {
+    const addressObj = data?.result?.items.reduce((acc, item) => {
+      const address = (item.address_name || item.full_name).replace('Ташкент', '');
+      const { name } = item;
+      const isAddressInName = stringSimilarity.compareTwoStrings(
+        name.replace('Ташкент', ''),
+        address,
+      ) > 0.5;
+      if (name) {
+        return {
+          ...acc,
+          [item.subtype || item.type]: isAddressInName ? name : `${name}, ${address}`,
+        }
+      }
+      return acc;
+    },
+      {}
+    );
+    const {
+      region, district, living_area: livingArea, street, place, building,
+    } = addressObj;
+    return filteredJoin([region, district, livingArea?.replace('ж/м', 'массив'), street || place, building])
+  }
+
+  return null;
 }
-
-
-// function searchAddressByYandex(lat, lon, callback, errorCallback) {
-//   axios.get('https://geocode-maps.yandex.ru/1.x', {
-//     params: {
-//       apikey: '8dbe3f68-3173-479f-ad7c-c05cad82197e',
-//       format: 'json',
-//       geocode: `${lon},${lat}`,
-//     },
-//   }).then(({ data }) => {
-//     console.log(data);
-//     const result = data?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.Address?.formatted;
-//     if (result) {
-//       callback({ address: result })
-//     } else {
-//       if (errorCallback) errorCallback()
-//       message.error('Не найден адрес по заданной локации');
-//     }
-//   }).catch(() => {
-//     if (errorCallback) errorCallback()
-//     message.error('Не найден адрес по заданной локации')
-//   });
-// }
 
 
 const OrderNew = (props) => {
@@ -147,14 +152,15 @@ const OrderNew = (props) => {
   const client = clients?.detailsData[clientId]
   const regions = useSelector((state) => state.regions)
   const [addressLoading, setAddressLoading] = useState(false);
-  const [locationLoading, setLocationLoading] = useState(false);
   const loading = !client || !regions || status === 'request';
-
+  const [similarAddresses, setSimilarAddresses] = useState([])
+  const [similarAddressesLoading, setSimilarAddressesLoading] = useState(false);
   useEffect(() => {
     dispatch(actions.setMenuActive(8));
     dispatch(actions.getRegions())
     if (clientId) dispatch(actions.getClientDetails(clientId));
   }, [dispatch, clientId]);
+
   useEffect(() => {
     if (client && !(form.getFieldValue('latitude') && form.getFieldValue('longitude'))) {
       form.setFieldsValue(
@@ -163,22 +169,30 @@ const OrderNew = (props) => {
     }
   }, [form, client])
 
-  const onShowAddressInMap = () => {
-    setLocationLoading(true);
-    searchLocationBy2GIS(form.getFieldValue('address'),
-      (v) => {
-        setLocationLoading(false);
-        form.setFieldsValue(v)
-      }, () => setLocationLoading(false))
+  const onShowSimilar = async () => {
+    setSimilarAddressesLoading(true);
+    const addresses = await searchLocationBy2GIS(form.getFieldValue('address'))
+    setSimilarAddressesLoading(false);
+    if (addresses && addresses.length > 0) {
+      setSimilarAddresses(addresses);
+    } else {
+      message.error('По данному адресу ничего не найдено');
+    }
   }
 
-  const onGetAddressFromMap = () => {
+  const onGetAddressFromMap = async () => {
     setAddressLoading(true);
-    searchAddressBy2GIS(form.getFieldValue('latitude'), form.getFieldValue('longitude'),
-      (v) => {
-        setAddressLoading(false);
-        form.setFieldsValue(v)
-      }, () => setAddressLoading(false))
+    const address = await searchAddressBy2GIS(
+      form.getFieldValue('latitude'),
+      form.getFieldValue('longitude'),
+    )
+    if (address) {
+      form.setFieldsValue({ address });
+    } else {
+      message.error('Ненайден адрес по заданной локации');
+    }
+    setAddressLoading(false);
+    await onShowSimilar()
   }
 
   return (
@@ -201,7 +215,7 @@ const OrderNew = (props) => {
               layout="vertical"
               bordered
             >
-              <Descriptions.Item label="Локация" span={3}>
+              <Descriptions.Item label="Локация" span={2}>
                 <MarkerMap
                   regions={regions}
                   style={{ minWidth: 200, width: '100%', height: '50vh' }}
@@ -239,7 +253,7 @@ const OrderNew = (props) => {
                   </Col>
                 </Row>
               </Descriptions.Item>
-              <Descriptions.Item label="Адрес" span={1}>
+              <Descriptions.Item label="Адрес" span={2}>
                 <Form.Item style={{ width: '100%' }}>
                   {form.getFieldDecorator(('address'), {
                     rules: [{
@@ -251,18 +265,42 @@ const OrderNew = (props) => {
                   )}
                 </Form.Item>
                 <Button
-                  loading={locationLoading && { delay: 500 }}
+                  loading={similarAddressesLoading && { delay: 500 }}
                   style={{ width: '100%' }}
-                  onClick={onShowAddressInMap}
+                  onClick={onShowSimilar}
                 >
-                  Показать на
-                  карте
+                  Найти похожие
                 </Button>
               </Descriptions.Item>
-              <Descriptions.Item label="Предыдущие заказы" span={4}>
+              <Descriptions.Item label="Похожие адреса" span={2}>
                 <List
+                  loading={similarAddressesLoading}
                   style={{
-                    width: '100%', maxHeight: '20vh', height: '100%', overflowY: 'scroll',
+                    width: '40vw', height: '30vh', overflowY: 'scroll',
+                  }}
+                  bordered
+                  dataSource={similarAddresses}
+                  renderItem={({ id, address, ...location }) => (
+                    <List.Item
+                      key={id}
+                      className="hoverable"
+                      onClick={() => form.setFieldsValue({ ...location, address })}
+                    >
+                      {address
+                      && (
+                        <Typography.Text>
+                          {address}
+                        </Typography.Text>
+                      )}
+                    </List.Item>
+                  )}
+                />
+              </Descriptions.Item>
+              <Descriptions.Item label="Предыдущие заказы" span={2}>
+                <List
+                  loading={loading}
+                  style={{
+                    width: '40vw', height: '30vh', overflowY: 'scroll',
                   }}
                   bordered
                   dataSource={client?.last_orders}
