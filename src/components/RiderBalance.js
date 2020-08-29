@@ -42,7 +42,7 @@ const RidersBalance = (props) => {
     {
       title: 'Админ',
       dataIndex: 'admin_name',
-      render: (name, log) => `${name} @${log.admin_login}`,
+      render: (adminName, log) => log.admin_id && `${adminName} @${log.admin_login}`,
 
     },
     {
