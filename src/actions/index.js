@@ -406,6 +406,28 @@ export const getRiderDetails = (riderId) => async (dispatch) => {
   }
 };
 
+
+export const getRiderBalanceLogsRequest = createAction('GET_RIDER_BALANCE_LOG_REQUEST');
+export const getRiderBalanceLogsFailure = createAction('GET_RIDER_BALANCE_LOG_FAILURE');
+export const getRiderBalanceLogsSuccess = createAction('GET_RIDER_BALANCE_LOG_SUCCESS');
+
+export const getRiderBalanceLogs = (riderId, limit, offset) => async (dispatch) => {
+  dispatch(getRiderBalanceLogsRequest());
+  try {
+    const response = await httpClient.get(api.riderBalanceLogs(riderId),
+      { params: { limit, offset } });
+    dispatch(getRiderBalanceLogsSuccess({ data: response.data, riderId }));
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(getRiderBalanceLogsFailure());
+  }
+};
+
+
 export const editRiderRequest = createAction('EDIT_RIDER_REQUEST');
 export const editRiderFailure = createAction('EDIT_RIDER_FAILURE');
 export const editRiderSuccess = createAction('EDIT_RIDER_SUCCESS');

@@ -193,6 +193,25 @@ const riders = handleActions({
       editRiderDetails: data,
     };
   },
+  [actions.getRiderBalanceLogsRequest](state) {
+    return {
+      ...state,
+      riderBalanceLogsStatus: 'request',
+    }
+  },
+  [actions.getRiderBalanceLogsFailure](state) {
+    return {
+      ...state,
+      riderBalanceLogsStatus: 'failure',
+    };
+  },
+  [actions.getRiderBalanceLogsSuccess](state, { payload: { data } }) {
+    return {
+      ...state,
+      riderBalanceLogsStatus: 'success',
+      riderBalanceLogs: data,
+    };
+  },
   [actions.editRiderRequest](state) {
     return {
       ...state,
@@ -260,6 +279,11 @@ const riders = handleActions({
   },
   riderDetailsStatus: null,
   riderDetails: {},
+  riderBalanceLogsStatus: null,
+  riderBalanceLogs: {
+    logs: [],
+    total: 0,
+  },
 });
 
 
