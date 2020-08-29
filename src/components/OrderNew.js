@@ -175,9 +175,9 @@ const OrderNew = (props) => {
     setSimilarAddressesLoading(false);
     if (addresses && addresses.length > 0) {
       setSimilarAddresses(addresses);
-    } else {
-      message.error('По данному адресу ничего не найдено');
+      return addresses
     }
+    message.error('По данному адресу ничего не найдено');
   }
 
   const onGetAddressFromMap = async () => {
@@ -267,7 +267,11 @@ const OrderNew = (props) => {
                 <Button
                   loading={similarAddressesLoading && { delay: 500 }}
                   style={{ width: '100%' }}
-                  onClick={onShowSimilar}
+                  onClick={async () => {
+                    const addresses = await onShowSimilar()
+                    const { longitude, latitude, address } = addresses[0];
+                    form.setFieldsValue({ longitude, latitude, address })
+                  }}
                 >
                   Найти похожие
                 </Button>
