@@ -40,10 +40,10 @@ const RidersBalance = (props) => {
       width: '10%',
     },
     {
-      title: 'Админ',
-      dataIndex: 'admin_name',
-      render: (adminName, log) => log.admin_id && `${adminName} @${log.admin_login}`,
-
+      title: 'Сумма',
+      dataIndex: 'amount',
+      align: 'right',
+      render: (amount) => `${amount} сум`,
     },
     {
       title: 'Дата',
@@ -52,14 +52,15 @@ const RidersBalance = (props) => {
       render: (date) => moment(date).format('DD.MM.YYYY HH:mm'),
     },
     {
-      title: 'Описание',
-      dataIndex: 'description',
+      title: 'Админ',
+      dataIndex: 'admin_name',
+      align: 'center',
+      render: (adminName, log) => log.admin_id && `${adminName} @${log.admin_login}`,
     },
     {
-      title: 'Сумма',
-      dataIndex: 'amount',
-      align: 'right',
-      render: (amount) => `${amount} сум`,
+      title: 'Описание',
+      align: 'left',
+      dataIndex: 'description',
     },
   ];
   const tableChange = ({ current, pageSize }) => setQuery({ size: pageSize, page: current })
