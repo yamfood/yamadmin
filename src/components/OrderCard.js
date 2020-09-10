@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Card,
-  Icon,
-  Popover,
-  Button,
-} from 'antd';
+import { Card, Icon, Popover, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
@@ -102,7 +97,7 @@ const OrderCard = ({ order }) => {
       {order.name === null ? null : (
         <div>
           <br />
-            😃
+          😃
           {order.name}
         </div>
       )}
@@ -137,14 +132,16 @@ const OrderCard = ({ order }) => {
           </span>
         </p>
       )}
-      {order.viewer === null ? null : (
+      {order.viewers?.map((viewer) => (
         <p>
-          <span role="img" aria-label="">👁</span>
-          <strong>{order.viewer}</strong>
+          <span role="img" aria-label="">
+            👁
+          </span>
+          <strong>{viewer}</strong>
         </p>
-      )}
+      ))}
     </Card>
-  )
+  );
 };
 
 export default OrderCard;
