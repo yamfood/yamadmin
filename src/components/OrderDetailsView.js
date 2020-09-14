@@ -356,8 +356,8 @@ const OrderDetailsView = (props) => {
           pagination={false}
           footer={() => (
             <div style={{ textAlign: 'right', paddingRight: 10 }}>
-              Итого:&nbsp;
-              {totalPrice}
+              Итого с доставкой:&nbsp;
+              {totalPrice + (form.getFieldValue('delivery_cost') || 0)}
               &nbsp;сум
             </div>
           )}
