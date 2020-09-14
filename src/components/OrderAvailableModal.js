@@ -14,7 +14,9 @@ import textInModal from '../assets/style';
 const OrderAvailableModal = ({ orderId }) => {
   const [isVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
-  const availableProductsList = useSelector((state) => state.orderDetails.availableList);
+  const availableProductsList = useSelector(
+    (state) => state.orderDetails.availableList
+  );
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const OrderAvailableModal = ({ orderId }) => {
       setProducts(availableProductsList);
       return null;
     }
-    const filteredProducts = products.filter(
+    const filteredProducts = availableProductsList.filter(
       (p) => p.name.toLowerCase().includes(value.toLowerCase()),
     );
     setProducts(filteredProducts);
