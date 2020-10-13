@@ -1,10 +1,11 @@
-import { message } from 'antd';
-import { createAction } from 'redux-actions';
+import {message} from 'antd';
+import {createAction} from 'redux-actions';
 import axios from 'axios';
 import React from 'react';
-import { httpClient } from '../http-client';
+import {httpClient} from '../http-client';
 import api from '../apiRoutes';
 import history from '../history';
+import {pick} from "../utils";
 
 
 export const addNotification = createAction('ADD_NOTIFICATION');
@@ -728,6 +729,41 @@ export const createProduct = (params) => async (dispatch) => {
     dispatch(createProductSuccess());
     message.success('Продукт успешно создан', 3);
     history.push('/products/');
+  } catch (error) {
+    console.error(error);
+    if (error.response.status === 403 || error.response.status === 401) {
+      localStorage.removeItem('token');
+      dispatch(loginFailure());
+    }
+    dispatch(createProductFailure());
+    message.error('Ошибка при создании продукта', 3);
+  }
+};
+
+export const createDuplicateProductSuccess = createAction('CREATE_DUPLICATE_PRODUCT_SUCCESS');
+
+export const duplicateProduct = (params) => async (dispatch) => {
+  dispatch(createProductRequest());
+  try {
+    const product = pick(params,
+      [
+        'photo',
+        'thumbnail',
+        'name',
+        'price',
+        'energy',
+        // 'category_id',
+        'position',
+        'description',
+        'payload',
+      ]);
+    const name = {ru: '', uz: '', en: '', ...product.name}
+    const payload = product.payload || {}
+    const {data} = await httpClient.post(api.products(),
+      {...product, name, payload});
+    dispatch(createProductSuccess());
+    dispatch(createDuplicateProductSuccess({data}));
+    message.success('Продукт успешно создан', 3);
   } catch (error) {
     console.error(error);
     if (error.response.status === 403 || error.response.status === 401) {

@@ -426,6 +426,16 @@ const products = handleActions({
       productCreateStatus: 'success',
     };
   },
+  [actions.createDuplicateProductSuccess](state, {payload: {data}}) {
+    console.log("createDuplicateProductSuccess", data)
+    return {
+      ...state,
+      productDetails: {
+        ...state.productDetails,
+        duplicateProductId: data.id
+      },
+    };
+  },
   [actions.deleteProductRequest](state) {
     return {
       ...state,
