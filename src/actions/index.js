@@ -1329,6 +1329,7 @@ export const createCategory = (params) => async (dispatch) => {
       position: parseInt(params.position, 10),
       emoji: params.emoji,
       is_delivery_free: params.shipping,
+      rider_delivery_cost: parseInt(params.rider_delivery_cost),
     });
     dispatch(createCategorySuccess());
     message.success('Категория успешно создана', 3);
