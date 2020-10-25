@@ -36,6 +36,14 @@ export function last(arr) {
   return arr[arr.length - 1];
 }
 
+
+export function pick(obj, keys) {
+  return Object.keys(obj)
+    .filter((key) => keys.indexOf(key) >= 0)
+    .reduce((newObj, key) => Object.assign(newObj, { [key]: obj[key] }), {});
+}
+
+
 export function indexDuplicates(arr, key, outKey) {
   const groupedArr = groupBy(arr, key);
   return Object

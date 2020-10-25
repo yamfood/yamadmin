@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {Link, useHistory} from 'react-router-dom';
 import {
+  Alert,
+  Row,
+  Col,
   Form,
   Layout,
   Input,
@@ -22,19 +25,26 @@ const ProductCreate = (props) => {
   const [getSignedURLStatus, uploadStatus] = useSelector(
     (state) => [state.products.getSignedURLStatus, state.products.uploadStatus],
   );
-
-  const { form, match } = props;
-
-  const { productDetails } = products;
-
+  const {form, match} = props;
+  const {productDetails} = products;
+  const disableDuplicateButton = !productDetails.photo
+    || !productDetails.thumbnail
+    || !productDetails.name.ru
+    || !productDetails.name.uz
+    || !productDetails.name.en
+    || !productDetails.price
+    || !productDetails.bot_id;
   useEffect(() => {
     const productId = match.params.id;
     dispatch(actions.getProductDetails(productId));
+  }, [match.params.id])
+
+  useEffect(() => {
     dispatch(actions.getCategory());
     dispatch(actions.setMenuActive(4));
   }, [])
 
-  const { getFieldDecorator } = form;
+  const {getFieldDecorator} = form;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -46,7 +56,9 @@ const ProductCreate = (props) => {
   };
 
   const onUpload = async (folder, file) => dispatch(actions.getSignedURL(folder, file));
-
+  const duplicateProduct = () => {
+    dispatch(actions.duplicateProduct(productDetails));
+  }
   const isUploadLoading = [getSignedURLStatus, uploadStatus, products.productDetailsStatus].includes('request');
 
   return (
@@ -54,12 +66,27 @@ const ProductCreate = (props) => {
       <Content
         style={contentStyle}
       >
-        <h1 style={{ textAlign: 'center', fontSize: 30 }}>Изменение продукта</h1>
+        {productDetails.duplicateProductId && (
+          <Alert
+            message={<div>Дубликат продукта создан, <Link
+              to={`/products/${productDetails.duplicateProductId}/edit`}>перейти</Link></div>}
+            type="success"/>
+        )}
         <Form onSubmit={handleSubmit}>
+          <Row type="flex" gutter={16} align={'middle'} justify={'center'}>
+            <Col span={14}><h1 style={{textAlign: 'right', fontSize: 30}}>Изменение продукта</h1></Col>
+            <Col span={10} style={{textAlign: 'right'}}>
+              <Button
+                disabled={disableDuplicateButton}
+                onClick={duplicateProduct}>
+                Дублировать
+              </Button>
+            </Col>
+          </Row>
           <Form.Item label="URL Фото">
             {getFieldDecorator('photo', {
               initialValue: productDetails.photo ? productDetails.photo : null,
-              rules: [{ required: true, message: 'Это обязательное поле' }],
+              rules: [{required: true, message: 'Это обязательное поле'}],
             })(
               <FileUploader
                 onUpload={onUpload}
